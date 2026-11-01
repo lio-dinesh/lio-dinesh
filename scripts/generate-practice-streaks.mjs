@@ -211,7 +211,9 @@ async function leetcode(today) {
     const calendars = await Promise.all(historyYears.map((y) => leetCalendar(y).catch(() => null)));
     const map = new Map();
     mergeCalendar(currentCalendar, map);
-    calendars.filter(Boolean).forEach((cal) => mergeCalendar(cal, map));
+    calendars.filter(Boolean).forEach((result) => {
+      if (result?.calendar) mergeCalendar(result.calendar, map);
+    });
     const derived = streaks(map, today);
     const accepted = submitStats?.acSubmissionNum ?? [];
     const acceptedCount = (difficulty) => Number(accepted.find((item) => String(item.difficulty).toLowerCase() === difficulty.toLowerCase())?.count ?? 0);
@@ -394,7 +396,12 @@ async function main() {
   const output = path.resolve(process.cwd(), "assets/practice-streaks.svg");
   await fs.mkdir(path.dirname(output), { recursive: true });
   await fs.writeFile(output, renderSvg(platforms, today), "utf8");
-  console.log("Generated assets/practice-streaks.svg");
-  for (const p of platforms) console.log(p.label + ": current=" + (p.current ?? "n/a") + " longest=" + (p.longest ?? "n/a") + " status=" + p.status);
+  console.log("Generated assets/practice-streaks.svg for IST date " + today);
+  for (const p of platforms) {
+    console.log(p.label + ": current=" + (p.current ?? "n/a") +
+      " longest=" + (p.longest ?? "n/a") +
+      " activeDays=" + (p.activeDays ?? "private/unavailable") +
+      " status=" + p.status);
+  }
 }
 main().catch((error) => { console.error(error); process.exitCode = 1; });
