@@ -1,0 +1,47 @@
+name: Update GitHub profile metrics
+
+on:
+  schedule:
+    - cron: "17 1 * * *" # Daily at 01:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: profile-metrics
+  cancel-in-progress: false
+
+jobs:
+  metrics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Generate profile metrics SVG
+        uses: lowlighter/metrics@latest
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
+          user: lio-dinesh
+          filename: assets/metrics.svg
+          output_action: commit
+          base: header, activity, community, repositories
+          config_timezone: Asia/Kolkata
+          config_display: large
+          config_animations: yes
+          config_order: base.header, isocalendar, languages, achievements, leetcode
+          plugin_isocalendar: yes
+          plugin_isocalendar_duration: full-year
+          plugin_languages: yes
+          plugin_languages_limit: 8
+          plugin_languages_details: percentage, lines, bytes-size
+          plugin_languages_sections: most-used, recently-used
+          plugin_achievements: yes
+          plugin_achievements_display: compact
+          plugin_activity: yes
+          plugin_activity_limit: 5
+          plugin_leetcode: yes
+          plugin_leetcode_user: "4107251480"
+          plugin_leetcode_sections: solved, skills, recent
+          plugin_leetcode_limit_skills: 8
+          plugin_leetcode_limit_recent: 3
+          plugins_errors_fatal: no
