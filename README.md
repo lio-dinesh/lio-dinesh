@@ -6,7 +6,7 @@
 
 <p align="center">
   <img
-    src="https://capsule-render.vercel.app/api?type=waving&height=230&color=0:0F172A,55:0E7490,100:7C3AED&text=Dinesh%20G&fontSize=56&fontColor=FFFFFF&fontAlignY=36&desc=AI%20%7C%20DATA%20%7C%20FULL-STACK&descAlignY=57&descSize=18&animation=fadeIn&section=header"
+    src="https://capsule-render.vercel.app/api?type=waving&height=230&color=0:17211F,55:176B62,100:54D6C5&text=Dinesh%20G&fontSize=56&fontColor=FFFFFF&fontAlignY=36&desc=AI%20%7C%20DATA%20%7C%20FULL-STACK&descAlignY=57&descSize=18&animation=fadeIn&section=header"
     alt="Dinesh G — AI, Data and Full-Stack Development"
     width="100%"
   />
@@ -52,13 +52,16 @@ I'm **Dinesh G**, an **AI & Machine Learning engineering student** interested in
 
 ## 🧭 Quick Navigation
 
-- [About Me](#about-me)
-- [What I'm Building](#what-im-building)
-- [Technology Toolbox](#technology-toolbox)
-- [Areas I'm Exploring](#areas-im-exploring)
-- [GitHub Analytics](#github-analytics)
-- [Contribution Animation](#contribution-animation)
-- [Let's Connect](#lets-connect)
+- [About Me](#-about-me)
+- [Featured Projects](#-what-im-building)
+- [Technology Toolbox](#-technology-toolbox)
+- [Extended Engineering Toolkit](#-extended-engineering-toolkit)
+- [AI & Data Engineering](#-areas-im-exploring)
+- [Monkeytype & LeetCode](#-coding-practice--performance)
+- [GitHub Analytics](#-github-analytics)
+- [Contribution Animation](#-contribution-animation)
+- [Engineering Foundations](#-engineering-foundations)
+- [Let's Connect](#-lets-connect)
 
 ---
 
@@ -124,6 +127,83 @@ These are technologies I use in projects or am actively learning. The icons are 
 
 ---
 
+## 🧰 Extended Engineering Toolkit
+
+The expandable catalogue below covers additional languages, frameworks and engineering areas I work with or explore. The main toolbox above highlights the stack most relevant to my current projects.
+
+<details>
+  <summary><strong>Programming languages and foundations</strong></summary>
+  <br />
+  `Python` · `C` · `C++` · `Java` · `JavaScript` · `TypeScript` · `Go` · `Rust` · `C#` · `PHP` · `Ruby` · `Kotlin` · `Swift` · `Dart` · `R` · `SQL` · `Bash` · `PowerShell`
+</details>
+
+<details>
+  <summary><strong>Frontend, UI and product engineering</strong></summary>
+  <br />
+  `React` · `Next.js` · `Vue.js` · `Angular` · `Svelte` · `Astro` · `Tailwind CSS` · `Bootstrap` · `Material UI` · `shadcn/ui` · `Chakra UI` · `Radix UI` · `Framer Motion` · `Sass` · `Vite` · `Webpack`
+  <br /><br />
+  `Responsive design` · `Accessibility` · `Design systems` · `Component architecture` · `State management` · `Web performance` · `SEO fundamentals` · `Motion design`
+</details>
+
+<details>
+  <summary><strong>Backend, APIs and application architecture</strong></summary>
+  <br />
+  `Node.js` · `Express` · `Fastify` · `NestJS` · `Django` · `Flask` · `FastAPI` · `Spring Boot` · `.NET / ASP.NET Core` · `Laravel`
+  <br /><br />
+  `REST` · `GraphQL` · `WebSockets` · `gRPC` · `Webhooks` · `OAuth 2.0` · `JWT` · `RBAC` · `OpenAPI / Swagger` · `Background jobs` · `Event-driven systems`
+</details>
+
+<details>
+  <summary><strong>Databases, storage and data platforms</strong></summary>
+  <br />
+  `PostgreSQL` · `MySQL` · `SQLite` · `MongoDB` · `Redis` · `Firebase` · `Supabase` · `DynamoDB` · `SQL Server` · `Oracle` · `Neon`
+  <br /><br />
+  `SQLAlchemy` · `Prisma` · `Drizzle ORM` · `TypeORM` · `Indexing` · `Transactions` · `Normalization` · `Query optimization` · `Migrations` · `Caching` · `Connection pooling`
+</details>
+
+<details>
+  <summary><strong>AI, machine learning and Generative AI</strong></summary>
+  <br />
+  `PyTorch` · `TensorFlow` · `Keras` · `Scikit-learn` · `Hugging Face` · `Transformers` · `OpenAI API` · `Claude API` · `Gemini API` · `Mistral API` · `Ollama`
+  <br /><br />
+  `LangChain` · `LangGraph` · `LlamaIndex` · `CrewAI` · `AutoGen` · `FAISS` · `Chroma` · `Pinecone` · `Qdrant` · `Weaviate`
+  <br /><br />
+  `Prompt engineering` · `RAG` · `Embeddings` · `Semantic search` · `Hybrid retrieval` · `Reranking` · `Tool calling` · `Agent orchestration` · `Evaluation` · `Guardrails` · `Context and memory` · `MCP` · `Multimodal AI`
+</details>
+
+<details>
+  <summary><strong>Data analytics, data engineering and BI</strong></summary>
+  <br />
+  `Pandas` · `NumPy` · `Polars` · `Matplotlib` · `Seaborn` · `Plotly` · `Power BI` · `Tableau` · `JupyterLab` · `Streamlit` · `Dash` · `DuckDB`
+  <br /><br />
+  `Apache Spark` · `PySpark` · `Apache Kafka` · `Apache Airflow` · `dbt` · `BigQuery` · `Snowflake` · `Amazon Redshift` · `ETL / ELT` · `Batch processing` · `Stream processing` · `Data warehousing`
+</details>
+
+<details>
+  <summary><strong>Cloud, DevOps, infrastructure and deployment</strong></summary>
+  <br />
+  `AWS` · `Microsoft Azure` · `Google Cloud` · `Docker` · `Docker Compose` · `Kubernetes` · `Linux` · `Nginx` · `Terraform` · `Jenkins` · `GitHub Actions` · `GitLab CI/CD` · `Cloudflare` · `Vercel` · `Netlify` · `Render` · `Railway`
+  <br /><br />
+  `CI/CD` · `Infrastructure as Code` · `Containerization` · `Reverse proxies` · `Monitoring` · `Structured logging` · `Tracing` · `Observability` · `Release and rollback strategies`
+</details>
+
+<details>
+  <summary><strong>Testing, quality, security and mobile</strong></summary>
+  <br />
+  `Pytest` · `unittest` · `Jest` · `Vitest` · `Cypress` · `Playwright` · `Selenium` · `Postman` · `Insomnia`
+  <br /><br />
+  `Unit testing` · `Integration testing` · `End-to-end testing` · `API testing` · `Performance testing` · `Static analysis` · `OWASP fundamentals` · `Secure authentication`
+  <br /><br />
+  `Flutter` · `React Native` · `Expo` · `Android` · `Kotlin` · `Swift` · `SwiftUI`
+</details>
+
+<details>
+  <summary><strong>Developer tools and AI-assisted development</strong></summary>
+  <br />
+  `VS Code` · `PyCharm` · `IntelliJ IDEA` · `WebStorm` · `Cursor` · `Antigravity` · `Claude Code` · `GitHub Copilot` · `Figma` · `DBeaver` · `pgAdmin` · `MySQL Workbench` · `Google Colab`
+</details>
+
+---
 ## 🚀 What I'm Building
 
 The projects below are selected from my public repositories. Open the source code to see the implementation; use the live demo links to explore the deployed versions where available.
@@ -203,6 +283,39 @@ The projects below are selected from my public repositories. Open the source cod
 
 ---
 
+## ⌨️ Coding Practice & Performance
+
+I keep a regular practice routine to improve typing accuracy, speed, and algorithmic problem-solving. The cards below are generated by third-party services; the profile links remain available if a provider is temporarily unavailable.
+
+### Monkeytype — typing practice
+
+<p align="center">
+  <a href="https://monkeytype.com/profile/lio_dinesh">
+    <img src="https://raw.githubusercontent.com/lio-dinesh/lio-dinesh/monkeytype-readme/monkeytype-readme-lbpb.svg" width="100%" alt="Monkeytype leaderboard and personal-best statistics for lio_dinesh" />
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://monkeytype.com/profile/lio_dinesh"><img src="https://img.shields.io/badge/OPEN-MONKEYTYPE%20PROFILE-35C4A2?style=for-the-badge&logo=monkeytype&logoColor=white" alt="Open Monkeytype profile" /></a>
+</p>
+
+<sub>The card is refreshed by a scheduled GitHub Action. It appears after the first successful run and may be delayed by the external service.</sub>
+
+### LeetCode — problem solving
+
+<p align="center">
+  <a href="https://leetcode.com/u/4107251480/">
+    <img src="https://leetcard.jacoblin.cool/4107251480?theme=dark&font=Baloo_2&ext=heatmap" width="100%" alt="LeetCode problem-solving statistics and activity heatmap" />
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://leetcode.com/u/4107251480/"><img src="https://img.shields.io/badge/OPEN-LEETCODE%20PROFILE-FFA116?style=for-the-badge&logo=leetcode&logoColor=black" alt="Open LeetCode profile" /></a>
+</p>
+
+<sub>The LeetCard image expects a public LeetCode username/slug. Your supplied profile identifier is numeric; if the card provider does not resolve it, the direct profile link above remains the fallback.</sub>
+
+---
 ## 📈 GitHub Analytics
 
 <p align="center">
@@ -232,6 +345,14 @@ The projects below are selected from my public repositories. Open the source cod
 
 ---
 
+### Advanced GitHub Metrics
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/lio-dinesh/lio-dinesh/main/assets/metrics.svg" width="100%" alt="GitHub Metrics dashboard with language activity, achievements, recent activity, LeetCode and isometric contribution calendar" />
+</p>
+
+<sub>Generated daily by the GitHub Metrics workflow. This card appears after the workflow succeeds and the required METRICS_TOKEN secret is configured.</sub>
+
 ## 🐍 Contribution Animation
 
 <p align="center">
@@ -246,6 +367,27 @@ The projects below are selected from my public repositories. Open the source cod
 
 ---
 
+## 🧠 Engineering Foundations
+
+<details>
+  <summary><strong>Computer science and software engineering</strong></summary>
+  <br />
+  `Data Structures & Algorithms` · `OOP` · `DBMS` · `Operating Systems` · `Computer Networks` · `SDLC` · `Design Patterns` · `SOLID` · `Concurrency` · `Memory and performance fundamentals`
+</details>
+
+<details>
+  <summary><strong>System design and architecture</strong></summary>
+  <br />
+  `Clean Architecture` · `Layered Architecture` · `MVC` · `Microservices` · `Modular Monoliths` · `Event-Driven Architecture` · `Domain-Driven Design` · `Caching` · `Load Balancing` · `Message Queues` · `Rate Limiting` · `Fault Tolerance` · `Scalability` · `Distributed Systems`
+</details>
+
+<details>
+  <summary><strong>API, application and AI system design</strong></summary>
+  <br />
+  `API contracts` · `Authentication` · `Authorization` · `Input validation` · `Secrets management` · `SQL injection prevention` · `CORS` · `HTTPS / TLS` · `OWASP fundamentals` · `RAG pipelines` · `Vector indexing` · `Semantic retrieval` · `Tool calling` · `Agent orchestration` · `Prompt evaluation` · `Human-in-the-loop` · `LLM observability`
+</details>
+
+---
 ## 🤝 Let's Connect
 
 <p align="center">
