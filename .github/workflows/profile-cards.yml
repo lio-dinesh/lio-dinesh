@@ -14,7 +14,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: profile-cards-main
+  group: profile-main-writers
   cancel-in-progress: false
 
 jobs:
