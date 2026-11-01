@@ -87,7 +87,7 @@ function monkeyActivity(activity) {
 }
 
 function unavailable(id, label, handle, color, url, note) {
-  return { id, label, handle, color, url, status: "DATA UNAVAILABLE", current: null, longest: null, activeDays: 0, lastActiveDate: null, activity: new Map(), note };
+  return { id, label, handle, color, url, status: "DATA UNAVAILABLE", current: null, longest: null, activeDays: null, lastActiveDate: null, activity: new Map(), activityAvailable: false, note };
 }
 
 async function monkeytype(today) {
@@ -95,7 +95,19 @@ async function monkeytype(today) {
   try {
     const response = await getJson(url);
     const p = response.data ?? response;
-    const map = monkeyActivity(p.testActivity);
+    let map = monkeyActivity(p.testActivity);
+    let activityAvailable = Boolean(p.testActivity);
+    if (!activityAvailable && process.env.MONKEYTYPE_API_KEY) {
+      try {
+        const activityPayload = await getJson("https://api.monkeytype.com/users/currentTestActivity", {
+          headers: { authorization: "ApeKey " + process.env.MONKEYTYPE_API_KEY },
+        });
+        map = monkeyActivity(activityPayload.data ?? activityPayload);
+        activityAvailable = true;
+      } catch (activityError) {
+        console.warn("Monkeytype activity calendar unavailable: " + activityError.message);
+      }
+    }
     const stats = streaks(map, today);
     const current = Number(p.streak);
     const longest = Number(p.maxStreak);
@@ -104,8 +116,8 @@ async function monkeytype(today) {
         id: "monkeytype", label: "MONKEYTYPE", handle: USER.monkeytype, color: C.amber,
         url: "https://monkeytype.com/profile/" + USER.monkeytype,
         status: "PUBLIC PROFILE", current, longest,
-        activeDays: stats.activeDays, lastActiveDate: stats.lastActiveDate,
-        activity: map, note: "Official current and maximum streak from public profile",
+        activeDays: activityAvailable ? stats.activeDays : null, lastActiveDate: stats.lastActiveDate,
+        activity: map, activityAvailable, note: activityAvailable ? "Official current and maximum streak from public profile" : "Official streaks; daily activity calendar is private",
       };
     }
     throw new Error("Public profile did not return streak fields.");
@@ -127,7 +139,7 @@ async function monkeytype(today) {
           status: "APEKEY CONNECTED", current: Number(s.length ?? derived.current),
           longest: Number(s.maxLength ?? derived.longest), activeDays: derived.activeDays,
           lastActiveDate: timestampDate(s.lastResultTimestamp) ?? derived.lastActiveDate,
-          activity: map, note: "Official Monkeytype streak endpoint",
+          activity: map, activityAvailable: true, note: "Official Monkeytype streak endpoint",
         };
       } catch (keyError) {
         return unavailable("monkeytype", "MONKEYTYPE", USER.monkeytype, C.amber, "https://monkeytype.com/profile/" + USER.monkeytype, "API unavailable: " + keyError.message);
@@ -184,7 +196,7 @@ async function leetcode(today) {
       longest: derived.longest,
       activeDays: Number(currentCalendar.totalActiveDays ?? derived.activeDays),
       lastActiveDate: derived.lastActiveDate,
-      activity: map,
+      activity: map, activityAvailable: true,
       note: "Current streak from LeetCode; longest calculated across available calendar years",
     };
   } catch (error) {
@@ -194,7 +206,7 @@ async function leetcode(today) {
 
 async function codechef(today) {
   try {
-    const url = "https://codechef-stats.tashif.codes/" + encodeURIComponent(USER.codechef) + "/heatmap?view=all";
+    const url = "https://codechef-stats.tashif.codes/heatmap/" + encodeURIComponent(USER.codechef) + "?view=all";
     const payload = await getJson(url);
     const data = payload.data ?? payload;
     if (payload.status === "error" || data.status === "error") throw new Error(payload.message ?? data.message ?? "Profile not found.");
@@ -208,7 +220,7 @@ async function codechef(today) {
       longest: Number.isFinite(Number(data.longestStreak)) ? Number(data.longestStreak) : derived.longest,
       activeDays: Number(data.totalActiveDays ?? derived.activeDays),
       lastActiveDate: data.lastActiveDate ?? derived.lastActiveDate,
-      activity: map,
+      activity: map, activityAvailable: true,
       note: "Heatmap-derived submission streak; CodeChef streak freezes may not be reflected",
     };
   } catch (error) {
@@ -257,6 +269,7 @@ function drawCard(p, x, today) {
   const arr = activityWindow(p.activity, today);
   const max = Math.max(1, ...arr.map((a) => a.count));
   const active = arr.filter((a) => a.count > 0).length;
+  const activeLabel = p.activityAvailable ? active + " / 91" : "PRIVATE";
   const current = Number.isFinite(p.current) ? String(p.current) : "--";
   const longest = Number.isFinite(p.longest) ? String(p.longest) : "--";
   const out = [];
@@ -284,9 +297,9 @@ function drawCard(p, x, today) {
     }
   }
   out.push(label(x + 24, y + 385, "ACTIVE DAYS", 9, C.faint, 750, "start", 'letter-spacing=".7"'));
-  out.push(label(x + 112, y + 385, active + " / 91", 10, C.text, 750));
+  out.push(label(x + 112, y + 385, activeLabel, 10, C.text, 750));
   out.push(label(x + w - 24, y + 385, "LAST " + formatDate(p.lastActiveDate), 8.5, C.muted, 750, "end"));
-  out.push(label(x + 24, y + 406, "OPEN PLATFORM PROFILE FOR FULL ACTIVITY DETAILS", 7.5, C.faint, 600));
+  out.push(label(x + 24, y + 406, (p.activityAvailable ? "OPEN PLATFORM PROFILE FOR FULL ACTIVITY DETAILS" : "ACTIVITY CALENDAR PRIVATE — STREAKS FROM PROFILE"), 7.5, C.faint, 600));
   out.push('</g>');
   return out.join("");
 }
@@ -311,7 +324,7 @@ function renderSvg(platforms, today) {
   out.push(label(983, 49, "UPDATED " + now + " IST", 8.5, C.mint, 800));
   [24, 414, 804].forEach((x, i) => out.push(drawCard(platforms[i], x, today)));
   out.push(label(34, 584, "SOURCE NOTES", 9, C.mint, 800, "start", 'letter-spacing="1"'));
-  out.push(label(145, 584, "Monkeytype = public profile · LeetCode = userCalendar · CodeChef = public heatmap estimate (freeze days may differ)", 8.5, C.muted, 500));
+  out.push(label(145, 584, "Monkeytype = official profile · LeetCode = public calendar · CodeChef = heatmap estimate (freeze days may differ)", 8.0, C.muted, 500));
   out.push(label(34, 603, "Activity data is shown for the last 13 weeks. Use the platform links in the README for the authoritative account view.", 8.5, C.faint, 500));
   out.push('</svg>');
   return out.join("\n");
