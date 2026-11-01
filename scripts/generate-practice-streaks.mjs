@@ -323,66 +323,68 @@ function level(count, max) {
   const ratio = count / max;
   return ratio <= .25 ? 1 : ratio <= .5 ? 2 : ratio <= .75 ? 3 : 4;
 }
-function poly(points, fill, attrs = "") {
-  return '<polygon points="' + points + '" fill="' + fill + '" ' + attrs + '/>';
-}
-function isoTile(x, y, n) {
-  const top = n === 0 ? C.empty : C.levels[n - 1];
-  const left = n === 0 ? "#1A2924" : n < 3 ? "#174A38" : "#267B59";
-  const right = n === 0 ? "#1D2D28" : n < 3 ? "#1D6248" : "#2F9A6B";
-  const a = x + "," + (y + 4);
-  const b = (x + 8) + "," + y;
-  const c = (x + 16) + "," + (y + 4);
-  const d = (x + 8) + "," + (y + 8);
-  return poly(a + " " + d + " " + (x + 8) + "," + (y + 11) + " " + x + "," + (y + 7), left) +
-    poly(d + " " + c + " " + (x + 16) + "," + (y + 7) + " " + (x + 8) + "," + (y + 11), right) +
-    poly(a + " " + b + " " + c + " " + d, top, 'stroke="#0D1814" stroke-width=".7"');
+function rect(x, y, width, height, fill, attrs = "") {
+  return '<rect x="' + x + '" y="' + y + '" width="' + width + '" height="' + height + '" fill="' + fill + '" ' + attrs + '/>';
 }
 function label(x, y, value, size, color, weight = 500, anchor = "start", extra = "") {
   return '<text x="' + x + '" y="' + y + '" font-size="' + size + '" font-weight="' + weight + '" fill="' + color + '" text-anchor="' + anchor + '" ' + extra + '>' + xml(value) + '</text>';
 }
+function heatColor(count, max) {
+  if (count <= 0) return "#161B22";
+  const ratio = count / Math.max(1, max);
+  if (ratio <= .25) return "#0E4429";
+  if (ratio <= .50) return "#006D32";
+  if (ratio <= .75) return "#26A641";
+  return "#39D353";
+}
 function drawCard(p, x, today) {
-  const y = 132, w = 372, h = 420;
+  const y = 126, w = 372, h = 438;
   const arr = activityWindow(p.activity, today);
   const max = Math.max(1, ...arr.map((a) => a.count));
   const active = arr.filter((a) => a.count > 0).length;
-  const activeLabel = p.activityAvailable ? active + " / 91" : "PRIVATE";
-  const current = Number.isFinite(p.current) ? String(p.current) : "--";
-  const longest = Number.isFinite(p.longest) ? String(p.longest) : "--";
+  const activeLabel = p.activityAvailable ? active + " / 91 days" : "Private / unavailable";
+  const current = Number.isFinite(p.current) ? String(p.current) : "—";
+  const longest = Number.isFinite(p.longest) ? String(p.longest) : "—";
   const out = [];
   out.push('<g class="platform-card">');
-  out.push('<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="22" fill="url(#cardGradient)" stroke="' + p.color + '" stroke-opacity=".42" stroke-width="1.4"/>');
-  out.push('<path d="M' + (x + 22) + ' ' + (y + 2) + ' H' + (x + w - 22) + '" stroke="' + p.color + '" stroke-width="3" stroke-linecap="round"/>');
-  out.push('<circle cx="' + (x + w - 34) + '" cy="' + (y + 37) + '" r="14" fill="' + p.color + '" opacity=".12"/>');
-  out.push('<circle cx="' + (x + w - 34) + '" cy="' + (y + 37) + '" r="5" fill="' + p.color + '" class="pulse"/>');
-  out.push(label(x + 24, y + 43, p.label, 17, C.text, 850));
-  out.push(label(x + 24, y + 65, p.handle, 11, C.muted, 500));
-  out.push('<rect x="' + (x + 223) + '" y="' + (y + 20) + '" width="121" height="24" rx="12" fill="' + p.color + '" opacity=".13"/>');
-  out.push(label(x + 283.5, y + 36, p.status, 8.5, p.color, 800, "middle", 'letter-spacing=".75"'));
-  out.push(label(x + 24, y + 126, current, 51, C.text, 850));
-  out.push(label(x + 26, y + 150, "CURRENT STREAK · DAYS", 9, C.muted, 750, "start", 'letter-spacing=".7"'));
-  out.push('<line x1="' + (x + 194) + '" y1="' + (y + 91) + '" x2="' + (x + 194) + '" y2="' + (y + 160) + '" stroke="' + C.border + '"/>');
-  out.push(label(x + 218, y + 124, longest, 38, p.color, 850));
-  out.push(label(x + 220, y + 150, "LONGEST · DAYS", 9, C.muted, 750, "start", 'letter-spacing=".7"'));
-  out.push(label(x + 24, y + 181, p.note.length > 55 ? p.note.slice(0, 52) + "…" : p.note, 8.5, C.faint, 500));
+  out.push(rect(x, y, w, h, "#0D1117", 'rx="10" stroke="#30363D" stroke-width="1.2"'));
+  out.push(label(x + 22, y + 34, p.label, 16, "#E6EDF3", 700));
+  out.push(label(x + 22, y + 55, p.handle, 10, "#8B949E", 400));
+  out.push('<a href="' + xml(p.url) + '" target="_blank">');
+  out.push(label(x + w - 20, y + 34, "OPEN PROFILE ↗", 9, "#58A6FF", 600, "end"));
+  out.push('</a>');
+  out.push('<line x1="' + (x + 20) + '" y1="' + (y + 72) + '" x2="' + (x + w - 20) + '" y2="' + (y + 72) + '" stroke="#21262D"/>');
+
+  out.push(label(x + 22, y + 116, current, 42, "#F0F6FC", 700));
+  out.push(label(x + 22, y + 137, "CURRENT STREAK", 9, "#8B949E", 600, "start", 'letter-spacing=".5"'));
+  out.push(label(x + 202, y + 116, longest, 42, "#F0F6FC", 700));
+  out.push(label(x + 202, y + 137, "LONGEST STREAK", 9, "#8B949E", 600, "start", 'letter-spacing=".5"'));
+  out.push(label(x + 22, y + 160, p.note.length > 58 ? p.note.slice(0, 55) + "…" : p.note, 8.5, "#6E7681", 400));
+  out.push('<line x1="' + (x + 20) + '" y1="' + (y + 177) + '" x2="' + (x + w - 20) + '" y2="' + (y + 177) + '" stroke="#21262D"/>');
+
   const metricItems = Array.isArray(p.metrics) ? p.metrics.slice(0, 4) : [];
   metricItems.forEach((item, index) => {
-    const mx = x + 24 + index * 82;
-    out.push(label(mx, y + 209, item.value, 13, p.color, 850));
-    out.push(label(mx, y + 225, item.label, 7, C.muted, 750, "start", 'letter-spacing=".35"'));
+    const col = index % 2, row = Math.floor(index / 2);
+    const mx = x + 22 + col * 174, my = y + 205 + row * 43;
+    out.push(label(mx, my, item.value, 15, "#E6EDF3", 650));
+    out.push(label(mx, my + 13, item.label, 8, "#8B949E", 600, "start", 'letter-spacing=".4"'));
   });
-  out.push(label(x + 24, y + 249, "13-WEEK ACTIVITY · ISOMETRIC VIEW", 9.5, C.muted, 750, "start", 'letter-spacing=".7"'));
-  const gx = x + 44, gy = y + 288;
+
+  out.push('<line x1="' + (x + 20) + '" y1="' + (y + 278) + '" x2="' + (x + w - 20) + '" y2="' + (y + 278) + '" stroke="#21262D"/>');
+  out.push(label(x + 22, y + 301, "ACTIVITY · LAST 13 WEEKS", 9, "#C9D1D9", 650, "start", 'letter-spacing=".5"'));
+  const gx = x + 24, gy = y + 318, cell = 11, gap = 3;
   for (let col = 0; col < 13; col += 1) {
     for (let row = 0; row < 7; row += 1) {
       const a = arr[col * 7 + row];
-      out.push(isoTile(gx + col * 17 + row * 7, gy + col * 6 - row * 6, level(a.count, max)));
+      const px = gx + col * (cell + gap), py = gy + row * (cell + gap);
+      const date = a.date;
+      out.push(rect(px, py, cell, cell, heatColor(a.count, max),
+        'rx="2" stroke="#30363D" stroke-width=".35"><title>' + xml(date + ": " + a.count + " activity") + '</title></rect>'));
     }
   }
-  out.push(label(x + 24, y + 385, "ACTIVE DAYS", 9, C.faint, 750, "start", 'letter-spacing=".7"'));
-  out.push(label(x + 112, y + 385, activeLabel, 10, C.text, 750));
-  out.push(label(x + w - 24, y + 385, "LAST " + formatDate(p.lastActiveDate), 8.5, C.muted, 750, "end"));
-  out.push(label(x + 24, y + 406, (p.activityAvailable ? "OPEN PLATFORM PROFILE FOR FULL ACTIVITY DETAILS" : "ACTIVITY CALENDAR PRIVATE — STREAKS FROM PROFILE"), 7.5, C.faint, 600));
+  out.push(label(x + 22, y + 416, "ACTIVE DAYS", 8, "#8B949E", 600));
+  out.push(label(x + 103, y + 416, activeLabel, 9, "#C9D1D9", 600));
+  out.push(label(x + w - 20, y + 416, "LAST " + formatDate(p.lastActiveDate), 8, "#8B949E", 500, "end"));
   out.push('</g>');
   return out.join("");
 }
@@ -391,28 +393,25 @@ function renderSvg(platforms, today) {
   const out = [];
   out.push('<?xml version="1.0" encoding="UTF-8"?>');
   out.push('<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">');
-  out.push('<title id="title">Dinesh G — 3D Daily Practice Streak Matrix</title>');
-  out.push('<desc id="desc">Current streaks, longest streaks and isometric activity calendars for Monkeytype, LeetCode and CodeChef.</desc>');
-  out.push('<defs>');
-  out.push('<linearGradient id="pageGradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0B1110"/><stop offset=".55" stop-color="#101D19"/><stop offset="1" stop-color="#111A24"/></linearGradient>');
-  out.push('<linearGradient id="cardGradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#172521"/><stop offset="1" stop-color="#101A18"/></linearGradient>');
-  out.push('<radialGradient id="glow"><stop offset="0" stop-color="#45D5A0" stop-opacity=".2"/><stop offset="1" stop-color="#45D5A0" stop-opacity="0"/></radialGradient>');
-  out.push('<style>text{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}.platform-card{animation:rise .7s ease both;transform-box:fill-box;transform-origin:center}.platform-card:nth-of-type(2){animation-delay:.12s}.platform-card:nth-of-type(3){animation-delay:.24s}.pulse{animation:pulse 2.8s ease-in-out infinite}@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}@media(prefers-reduced-motion:reduce){*{animation:none!important}}</style>');
-  out.push('</defs><rect width="1200" height="620" rx="26" fill="url(#pageGradient)"/>');
-  out.push('<circle cx="90" cy="48" r="190" fill="url(#glow)"/><circle cx="1110" cy="46" r="170" fill="url(#glow)"/>');
-  out.push('<path d="M32 96 H1168" stroke="#29483D"/>');
-  out.push(label(34, 46, "DAILY PRACTICE / STREAK MATRIX", 26, C.text, 850, "start", 'letter-spacing="1.1"'));
-  out.push(label(35, 72, "THREE PLATFORMS · ONE CONSISTENT ROUTINE · 3D ACTIVITY VIEW", 10, C.muted, 700, "start", 'letter-spacing="1"'));
-  out.push('<rect x="950" y="28" width="218" height="34" rx="17" fill="#1C332B" stroke="#315D4C"/><circle cx="970" cy="45" r="4" fill="' + C.mint + '" class="pulse"/>');
-  out.push(label(983, 49, "UPDATED " + now + " IST", 8.5, C.mint, 800));
+  out.push('<title id="title">Dinesh G — Daily Coding Practice</title>');
+  out.push('<desc id="desc">A clean, GitHub-style activity breakdown for Monkeytype, LeetCode and CodeChef, with streak totals, platform metrics and 13-week activity heatmaps.</desc>');
+  out.push('<style>text{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}.platform-card{opacity:1}@media(prefers-reduced-motion:reduce){*{animation:none!important}}</style>');
+  out.push(rect(0, 0, 1200, 620, "#010409"));
+  out.push(label(30, 43, "DAILY CODING PRACTICE", 24, "#F0F6FC", 700));
+  out.push(label(31, 68, "MONKEYTYPE  /  LEETCODE  /  CODECHEF", 10, "#8B949E", 600, "start", 'letter-spacing="1"'));
+  out.push(label(1170, 43, "UPDATED " + now + " IST", 9, "#8B949E", 500, "end"));
+  out.push('<line x1="30" y1="87" x2="1170" y2="87" stroke="#21262D"/>');
   [24, 414, 804].forEach((x, i) => out.push(drawCard(platforms[i], x, today)));
-  out.push(label(34, 584, "SOURCE NOTES", 9, C.mint, 800, "start", 'letter-spacing="1"'));
-  out.push(label(145, 584, "Monkeytype = official profile · LeetCode = public calendar · CodeChef = heatmap estimate (freeze days may differ)", 8.0, C.muted, 500));
-  out.push(label(34, 603, "Activity data is shown for the last 13 weeks. Use the platform links in the README for the authoritative account view.", 8.5, C.faint, 500));
+  out.push(label(30, 592, "ACTIVITY LEVEL", 8, "#8B949E", 600, "start", 'letter-spacing=".5"'));
+  ["#161B22", "#0E4429", "#006D32", "#26A641", "#39D353"].forEach((color, i) => {
+    out.push(rect(125 + i * 17, 581, 11, 11, color, 'rx="2" stroke="#30363D" stroke-width=".35"'));
+  });
+  out.push(label(224, 590, "Less", 8, "#8B949E", 400));
+  out.push(label(265, 590, "More", 8, "#8B949E", 400));
+  out.push(label(1170, 592, "13-WEEK WINDOW · PLATFORM LINKS OPEN SOURCE PROFILES", 8, "#6E7681", 400, "end"));
   out.push('</svg>');
   return out.join("\n");
 }
-
 async function main() {
   const today = dateInTimezone("Asia/Kolkata");
   const results = await Promise.allSettled([monkeytype(today), leetcode(today), codechef(today)]);
