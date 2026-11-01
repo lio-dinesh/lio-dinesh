@@ -291,7 +291,7 @@ I keep a regular practice routine to improve typing accuracy, speed, and algorit
 
 <p align="center">
   <a href="https://monkeytype.com/profile/lio_dinesh">
-    <img src="https://raw.githubusercontent.com/lio-dinesh/lio-dinesh/monkeytype-readme/lio_dinesh-monkeytype-readme-lb-pb.svg" width="100%" alt="Monkeytype leaderboard and personal-best statistics for lio_dinesh" />
+    <img src="https://monkeytypecard.vercel.app/monkeytype.svg?username=lio_dinesh&theme=serika_dark&timeValue=60&wordValue=50" width="100%" alt="Monkeytype leaderboard and personal-best statistics for lio_dinesh" />
   </a>
 </p>
 
@@ -299,7 +299,7 @@ I keep a regular practice routine to improve typing accuracy, speed, and algorit
   <a href="https://monkeytype.com/profile/lio_dinesh"><img src="https://img.shields.io/badge/OPEN-MONKEYTYPE%20PROFILE-35C4A2?style=for-the-badge&logo=monkeytype&logoColor=white" alt="Open Monkeytype profile" /></a>
 </p>
 
-<sub>The card is refreshed by a scheduled GitHub Action. It appears after the first successful run and may be delayed by the external service.</sub>
+<sub>The card is rendered directly from your public Monkeytype profile by the Monkeytype Card SVG service. It updates when the service retrieves fresh profile data; no GitHub Actions workflow or API key is required.</sub>
 
 ### LeetCode — problem solving
 
