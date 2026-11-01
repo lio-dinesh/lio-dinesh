@@ -378,8 +378,7 @@ function drawCard(p, x, today) {
       const a = arr[col * 7 + row];
       const px = gx + col * (cell + gap), py = gy + row * (cell + gap);
       const date = a.date;
-      out.push(rect(px, py, cell, cell, heatColor(a.count, max),
-        'rx="2" stroke="#30363D" stroke-width=".35"><title>' + xml(date + ": " + a.count + " activity") + '</title></rect>'));
+      out.push('<rect x="' + px + '" y="' + py + '" width="' + cell + '" height="' + cell + '" rx="2" fill="' + heatColor(a.count, max) + '" stroke="#30363D" stroke-width=".35"><title>' + xml(date + ": " + a.count + " activity") + '</title></rect>');
     }
   }
   out.push(label(x + 22, y + 416, "ACTIVE DAYS", 8, "#8B949E", 600));
