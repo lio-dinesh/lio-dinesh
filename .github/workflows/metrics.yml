@@ -40,7 +40,7 @@ jobs:
           plugin_activity: yes
           plugin_activity_limit: 5
           plugin_leetcode: yes
-          plugin_leetcode_user: "4107251480"
+          plugin_leetcode_user: "410725148010"
           plugin_leetcode_sections: solved, skills, recent
           plugin_leetcode_limit_skills: 8
           plugin_leetcode_limit_recent: 3
