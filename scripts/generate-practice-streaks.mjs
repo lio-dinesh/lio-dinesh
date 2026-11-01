@@ -241,23 +241,51 @@ async function leetcode(today) {
 
 async function codechef(today) {
   try {
-    const [heatmapPayload, summaryPayload] = await Promise.all([
+    const [heatmapPayload, summaryPayload, profilePayload, ratingPayload] = await Promise.all([
       getJson("https://codechef-stats.tashif.codes/heatmap/" + encodeURIComponent(USER.codechef) + "?view=all"),
       getJson("https://codechef-stats.tashif.codes/" + encodeURIComponent(USER.codechef)),
+      getJson("https://codechef-stats.tashif.codes/profile/" + encodeURIComponent(USER.codechef)),
+      getJson("https://codechef-stats.tashif.codes/rating/" + encodeURIComponent(USER.codechef)),
     ]);
     const data = heatmapPayload.data ?? heatmapPayload;
     const summary = summaryPayload.data ?? summaryPayload;
+    const profileInfo = profilePayload.profile ?? profilePayload.data?.profile ?? {};
+    const ratingHistory = Array.isArray(ratingPayload.ratingData)
+      ? ratingPayload.ratingData
+      : Array.isArray(ratingPayload.data?.history)
+        ? ratingPayload.data.history
+        : [];
+    const ratingValues = ratingHistory
+      .map((item) => Number(item?.rating))
+      .filter((value) => Number.isFinite(value) && value > 0);
+    const lastRating = [...ratingHistory].reverse()
+      .map((item) => Number(item?.rating))
+      .find((value) => Number.isFinite(value) && value > 0);
+    const currentRating = profileInfo.currentRating ?? summary.currentRating ?? lastRating ?? null;
+    const highestRating = profileInfo.highestRating ?? summary.maxRating ??
+      (ratingValues.length ? Math.max(...ratingValues) : null);
+    const stars = profileInfo.stars ?? summary.rank ?? null;
+
     if (heatmapPayload.status === "error" || data.status === "error") {
       throw new Error(heatmapPayload.message ?? data.message ?? "Profile heatmap could not be read.");
     }
+
     const map = entriesToMap(data.dailyContributions ?? data.heatMap ?? data.heatmap ?? []);
     const derived = streaks(map, today);
     const metrics = [
-      metric("SOLVED", summary.totalSolved),
-      metric("RATING", summary.currentRating),
-      metric("BEST RATING", summary.maxRating),
-      metric("STARS", summary.rank),
-    ];
+      metric("SOLVED", summary.totalSolved ?? profileInfo.totalSolved),
+      metric("RATING", currentRating),
+      metric("BEST RATING", highestRating),
+      metric("STARS", stars),
+    ].filter((item) => item.value !== "--");
+
+    if (metrics.length < 4 && summary.totalActiveDays !== undefined) {
+      metrics.push(metric("ACTIVE DAYS", summary.totalActiveDays));
+    }
+    if (metrics.length < 4 && summary.totalContests !== undefined) {
+      metrics.push(metric("CONTESTS", summary.totalContests));
+    }
+
     return {
       id: "codechef", label: "CODECHEF", handle: USER.codechef, color: C.violet,
       url: "https://www.codechef.com/users/" + USER.codechef,
