@@ -2,7 +2,8 @@ name: Generate 3D practice streak matrix
 
 on:
   schedule:
-    - cron: "20 2 * * *" # 07:50 Asia/Kolkata
+    - cron: "50 7 * * *" # Daily at 07:50 Asia/Kolkata
+      timezone: "Asia/Kolkata"
   workflow_dispatch:
   push:
     branches: [main]
