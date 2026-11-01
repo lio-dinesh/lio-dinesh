@@ -17,6 +17,16 @@ const C = {
 };
 
 const dateISO = (d) => d.toISOString().slice(0, 10);
+function dateInTimezone(timeZone = "Asia/Kolkata") {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone, year: "numeric", month: "2-digit", day: "2-digit",
+  }).formatToParts(new Date());
+  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  return values.year + "-" + values.month + "-" + values.day;
+}
+function metric(label, value) {
+  return { label, value: value === undefined || value === null || value === "" ? "--" : String(value) };
+}
 const addDays = (s, n) => {
   const d = new Date(s + "T00:00:00.000Z");
   d.setUTCDate(d.getUTCDate() + n);
@@ -95,6 +105,18 @@ async function monkeytype(today) {
   try {
     const response = await getJson(url);
     const p = response.data ?? response;
+    const typingStats = p.typingStats ?? {};
+    const pbTime = Array.isArray(p.personalBests?.time?.["60"]) ? p.personalBests.time["60"] : [];
+    const pbWords = Array.isArray(p.personalBests?.words?.["50"]) ? p.personalBests.words["50"] : [];
+    const best = [...pbTime, ...pbWords]
+      .filter((item) => Number.isFinite(Number(item?.wpm)))
+      .sort((a, b) => Number(b.wpm) - Number(a.wpm))[0];
+    const metrics = [
+      metric("BEST WPM", best ? Math.round(Number(best.wpm)) : "--"),
+      metric("ACCURACY", best ? Math.round(Number(best.acc)) + "%" : "--"),
+      metric("TESTS DONE", typingStats.completedTests ?? "--"),
+      metric("TYPING TIME", typingStats.timeTyping ? Math.round(Number(typingStats.timeTyping) / 3600) + "h" : "--"),
+    ];
     let map = monkeyActivity(p.testActivity);
     let activityAvailable = Boolean(p.testActivity);
     if (!activityAvailable && process.env.MONKEYTYPE_API_KEY) {
@@ -117,7 +139,8 @@ async function monkeytype(today) {
         url: "https://monkeytype.com/profile/" + USER.monkeytype,
         status: "PUBLIC PROFILE", current, longest,
         activeDays: activityAvailable ? stats.activeDays : null, lastActiveDate: stats.lastActiveDate,
-        activity: map, activityAvailable, note: activityAvailable ? "Official current and maximum streak from public profile" : "Official streaks; daily activity calendar is private",
+        activity: map, activityAvailable, metrics,
+        note: activityAvailable ? "Official current and maximum streak from public profile" : "Official streaks; daily activity calendar is private",
       };
     }
     throw new Error("Public profile did not return streak fields.");
@@ -149,7 +172,7 @@ async function monkeytype(today) {
   }
 }
 
-const LEET_QUERY = "query UserCalendar($username: String!, $year: Int) { matchedUser(username: $username) { username userCalendar(year: $year) { activeYears streak totalActiveDays submissionCalendar } } }";
+const LEET_QUERY = "query UserCalendar($username: String!, $year: Int) { matchedUser(username: $username) { username submitStats { acSubmissionNum { difficulty count submissions } } userCalendar(year: $year) { activeYears streak totalActiveDays submissionCalendar } } }";
 
 async function leetCalendar(year) {
   const payload = await getJson("https://leetcode.com/graphql", {
@@ -159,7 +182,7 @@ async function leetCalendar(year) {
   });
   const user = payload.data?.matchedUser;
   if (!user?.userCalendar) throw new Error(payload.errors?.[0]?.message ?? "LeetCode profile/calendar not found.");
-  return user.userCalendar;
+  return { calendar: user.userCalendar, submitStats: user.submitStats ?? {} };
 }
 
 function mergeCalendar(calendar, map) {
@@ -177,7 +200,9 @@ function mergeCalendar(calendar, map) {
 async function leetcode(today) {
   try {
     const year = Number(today.slice(0, 4));
-    const currentCalendar = await leetCalendar(year);
+    const currentPayload = await leetCalendar(year);
+    const currentCalendar = currentPayload.calendar;
+    const submitStats = currentPayload.submitStats;
     const years = Array.isArray(currentCalendar.activeYears)
       ? [...new Set(currentCalendar.activeYears.map(Number).filter((y) => Number.isInteger(y) && y > 2000 && y <= year))]
       : [year];
@@ -188,6 +213,14 @@ async function leetcode(today) {
     mergeCalendar(currentCalendar, map);
     calendars.filter(Boolean).forEach((cal) => mergeCalendar(cal, map));
     const derived = streaks(map, today);
+    const accepted = submitStats?.acSubmissionNum ?? [];
+    const acceptedCount = (difficulty) => Number(accepted.find((item) => String(item.difficulty).toLowerCase() === difficulty.toLowerCase())?.count ?? 0);
+    const metrics = [
+      metric("SOLVED", acceptedCount("All")),
+      metric("EASY", acceptedCount("Easy")),
+      metric("MEDIUM", acceptedCount("Medium")),
+      metric("HARD", acceptedCount("Hard")),
+    ];
     return {
       id: "leetcode", label: "LEETCODE", handle: USER.leetcode, color: C.cyan,
       url: "https://leetcode.com/u/" + USER.leetcode + "/",
@@ -196,7 +229,7 @@ async function leetcode(today) {
       longest: derived.longest,
       activeDays: Number(currentCalendar.totalActiveDays ?? derived.activeDays),
       lastActiveDate: derived.lastActiveDate,
-      activity: map, activityAvailable: true,
+      activity: map, activityAvailable: true, metrics,
       note: "Current streak from LeetCode; longest calculated across available calendar years",
     };
   } catch (error) {
@@ -206,12 +239,23 @@ async function leetcode(today) {
 
 async function codechef(today) {
   try {
-    const url = "https://codechef-stats.tashif.codes/heatmap/" + encodeURIComponent(USER.codechef) + "?view=all";
-    const payload = await getJson(url);
-    const data = payload.data ?? payload;
-    if (payload.status === "error" || data.status === "error") throw new Error(payload.message ?? data.message ?? "Profile not found.");
+    const [heatmapPayload, summaryPayload] = await Promise.all([
+      getJson("https://codechef-stats.tashif.codes/heatmap/" + encodeURIComponent(USER.codechef) + "?view=all"),
+      getJson("https://codechef-stats.tashif.codes/" + encodeURIComponent(USER.codechef)),
+    ]);
+    const data = heatmapPayload.data ?? heatmapPayload;
+    const summary = summaryPayload.data ?? summaryPayload;
+    if (heatmapPayload.status === "error" || data.status === "error") {
+      throw new Error(heatmapPayload.message ?? data.message ?? "Profile heatmap could not be read.");
+    }
     const map = entriesToMap(data.dailyContributions ?? data.heatMap ?? data.heatmap ?? []);
     const derived = streaks(map, today);
+    const metrics = [
+      metric("SOLVED", summary.totalSolved),
+      metric("RATING", summary.currentRating),
+      metric("BEST RATING", summary.maxRating),
+      metric("STARS", summary.rank),
+    ];
     return {
       id: "codechef", label: "CODECHEF", handle: USER.codechef, color: C.violet,
       url: "https://www.codechef.com/users/" + USER.codechef,
@@ -220,11 +264,13 @@ async function codechef(today) {
       longest: Number.isFinite(Number(data.longestStreak)) ? Number(data.longestStreak) : derived.longest,
       activeDays: Number(data.totalActiveDays ?? derived.activeDays),
       lastActiveDate: data.lastActiveDate ?? derived.lastActiveDate,
-      activity: map, activityAvailable: true,
+      activity: map, activityAvailable: true, metrics,
       note: "Heatmap-derived submission streak; CodeChef streak freezes may not be reflected",
     };
   } catch (error) {
-    return unavailable("codechef", "CODECHEF", USER.codechef, C.violet, "https://www.codechef.com/users/" + USER.codechef, "CodeChef heatmap unavailable: " + error.message);
+    return unavailable("codechef", "CODECHEF", USER.codechef, C.violet,
+      "https://www.codechef.com/users/" + USER.codechef,
+      "CodeChef heatmap unavailable: " + error.message);
   }
 }
 
@@ -287,9 +333,15 @@ function drawCard(p, x, today) {
   out.push('<line x1="' + (x + 194) + '" y1="' + (y + 91) + '" x2="' + (x + 194) + '" y2="' + (y + 160) + '" stroke="' + C.border + '"/>');
   out.push(label(x + 218, y + 124, longest, 38, p.color, 850));
   out.push(label(x + 220, y + 150, "LONGEST · DAYS", 9, C.muted, 750, "start", 'letter-spacing=".7"'));
-  out.push(label(x + 24, y + 181, p.note.length > 55 ? p.note.slice(0, 52) + "…" : p.note, 9, C.faint, 500));
-  out.push(label(x + 24, y + 224, "13-WEEK ACTIVITY · ISOMETRIC VIEW", 10, C.muted, 750, "start", 'letter-spacing=".8"'));
-  const gx = x + 44, gy = y + 281;
+  out.push(label(x + 24, y + 181, p.note.length > 55 ? p.note.slice(0, 52) + "…" : p.note, 8.5, C.faint, 500));
+  const metricItems = Array.isArray(p.metrics) ? p.metrics.slice(0, 4) : [];
+  metricItems.forEach((item, index) => {
+    const mx = x + 24 + index * 82;
+    out.push(label(mx, y + 209, item.value, 13, p.color, 850));
+    out.push(label(mx, y + 225, item.label, 7, C.muted, 750, "start", 'letter-spacing=".35"'));
+  });
+  out.push(label(x + 24, y + 249, "13-WEEK ACTIVITY · ISOMETRIC VIEW", 9.5, C.muted, 750, "start", 'letter-spacing=".7"'));
+  const gx = x + 44, gy = y + 288;
   for (let col = 0; col < 13; col += 1) {
     for (let row = 0; row < 7; row += 1) {
       const a = arr[col * 7 + row];
@@ -331,7 +383,7 @@ function renderSvg(platforms, today) {
 }
 
 async function main() {
-  const today = dateISO(new Date());
+  const today = dateInTimezone("Asia/Kolkata");
   const results = await Promise.allSettled([monkeytype(today), leetcode(today), codechef(today)]);
   const fallback = [
     ["monkeytype", "MONKEYTYPE", USER.monkeytype, C.amber, "https://monkeytype.com/profile/" + USER.monkeytype],
