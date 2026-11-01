@@ -1,5 +1,5 @@
-// Daily profile dashboard: refresh platform data and regenerate the 3D practice matrix.
 #!/usr/bin/env node
+// Daily profile dashboard: refresh platform data and regenerate the 3D practice matrix.
 import fs from "node:fs/promises";
 import path from "node:path";
 
