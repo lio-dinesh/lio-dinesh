@@ -8,6 +8,35 @@ Repository: https://github.com/lio-dinesh/lio-dinesh
 - `.github/workflows/profile-cards.yml` — renders GitHub analytics directly into this repository.
 - `.github/workflows/main.yml` — existing contribution snake workflow; retained as the only snake publisher.
 
+
+## Daily automation schedule
+
+All schedules use GitHub Actions' IANA timezone support with `Asia/Kolkata`; the refresh jobs are staggered to avoid concurrent writes.
+
+| Workflow | Daily time (IST) | Data refreshed |
+|---|---:|---|
+| `Generate GitHub Snake` | 06:35 | Contribution snake SVGs on the `output` branch |
+| `Generate self-hosted GitHub profile cards` | 07:00 | Overview, current/longest GitHub streak, 3D contribution calendar, momentum and language cards |
+| `Generate 3D practice streak matrix` | 07:50 | Monkeytype streak / typing metrics, LeetCode streak / accepted totals, CodeChef streak / solved / rating / star rank |
+
+These run automatically every day after their workflows exist on the default `main` branch. They also support manual dispatch from the repository's Actions tab.
+
+### Daily rolling activity window
+
+The platform dashboard uses an Asia/Kolkata calendar date and a rolling 91-day (13-week) activity grid. Each run recomputes current streak, longest streak, active days, last activity date and the platform-specific points/metrics from the latest source response. Historical activity is retrieved where the platform exposes it.
+
+### What updates and what has limitations
+
+- **GitHub cards:** rendered and committed as self-hosted light/dark SVG files by `profile-cards.yml`.
+- **GitHub snake:** regenerated daily and published to the `output` branch by `main.yml`.
+- **Monkeytype:** current/max streak and public profile metrics are read daily. Detailed activity history is private unless public activity is enabled or `MONKEYTYPE_API_KEY` is added as an Actions secret.
+- **LeetCode:** the daily GraphQL query refreshes submission calendar, current streak and accepted problem counts. Longest streak is calculated from available active years.
+- **CodeChef:** the public heatmap and profile summary are fetched daily to refresh streak estimates, solved count, current/highest rating and star rank. Heatmap streaks may not include official streak-freeze days.
+- **External README image cards:** third-party SVG services may have their own caches and refresh policies. The self-hosted practice matrix and GitHub cards are the repository-controlled daily sources.
+
+GitHub may delay scheduled runs during high load. In public repositories, schedules can be disabled after 60 days without repository activity; keep the repository active and check Actions if a daily run is missing. See [GitHub schedule event documentation](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
+
+
 ## GitHub analytics cards
 
 The `profile-cards` workflow uses `seijikohara/profile-cards-action@v1` to render SVGs and commit them to `assets/profile-cards/`.
