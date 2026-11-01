@@ -5,6 +5,10 @@ on:
     - cron: "50 7 * * *" # Daily at 07:50 Asia/Kolkata
       timezone: "Asia/Kolkata"
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/generate-practice-streaks.mjs"
 permissions:
   contents: write
 
