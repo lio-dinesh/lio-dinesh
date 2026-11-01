@@ -346,7 +346,9 @@ I keep a regular practice routine to improve typing accuracy, speed, and algorit
   <a href="https://www.codechef.com/users/dce_25148010">🏅 CodeChef</a>
 </p>
 
-<sub>Updated daily by GitHub Actions. Monkeytype uses its official public-profile streak values; its 13-week activity grid is shown only when public activity is enabled (or an optional Monkeytype ApeKey is configured). LeetCode current streak comes from its public calendar and longest streak is calculated from available calendar history. CodeChef streaks are derived from its public submission heatmap and may not account for streak-freeze days.</sub>
+<sub>All values are retrieved from the platform sources and rebuilt daily. The graphic includes: Monkeytype current/max streak, best WPM, best accuracy, completed tests and typing time; LeetCode current/longest streak, total solved and Easy/Medium/Hard counts; CodeChef heatmap-derived current/longest streak, solved count, current rating, highest rating and star rank. Each heatmap is a rolling 13-week window, so the dates move forward every day. Monkeytype's detailed activity grid requires public activity access or the optional ApeKey. CodeChef's heatmap-derived streak may not include official streak-freeze days.</sub>
+
+**Automatic refresh schedule (India time):** GitHub contribution snake — 06:35 IST · GitHub analytics cards — 07:00 IST · Monkeytype / LeetCode / CodeChef practice matrix — 07:50 IST. Each job also supports manual runs from GitHub Actions.
 
 ---
 ## 📈 GitHub Analytics & Contribution Streaks
