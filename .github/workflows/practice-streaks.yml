@@ -5,13 +5,6 @@ on:
     - cron: "50 7 * * *" # Daily at 07:50 Asia/Kolkata
       timezone: "Asia/Kolkata"
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - "README.md"
-      - "scripts/generate-practice-streaks.mjs"
-      - ".github/workflows/practice-streaks.yml"
-
 permissions:
   contents: write
 
@@ -47,4 +40,35 @@ jobs:
             exit 0
           fi
           git commit -m "chore(profile): refresh 3D practice streak matrix [skip ci]"
-          git push
+
+          # If another profile job or a manual README edit reaches main first,
+          # re-stage the generated SVG on the newest main and retry safely.
+          pushed=false
+          for attempt in 1 2 3; do
+            if git push origin HEAD:main; then
+              pushed=true
+              break
+            fi
+
+            if [ "$attempt" -eq 3 ]; then
+              break
+            fi
+
+            echo "Push rejected; refreshing main and retrying (attempt $attempt)."
+            git fetch origin main
+            git reset --mixed origin/main
+            git add assets/practice-streaks.svg
+
+            if git diff --cached --quiet; then
+              echo "The latest main already has the generated practice dashboard."
+              pushed=true
+              break
+            fi
+
+            git commit -m "chore(profile): refresh 3D practice streak matrix [skip ci]"
+          done
+
+          if [ "$pushed" != "true" ]; then
+            echo "::error::Could not push the daily practice dashboard after 3 attempts."
+            exit 1
+          fi
