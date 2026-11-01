@@ -32,6 +32,36 @@ To generate the first set of cards immediately:
 
 The workflow also runs daily. Its rendered SVGs are stored in your repository, so the README no longer depends on the public `github-readme-stats.vercel.app` or `github-readme-activity-graph.vercel.app` image endpoints.
 
+
+## 3D Daily Practice Streak Matrix
+
+- `scripts/generate-practice-streaks.mjs` fetches public streak/activity data for Monkeytype, LeetCode and CodeChef, then renders `assets/practice-streaks.svg`.
+- `.github/workflows/practice-streaks.yml` regenerates the SVG daily at 07:50 Asia/Kolkata and can also be run manually from Actions.
+- The dashboard displays current streak, longest streak, and a 13-week isometric activity calendar for each platform.
+
+### Data sources and definitions
+
+- **Monkeytype:** current and maximum streak come from the public Monkeytype profile API. The public profile may hide the daily activity calendar. To show that grid too, create an ApeKey in Monkeytype and add it as a repository secret named `MONKEYTYPE_API_KEY`. The key is never stored in the repository.
+- **LeetCode:** current streak comes from the public `userCalendar` GraphQL field. Longest streak is calculated from the activity dates returned for the account's active years.
+- **CodeChef:** current and longest streak are calculated from the public daily submission heatmap. CodeChef streak-freeze days may not be represented in that heatmap, so the dashboard labels these values as heatmap-derived rather than official freeze-aware totals.
+
+### Generate it
+
+1. Open https://github.com/lio-dinesh/lio-dinesh/actions.
+2. Select **Generate 3D practice streak matrix**.
+3. Click **Run workflow** on the `main` branch.
+4. After a successful run, confirm `assets/practice-streaks.svg` exists.
+5. Refresh https://github.com/lio-dinesh.
+
+### Optional Monkeytype activity calendar
+
+1. In Monkeytype, open your account settings and create an ApeKey with the minimum access needed for profile/test-activity reading.
+2. In this GitHub repository, open **Settings → Secrets and variables → Actions → New repository secret**.
+3. Set the secret name to `MONKEYTYPE_API_KEY` and paste the ApeKey as its value.
+4. Re-run **Generate 3D practice streak matrix**.
+5. Never place the ApeKey in README, workflow YAML, or a public file.
+
+
 ## Monkeytype
 
 - Profile: https://monkeytype.com/profile/lio_dinesh
