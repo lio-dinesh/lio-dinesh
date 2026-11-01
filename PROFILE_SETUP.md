@@ -29,14 +29,14 @@ Official setup: https://github.com/lowlighter/metrics/blob/master/.github/readme
 - Profile: https://monkeytype.com/profile/lio_dinesh
 - Workflow: **Actions → Update Monkeytype profile cards**.
 - It runs every six hours or manually.
-- It publishes generated SVGs to the `monkeytype-readme` branch. The README expects `monkeytype-readme-lbpb.svg` (leaderboard + personal bests). If the action changes its output filename, update the README image URL to the actual file.
+- It publishes generated SVGs to the `monkeytype-readme` branch. The README expects `lio_dinesh-monkeytype-readme-lb-pb.svg` (leaderboard + personal bests). If the action changes its output filename, update the README image URL to the actual file.
 - The card can only show metrics the Monkeytype profile and generator expose; no scores are hard-coded.
 
 Action documentation: https://github.com/monkeytype-hub/monkeytype-readme
 
 ## LeetCode
 
-- Profile: https://leetcode.com/u/4107251480/
+- Profile: https://leetcode.com/u/41072514801010/
 - README includes a LeetCard heatmap and the Metrics LeetCode plugin.
 - The numeric identifier may or may not be accepted as a username by third-party card providers. If the image fails, keep the direct profile link and replace the image endpoint with the public LeetCode username/slug shown by LeetCode.
 - The Metrics LeetCode plugin is configured non-fatally; if it cannot resolve the identifier, other GitHub Metrics sections should still render.
@@ -47,6 +47,16 @@ Metrics LeetCode support: https://github.com/lowlighter/metrics/releases
 ## Contribution snake
 
 The existing `.github/workflows/main.yml` already generates `github-snake.svg` and `github-snake-dark.svg` and publishes them to the `output` branch. Keep this single publisher. Do not add another `snake.yml` unless you first disable the existing publisher.
+
+
+## CodeChef
+
+- Profile: https://www.codechef.com/users/dce_25148010
+- The README embeds the CodeChef public stats SVG at `https://codechef-stats.tashif.codes/dce_25148010/stats/svg?theme=dark`. This is an independent service that scrapes public CodeChef profile data; it is not an official CodeChef API and can be rate-limited or unavailable.
+- CodeChef certificates are available from the signed-in certificate dashboard: https://www.codechef.com/certificates
+- CodeChef supports shareable certificate URLs. Open the certificate dashboard, use the certificate's Share action, and copy the individual shareable URL into the README's CodeChef certification section. The verification page is https://www.codechef.com/certificates/verify.
+- A certificate ID and username are required by the verification form. Do not invent these details or publish an unverified credential.
+- Official CodeChef certification FAQ: https://www.codechef.com/certifications/data-structures-and-algorithms/faq
 
 ## WakaTime (not enabled)
 
