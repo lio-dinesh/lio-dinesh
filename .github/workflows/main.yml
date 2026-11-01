@@ -4,7 +4,8 @@ name: Generate GitHub Snake
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "35 6 * * *" # Daily at 06:35 Asia/Kolkata
+      timezone: "Asia/Kolkata"
   push:
     branches:
       - main
