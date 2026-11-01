@@ -27,12 +27,12 @@ Official setup: https://github.com/lowlighter/metrics/blob/master/.github/readme
 ## Monkeytype
 
 - Profile: https://monkeytype.com/profile/lio_dinesh
-- Workflow: **Actions → Update Monkeytype profile cards**.
-- It runs every six hours or manually.
-- It publishes generated SVGs to the `monkeytype-readme` branch. The README expects `lio_dinesh-monkeytype-readme-lb-pb.svg` (leaderboard + personal bests). If the action changes its output filename, update the README image URL to the actual file.
-- The card can only show metrics the Monkeytype profile and generator expose; no scores are hard-coded.
+- README card: `https://monkeytypecard.vercel.app/monkeytype.svg?username=lio_dinesh&theme=serika_dark&timeValue=60&wordValue=50`.
+- The card is rendered directly from the public Monkeytype profile using the Monkeytype Card SVG service; it does not require a GitHub Actions workflow or API key.
+- The older `monkeytype-readme` action was removed because its Zeabur generator returned plain `Not Found` content instead of SVGs. Old files remain in the historical `monkeytype-readme` branch but are no longer referenced.
+- If the image does not load, open the Monkeytype profile directly and check that the profile is public and has typing-test data. The external card service may be unavailable or may change its API.
 
-Action documentation: https://github.com/monkeytype-hub/monkeytype-readme
+Card project: https://github.com/Xander-Murray/monkeytypecard
 
 ## LeetCode
 
