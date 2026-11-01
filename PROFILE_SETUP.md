@@ -31,7 +31,7 @@ The platform dashboard uses an Asia/Kolkata calendar date and a rolling 91-day (
 - **GitHub snake:** regenerated daily and published to the `output` branch by `main.yml`.
 - **Monkeytype:** current/max streak and public profile metrics are read daily. Detailed activity history is private unless public activity is enabled or `MONKEYTYPE_API_KEY` is added as an Actions secret.
 - **LeetCode:** the daily GraphQL query refreshes submission calendar, current streak and accepted problem counts. Longest streak is calculated from available active years.
-- **CodeChef:** the public heatmap and profile summary are fetched daily to refresh streak estimates, solved count, current/highest rating and star rank. Heatmap streaks may not include official streak-freeze days.
+- **CodeChef:** public heatmap, profile summary and rating-history endpoints are queried daily to refresh streak estimates, solved count, rating/rank when exposed, and active-day/contest totals where available. Heatmap streaks may not include official streak-freeze days.
 - **External README image cards:** third-party SVG services may have their own caches and refresh policies. The self-hosted practice matrix and GitHub cards are the repository-controlled daily sources.
 
 GitHub may delay scheduled runs during high load. In public repositories, schedules can be disabled after 60 days without repository activity; keep the repository active and check Actions if a daily run is missing. See [GitHub schedule event documentation](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
