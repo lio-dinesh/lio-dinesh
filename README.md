@@ -305,7 +305,7 @@ I keep a regular practice routine to improve typing accuracy, speed, and algorit
 
 <p align="center">
   <a href="https://leetcode.com/u/410725148010/">
-    <img src="https://leetcard.jacoblin.cool/410725148010?theme=dark&font=Baloo_2&ext=heatmap&cache=0" width="100%" alt="LeetCode problem-solving statistics and activity heatmap" />
+    <img src="https://leetcode-stats.tashif.codes/410725148010/stats/svg?theme=dark" width="100%" alt="LeetCode problem-solving statistics and activity heatmap" />
   </a>
 </p>
 
@@ -313,7 +313,7 @@ I keep a regular practice routine to improve typing accuracy, speed, and algorit
   <a href="https://leetcode.com/u/410725148010/"><img src="https://img.shields.io/badge/OPEN-LEETCODE%20PROFILE-FFA116?style=for-the-badge&logo=leetcode&logoColor=black" alt="Open LeetCode profile" /></a>
 </p>
 
-<sub>The card now uses the exact profile identifier from your supplied LeetCode URL. The direct profile link remains available if the external card provider is temporarily unavailable.</sub>
+<sub>This card uses the LeetCode Stats API SVG endpoint and the exact public profile identifier you supplied. The direct profile link remains available if the external stats service is temporarily unavailable.</sub>
 
 ### 🏅 CodeChef — practice, rating & certification
 
