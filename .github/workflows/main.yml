@@ -1,14 +1,11 @@
 
-name: Generate GitHub Snake
+name: Refresh GitHub contribution snake
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "35 6 * * *" # Daily at 06:35 Asia/Kolkata
+    - cron: "12,27,42,57 * * * *" # Every 15 minutes
       timezone: "Asia/Kolkata"
-  push:
-    branches:
-      - main
 
 permissions:
   contents: write
