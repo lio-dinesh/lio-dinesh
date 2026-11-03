@@ -9,6 +9,7 @@ on:
     branches: [main]
     paths:
       - "scripts/generate-practice-streaks.mjs"
+      - ".github/workflows/practice-streaks.yml"
 permissions:
   contents: write
 
