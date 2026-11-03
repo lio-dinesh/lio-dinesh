@@ -9,33 +9,35 @@ Repository: https://github.com/lio-dinesh/lio-dinesh
 - `.github/workflows/main.yml` — existing contribution snake workflow; retained as the only snake publisher.
 
 
-## Daily automation schedule
+## Near-real-time automation schedule
 
-All schedules use GitHub Actions' IANA timezone support with `Asia/Kolkata`; the refresh jobs are staggered to avoid concurrent writes.
+All three profile automation workflows use GitHub Actions schedules with the `Asia/Kolkata` IANA timezone. They are staggered and run every 15 minutes.
 
-| Workflow | Daily time (IST) | Data refreshed |
-|---|---:|---|
-| `Generate GitHub Snake` | 06:35 | Contribution snake SVGs on the `output` branch |
-| `Generate self-hosted GitHub profile cards` | 07:00 | Overview, current/longest GitHub streak, 3D contribution calendar, momentum and language cards |
-| `Generate 3D practice streak matrix` | 07:50 | Monkeytype streak / typing metrics, LeetCode streak / accepted totals, CodeChef streak / solved / rating / star rank |
+| Workflow | Minutes (IST) | Refreshes |
+|---|---|---|
+| `Refresh daily coding practice breakdown` | `:02, :17, :32, :47` | Monkeytype, LeetCode and CodeChef streaks, metrics and rolling 13-week activity heatmaps |
+| `Refresh GitHub profile analytics` | `:07, :22, :37, :52` | Contributions, current/longest GitHub streak, contribution calendar, momentum and languages |
+| `Refresh GitHub contribution snake` | `:12, :27, :42, :57` | Contribution snake SVGs on the `output` branch |
 
-These run automatically every day after their workflows exist on the default `main` branch. They also support manual dispatch from the repository's Actions tab.
+Each workflow also supports manual dispatch from the Actions tab. The data SVGs are committed only when their contents change, avoiding unnecessary commits when the upstream snapshot is identical.
 
-### Daily rolling activity window
+### What 'near-real-time' means
 
-The platform dashboard uses an Asia/Kolkata calendar date and a rolling 91-day (13-week) activity grid. Each run recomputes current streak, longest streak, active days, last activity date and the platform-specific points/metrics from the latest source response. Historical activity is retrieved where the platform exposes it.
+- The workflows poll the upstream services every 15 minutes. A new contribution or coding session should normally appear on the next successful poll, not instantly.
+- GitHub Actions scheduled events can start late during high-load periods and GitHub does not guarantee exact execution at the cron minute. External providers can also cache or delay public profile data.
+- GitHub does not expose one universal contribution-created webhook that can notify this profile repository for every contribution made in every other repository. Polling is therefore the practical cross-platform approach here.
+- The activity calendar is rolling 91 days (13 weeks) and is rebuilt from the latest available source activity on each successful run.
+- If you need an immediate refresh, use **Actions → the relevant workflow → Run workflow**.
 
-### What updates and what has limitations
+### Data sources and limitations
 
-- **GitHub cards:** rendered and committed as self-hosted light/dark SVG files by `profile-cards.yml`.
-- **GitHub snake:** regenerated daily and published to the `output` branch by `main.yml`.
-- **Monkeytype:** current/max streak and public profile metrics are read daily. Detailed activity history is private unless public activity is enabled or `MONKEYTYPE_API_KEY` is added as an Actions secret.
-- **LeetCode:** the daily GraphQL query refreshes submission calendar, current streak and accepted problem counts. Longest streak is calculated from available active years.
-- **CodeChef:** public heatmap, profile summary and rating-history endpoints are queried daily to refresh streak estimates, solved count, rating/rank when exposed, and active-day/contest totals where available. Heatmap streaks may not include official streak-freeze days.
-- **External README image cards:** third-party SVG services may have their own caches and refresh policies. The self-hosted practice matrix and GitHub cards are the repository-controlled daily sources.
+- **Monkeytype:** current/max streak and public performance values are fetched from the public profile API. Detailed daily activity history may require public activity access or the optional `MONKEYTYPE_API_KEY` secret.
+- **LeetCode:** the public GraphQL calendar and accepted-problem counts are polled. The upstream calendar may update after its own processing delay.
+- **CodeChef:** the public heatmap, summary, profile and rating-history endpoints are polled. Heatmap-derived streaks may not include official streak-freeze days.
+- **GitHub analytics:** the profile-cards action polls the public GitHub data and regenerates its self-hosted SVGs.
+- **Contribution snake:** the snake workflow regenerates its SVGs from the current GitHub contribution grid.
 
-GitHub may delay scheduled runs during high load. In public repositories, schedules can be disabled after 60 days without repository activity; keep the repository active and check Actions if a daily run is missing. See [GitHub schedule event documentation](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
-
+GitHub requires scheduled workflows to be on the default branch. The documented shortest schedule interval is five minutes; this repository uses 15-minute intervals to balance freshness, API usage and workflow queueing. Public-repository schedules may be disabled after 60 days without repository activity. See [GitHub workflow syntax](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#onschedule) and [schedule event guidance](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
 
 ## GitHub analytics cards
 
