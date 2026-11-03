@@ -61,36 +61,37 @@ To generate the first set of cards immediately:
 5. Confirm that `assets/profile-cards/` contains the eight SVG files listed above.
 6. Refresh https://github.com/lio-dinesh.
 
-The workflow also runs daily. Its rendered SVGs are stored in your repository, so the README no longer depends on the public `github-readme-stats.vercel.app` or `github-readme-activity-graph.vercel.app` image endpoints.
+The workflow runs every 15 minutes. Its rendered SVGs are stored in your repository, so the README no longer depends on the public `github-readme-stats.vercel.app` or `github-readme-activity-graph.vercel.app` image endpoints.
 
 
-## 3D Daily Practice Streak Matrix
+## Daily Coding Practice — Streaks & Activity Breakdown
 
-- `scripts/generate-practice-streaks.mjs` fetches public streak/activity data for Monkeytype, LeetCode and CodeChef, then renders `assets/practice-streaks.svg`.
-- `.github/workflows/practice-streaks.yml` regenerates the SVG daily at 07:50 Asia/Kolkata and can also be run manually from Actions.
-- The dashboard displays current streak, longest streak, and a 13-week isometric activity calendar for each platform.
+- `scripts/generate-practice-streaks.mjs` fetches the latest public profile/calendar data for Monkeytype, LeetCode and CodeChef, then renders `assets/practice-streaks.svg`.
+- `.github/workflows/practice-streaks.yml` polls every 15 minutes at IST minutes `:02`, `:17`, `:32` and `:47`, and supports manual dispatch.
+- The SVG uses a rolling 91-day (13-week) GitHub-style activity heatmap. Its date window and generated timestamp move forward on each successful refresh.
+- The platform cards include current/longest streak and available performance points: Monkeytype WPM/accuracy/tests/time; LeetCode accepted totals and difficulty breakdown; CodeChef solved/rating/rank/contest values when provided by its public profile endpoints.
 
 ### Data sources and definitions
 
-- **Monkeytype:** current and maximum streak come from the public Monkeytype profile API. The public profile may hide the daily activity calendar. To show that grid too, create an ApeKey in Monkeytype and add it as a repository secret named `MONKEYTYPE_API_KEY`. The key is never stored in the repository.
-- **LeetCode:** current streak comes from the public `userCalendar` GraphQL field. Longest streak is calculated from the activity dates returned for the account's active years.
-- **CodeChef:** current and longest streak are calculated from the public daily submission heatmap. CodeChef streak-freeze days may not be represented in that heatmap, so the dashboard labels these values as heatmap-derived rather than official freeze-aware totals.
+- **Monkeytype:** current and maximum streak plus public typing statistics are read from the public profile API. Detailed day-by-day activity can be private; add a Monkeytype ApeKey as the `MONKEYTYPE_API_KEY` repository Actions secret if you want the optional authenticated activity calendar.
+- **LeetCode:** the public GraphQL `userCalendar` provides current streak and daily activity; longest streak is calculated from available historical calendar years. Accepted counts are requested from `submitStats`.
+- **CodeChef:** the public heatmap is used to calculate current and longest active-day streaks; public profile/summary/rating endpoints provide solved, rating and rank values when available. Heatmap-derived streaks may not include official streak-freeze days.
 
-### Generate it
+### Generate or refresh manually
 
 1. Open https://github.com/lio-dinesh/lio-dinesh/actions.
-2. Select **Generate 3D practice streak matrix**.
+2. Select **Refresh daily coding practice breakdown**.
 3. Click **Run workflow** on the `main` branch.
-4. After a successful run, confirm `assets/practice-streaks.svg` exists.
+4. After a successful run, confirm `assets/practice-streaks.svg` has a recent update timestamp.
 5. Refresh https://github.com/lio-dinesh.
 
 ### Optional Monkeytype activity calendar
 
-1. In Monkeytype, open your account settings and create an ApeKey with the minimum access needed for profile/test-activity reading.
+1. In Monkeytype, create an ApeKey with the minimum access needed for profile/test-activity reading.
 2. In this GitHub repository, open **Settings → Secrets and variables → Actions → New repository secret**.
 3. Set the secret name to `MONKEYTYPE_API_KEY` and paste the ApeKey as its value.
-4. Re-run **Generate 3D practice streak matrix**.
-5. Never place the ApeKey in README, workflow YAML, or a public file.
+4. Re-run **Refresh daily coding practice breakdown**.
+5. Never put the ApeKey into README, workflow YAML or a public file.
 
 
 ## Monkeytype
