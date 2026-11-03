@@ -346,9 +346,9 @@ I keep a regular practice routine to improve typing accuracy, speed, and algorit
   <a href="https://www.codechef.com/users/dce_25148010">🏅 CodeChef</a>
 </p>
 
-<sub>All values are retrieved from the platform sources and rebuilt daily. The breakdown includes: Monkeytype current/max streak, best WPM, best accuracy, completed tests and typing time; LeetCode current/longest streak, total solved and Easy/Medium/Hard counts; CodeChef heatmap-derived current/longest streak, solved count, rating/rank when the public profile exposes them, plus active-day and contest totals where available. Each heatmap uses a rolling 13-week GitHub-style calendar grid, so the dates move forward every day. Monkeytype's detailed activity grid requires public activity access or the optional ApeKey. CodeChef's heatmap-derived streak may not include official streak-freeze days.</sub>
+<sub>All values are retrieved from the platform sources and rebuilt every 15 minutes. The breakdown includes: Monkeytype current/max streak, best WPM, best accuracy, completed tests and typing time; LeetCode current/longest streak, total solved and Easy/Medium/Hard counts; CodeChef heatmap-derived current/longest streak, solved count, rating/rank when the public profile exposes them, plus active-day and contest totals where available. Each heatmap uses a rolling 13-week GitHub-style calendar grid, so the dates move forward on each refresh. Monkeytype's detailed activity grid requires public activity access or the optional ApeKey. CodeChef's heatmap-derived streak may not include official streak-freeze days.</sub>
 
-**Automatic refresh schedule (India time):** GitHub contribution snake — 06:35 IST · GitHub analytics cards — 07:00 IST · Monkeytype / LeetCode / CodeChef practice matrix — 07:50 IST. Each job also supports manual runs from GitHub Actions.
+**Automatic refresh schedule (India time):** the practice dashboard, GitHub contribution calendar and contribution snake are polled every 15 minutes on staggered schedules. GitHub Actions can be delayed during busy periods, so this is near-real-time polling rather than an instant webhook. Each job also supports manual runs from GitHub Actions.
 
 ---
 ## 📈 GitHub Analytics & Contribution Streaks
@@ -385,7 +385,7 @@ These analytics cards are generated as SVG files inside this repository by GitHu
   <img src="./assets/profile-cards/languages.light.svg" width="100%" alt="Language treemap from public GitHub repositories" />
 </picture>
 
-<sub>Cards are refreshed daily by the profile-cards GitHub Action. Their SVGs are stored in this repository, so profile rendering does not depend on a third-party stats server at page-view time. New cards appear after the first successful workflow run.</sub>
+<sub>Cards are refreshed every 15 minutes by the profile-cards GitHub Action. Their SVGs are stored in this repository, so profile rendering does not depend on a third-party stats server at page-view time. New cards appear after the first successful workflow run.</sub>
 
 
 ## 🐍 Contribution Animation
