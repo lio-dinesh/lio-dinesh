@@ -1,8 +1,8 @@
-name: Generate self-hosted GitHub profile cards
+name: Refresh GitHub profile analytics
 
 on:
   schedule:
-    - cron: "0 7 * * *" # Daily at 07:00 Asia/Kolkata
+    - cron: "7,22,37,52 * * * *" # Every 15 minutes
       timezone: "Asia/Kolkata"
   workflow_dispatch:
 permissions:
