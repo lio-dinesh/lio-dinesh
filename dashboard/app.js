@@ -48,7 +48,7 @@ function material(color,extra={}){
 function rangedPlatform(platform){
   const days=platform.dailyActivity||[];
   const filtered=days.slice(-settings.range);
-  return {...platform,dailyActivity:filtered,activeDays:filtered.filter(day=>Number(day.count)>0).length};
+  return {...platform,dailyActivity:filtered,activeDays:platform.activityAvailable?filtered.filter(day=>Number(day.count)>0).length:null};
 }
 function motionEnabled(){return !settings.paused&&!settings.reducedMotion;}
 function animateIn(target,from={y:18,opacity:0},duration=.8){
@@ -307,7 +307,7 @@ function updateDashboard(data){
   currentSnapshot=data;
   const platforms=data.platforms||[];
   $("platform-count").textContent=String(platforms.length).padStart(2,"0");
-  const active=platforms.reduce((sum,p)=>sum+rangedPlatform(p).activeDays,0);
+  const active=platforms.reduce((sum,p)=>sum+(Number(rangedPlatform(p).activeDays)||0),0);
   $("total-active").textContent=n(active);
   const latest=platforms.filter(p=>p.lastActiveDate).sort((a,b)=>String(b.lastActiveDate).localeCompare(String(a.lastActiveDate)))[0];
   $("latest-date").textContent=latest?dateLabel(latest.lastActiveDate):"—";
@@ -321,7 +321,8 @@ function updateDashboard(data){
   });
   renderCalendars(platforms);
   $("connection-status").textContent="CONNECTED";
-  $("connection-status").style.color="var(--accent)";
+  $("connection-status").style.color="var(--cobalt)";
+  if(!settings.reducedMotion)gsap.fromTo(".overview-card",{y:8,opacity:.65},{y:0,opacity:1,duration:.45,stagger:.06,ease:"power2.out"});
 }
 async function refresh(manual=false){
   const button=$("refresh-now");
