@@ -15,7 +15,7 @@
       "imports": {
         "three": "https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js",
         "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/",
-        "gsap": "https://cdn.jsdelivr.net/npm/gsap@3.13.0/index.js"
+        "gsap": "https://cdn.jsdelivr.net/npm/gsap@3.13.0/+esm"
       }
     }
   </script>
@@ -86,7 +86,7 @@
           </div>
           <div class="model-stage-wrap">
             <div class="model-stage" id="scene-monkeytype"></div>
-            <div class="model-overlay"><span>INTERACTIVE KEYBOARD MODEL</span><strong>TYPE / ACCURACY / CONSISTENCY</strong></div>
+            <div class="model-overlay"><span>INTERACTIVE KEYBOARD MODEL</span><strong>MECHANICAL KEYCAPS / TYPING RHYTHM</strong></div>
             <div class="model-tooltip" id="tooltip-monkeytype" hidden></div>
             <span class="stage-footnote">DRAG TO ROTATE · HOVER KEYS · SCROLL TO ZOOM</span>
           </div>
@@ -110,7 +110,7 @@
           </div>
           <div class="model-stage-wrap">
             <div class="model-stage" id="scene-leetcode"></div>
-            <div class="model-overlay"><span>INTERACTIVE SOLUTION MODEL</span><strong>EASY / MEDIUM / HARD</strong></div>
+            <div class="model-overlay"><span>INTERACTIVE SOLUTION MODEL</span><strong>PROBLEM TIERS / ACCEPTED SOLUTIONS</strong></div>
             <div class="model-tooltip" id="tooltip-leetcode" hidden></div>
             <span class="stage-footnote">DRAG TO ROTATE · HOVER BLOCKS · SCROLL TO ZOOM</span>
           </div>
@@ -134,7 +134,7 @@
           </div>
           <div class="model-stage-wrap">
             <div class="model-stage" id="scene-codechef"></div>
-            <div class="model-overlay"><span>INTERACTIVE CONTEST MODEL</span><strong>RATING / SOLVED / ACTIVITY</strong></div>
+            <div class="model-overlay"><span>INTERACTIVE CONTEST MODEL</span><strong>AWARDS / CONTESTS / PRACTICE RHYTHM</strong></div>
             <div class="model-tooltip" id="tooltip-codechef" hidden></div>
             <span class="stage-footnote">DRAG TO ROTATE · HOVER THE TROPHY · SCROLL TO ZOOM</span>
           </div>
@@ -158,7 +158,7 @@
           </div>
           <div class="model-stage-wrap">
             <div class="model-stage" id="scene-github"></div>
-            <div class="model-overlay"><span>INTERACTIVE CONTRIBUTION MODEL</span><strong>CONTRIBUTIONS / STREAK / DAYS</strong></div>
+            <div class="model-overlay"><span>INTERACTIVE CONTRIBUTION MODEL</span><strong>DAILY VOXELS / STREAK / CONSISTENCY</strong></div>
             <div class="model-tooltip" id="tooltip-github" hidden></div>
             <span class="stage-footnote">DRAG TO ROTATE · HOVER CUBES · SCROLL TO ZOOM</span>
           </div>
@@ -178,6 +178,7 @@
 
       <section class="activity-summary">
         <div class="summary-head"><div><p class="eyebrow">DATA HISTORY</p><h2>Daily activity breakdown</h2></div><span id="summary-updated">SNAPSHOT —</span></div>
+        <div id="activity-insights" class="activity-insights" aria-label="Activity summary metrics"></div>
         <div id="combined-heatmaps" class="combined-heatmaps"></div>
       </section>
 
