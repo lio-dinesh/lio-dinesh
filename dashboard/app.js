@@ -324,7 +324,7 @@ function makeGitHub(platform){
     dummy.position.set(x,height/2+.12,z);dummy.scale.set(1,height,1);dummy.updateMatrix();
     cubes.setMatrixAt(i,dummy.matrix);
     const ratio=value/max;
-    color.set(value?(ratio>.72?"#E58B67":ratio>.36?"#B5A1E8":"#6E8BFF"):"#414753");
+    color.set(themeColor(value?(ratio>.72?"#E58B67":ratio>.36?"#B5A1E8":"#6E8BFF"):"#414753"));
     cubes.setColorAt(i,color);
     cubes.userData.items[i]={title:"GITHUB CONTRIBUTION",date:day.date,count:value};
   });
@@ -430,7 +430,15 @@ function initScene(platform){
       tooltip.style.top=Math.max(46,Math.min(rect.height-85,event.clientY-rect.top+10))+"px";
       tooltip.innerHTML="<strong>"+esc(detail.title||"ACTIVITY")+"</strong><span>"+esc(detail.date||detail.line1||"Platform data")+"</span><span>"+esc(detail.count!==undefined?"Activity: "+detail.count:(detail.line2||"Inspect platform statistics"))+"</span>";
     });
-    renderer.domElement.addEventListener("pointerleave",()=>{tooltip.hidden=true;});
+    renderer.domElement.addEventListener("pointerleave",()=>{
+      tooltip.hidden=true;
+      renderer.domElement.style.cursor="grab";
+      if(record.hoveredObject&&record.hoveredObject.userData.baseScale&&!settings.reducedMotion){
+        const previous=record.hoveredObject;
+        gsap.to(previous.scale,{x:previous.userData.baseScale.x,y:previous.userData.baseScale.y,z:previous.userData.baseScale.z,duration:.18,ease:"power2.out"});
+      }
+      record.hoveredObject=null;
+    });
 
     const observer=new IntersectionObserver(entries=>{
       for(const entry of entries)if(entry.target===host)record.visible=entry.isIntersecting;
