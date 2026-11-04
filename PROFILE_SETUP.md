@@ -41,7 +41,7 @@ The live dashboard collector runs every 5 minutes, beginning at minute :02 to av
 
 | Workflow | Minutes (IST) | Refreshes |
 |---|---|---|
-| `Refresh live coding dashboard and deploy GitHub Pages` | `:01, :06, :11, :16, :21, :26, :31, :36, :41, :46, :51, :56` | Monkeytype, LeetCode, CodeChef and GitHub activity; 3D dashboard data feed and deployment |
+| `Refresh live coding dashboard and deploy GitHub Pages` | `:02, :07, :12, :17, :22, :27, :32, :37, :42, :47, :52, :57` | Monkeytype, LeetCode, CodeChef and GitHub activity; 3D dashboard data feed and deployment |
 | `Refresh GitHub profile analytics` | `:07, :22, :37, :52` | Contributions, current/longest GitHub streak, contribution calendar, momentum and languages |
 | `Refresh GitHub contribution snake` | `:12, :27, :42, :57` | Contribution snake SVGs on the `output` branch |
 
@@ -49,7 +49,7 @@ Each workflow also supports manual dispatch from the Actions tab. The data SVGs 
 
 ### What 'near-real-time' means
 
-- The workflows poll the upstream services every 15 minutes. A new contribution or coding session should normally appear on the next successful poll, not instantly.
+- The live dashboard polls upstream services every 5 minutes; the profile-cards and snake workflows retain their separate 15-minute schedules. A new contribution or coding session should normally appear on the next successful poll, not instantly.
 - GitHub Actions scheduled events can start late during high-load periods and GitHub does not guarantee exact execution at the cron minute. External providers can also cache or delay public profile data.
 - GitHub does not expose one universal contribution-created webhook that can notify this profile repository for every contribution made in every other repository. Polling is therefore the practical cross-platform approach here.
 - The activity calendar is rolling 91 days (13 weeks) and is rebuilt from the latest available source activity on each successful run.
@@ -93,7 +93,7 @@ The workflow runs every 15 minutes. Its rendered SVGs are stored in your reposit
 ## Daily Coding Practice — Streaks & Activity Breakdown
 
 - `scripts/generate-practice-streaks.mjs` fetches the latest public profile/calendar data for Monkeytype, LeetCode and CodeChef, then renders `assets/practice-streaks.svg`.
-- `.github/workflows/practice-streaks.yml` polls every 15 minutes at IST minutes `:02`, `:17`, `:32` and `:47`, and supports manual dispatch.
+- `.github/workflows/practice-streaks.yml` polls every 5 minutes at IST minutes `:02`, `:07`, `:12`, `:17`, `:22`, `:27`, `:32`, `:37`, `:42`, `:47`, `:52` and `:57`, and supports manual dispatch.
 - The SVG uses a rolling 91-day (13-week) GitHub-style activity heatmap. Its date window and generated timestamp move forward on each successful refresh.
 - The platform cards include current/longest streak and available performance points: Monkeytype WPM/accuracy/tests/time; LeetCode accepted totals and difficulty breakdown; CodeChef solved/rating/rank/contest values when provided by its public profile endpoints.
 
