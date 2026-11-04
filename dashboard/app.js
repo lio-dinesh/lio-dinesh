@@ -306,9 +306,9 @@ function renderCalendars(platforms){
 function updateDashboard(data){
   currentSnapshot=data;
   const platforms=data.platforms||[];
-  $("platform-count").textContent=String(platforms.length).padStart(2,"0");
+  setCounter($("platform-count"),platforms.length,2);
   const active=platforms.reduce((sum,p)=>sum+(Number(rangedPlatform(p).activeDays)||0),0);
-  $("total-active").textContent=n(active);
+  setCounter($("total-active"),active);
   const latest=platforms.filter(p=>p.lastActiveDate).sort((a,b)=>String(b.lastActiveDate).localeCompare(String(a.lastActiveDate)))[0];
   $("latest-date").textContent=latest?dateLabel(latest.lastActiveDate):"—";
   $("latest-source").textContent=latest?latest.label+" · "+latest.handle:"No published activity";
@@ -438,6 +438,16 @@ function animate(){
     else record.composer.render();
   });
   animationFrame=requestAnimationFrame(animate);
+}
+function setCounter(element,target,pad=0){
+  if(!element)return;
+  const finalValue=Number(target);
+  if(!Number.isFinite(finalValue)){element.textContent=String(target??"—");return;}
+  if(settings.reducedMotion){element.textContent=String(finalValue).padStart(pad,"0");return;}
+  const value={count:0};
+  gsap.to(value,{count:finalValue,duration:.8,ease:"power2.out",onUpdate:()=>{
+    element.textContent=Math.round(value.count).toString().padStart(pad,"0");
+  }});
 }
 function setTimeAndCountdown(){
   const tick=()=>{
