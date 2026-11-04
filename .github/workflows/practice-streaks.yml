@@ -39,6 +39,9 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Validate dashboard JavaScript module
+        run: node --input-type=module --check < dashboard/app.js
+
       - name: Collect latest platform activity
         run: node scripts/generate-practice-streaks.mjs
         env:
