@@ -130,8 +130,11 @@ function makeCodeChef(platform){
     const handle=new THREE.Mesh(new THREE.TorusGeometry(.32,.065,10,36,Math.PI),material("#C17A5B",{metalness:.3}));
     handle.rotation.z=side<0?Math.PI/2:-Math.PI/2;handle.position.set(side*.58,2.13,0);trophy.add(handle);
   }
-  trophy.userData.detail={title:"CODECHEF TROPHY",line1:"Solved: "+metric(platform,"SOLVED"),line2:"Stars: "+metric(platform,"STARS")};
-  group.add(trophy);pickables.push(trophy);
+  const trophyDetail={title:"CODECHEF TROPHY",line1:"Solved: "+metric(platform,"SOLVED"),line2:"Stars: "+metric(platform,"STARS")};
+  trophy.traverse(child=>{
+    if(child.isMesh){child.userData.detail=trophyDetail;pickables.push(child);}
+  });
+  group.add(trophy);
   const days=(platform.dailyActivity||[]).slice(-21),max=Math.max(1,...days.map(x=>Number(x.count||0)));
   days.forEach((day,i)=>{
     const value=Number(day.count||0),height=value?(.12+Math.sqrt(value/max)*1.15):.035;
@@ -216,7 +219,6 @@ function initScene(platform){
       const w=host.clientWidth,h=host.clientHeight;if(!w||!h)return;
       camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h);
     }).observe(host);
-    updateScene(platform);
   }catch(error){
     console.error("3D model init failed",id,error);
     host.innerHTML='<div class="stat-placeholder">3D preview is unavailable in this browser. The data breakdown remains available below.</div>';
