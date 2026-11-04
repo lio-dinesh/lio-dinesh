@@ -10,6 +10,7 @@ on:
     paths:
       - "scripts/generate-practice-streaks.mjs"
       - ".github/workflows/practice-streaks.yml"
+      - "dashboard/**"
 
 permissions:
   contents: write
