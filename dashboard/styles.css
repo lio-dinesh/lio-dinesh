@@ -254,3 +254,63 @@ main{padding-bottom:42px}
 @media(max-width:1050px){.site-nav{gap:12px;margin-right:12px}.activity-insights{grid-template-columns:repeat(2,minmax(0,1fr))}.combined-heatmaps{grid-template-columns:1fr}}
 @media(max-width:760px){.site-nav{display:none}.intro{min-height:0;padding-top:42px}.intro:after{right:5%;top:30px;width:140px;height:140px}.model-stage-wrap{height:300px}.activity-summary{padding-top:42px}.activity-summary:before{top:22px}.activity-insights{grid-template-columns:repeat(2,minmax(0,1fr))}.calendar-card{padding:14px}.calendar-week{grid-template-rows:repeat(7,11px);gap:3px}.weekday-labels{grid-template-rows:repeat(7,11px);gap:3px}.calendar-cell{height:11px}.calendar-weeks,.calendar-months{gap:3px}}
 @media(max-width:480px){.site-wrap{width:calc(100% - 20px)}.intro h1{font-size:39px}.topbar-meta{gap:6px}.activity-insights{grid-template-columns:1fr}.calendar-card-head{gap:5px}.calendar-stats{gap:5px}.calendar-stats b{font-size:13px}.calendar-stats span{font-size:6px}.trend-chart{gap:3px}.model-stage-wrap{height:255px}.model-controls button{padding:6px 7px;font-size:6px}}
+
+
+/* Interactive colour and motion enhancement pack */
+:root{--mood-glow:#6E8BFF22;--mood-warm:#E58B6718}
+body:before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 16% 18%,var(--mood-glow),transparent 30%),
+    radial-gradient(ellipse at 86% 38%,var(--mood-warm),transparent 27%);
+  animation:ambientDrift 18s ease-in-out infinite alternate;
+}
+.studio-toolbar{position:relative;overflow:hidden}
+.studio-toolbar:after{
+  content:"";position:absolute;left:-30%;top:0;width:35%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--cobalt),var(--orange),transparent);
+  animation:toolbarSweep 8s linear infinite;pointer-events:none
+}
+.color-mode-group select{border-color:#59647A;background:linear-gradient(130deg,#303746,#292E35)}
+.toolbar-group select:hover{border-color:var(--cobalt);box-shadow:0 0 0 3px var(--mood-glow)}
+.model-card{isolation:isolate}
+.model-card:after{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:0;
+  background:radial-gradient(ellipse at 50% 0%,var(--model-accent)18,transparent 64%);
+  transition:opacity .35s ease
+}
+.model-card:hover:after{opacity:1}
+.model-stage-wrap{isolation:isolate}
+.model-stage-wrap:before{
+  content:"";position:absolute;z-index:1;inset:-28%;
+  pointer-events:none;opacity:.22;
+  background:radial-gradient(ellipse at 50% 55%,var(--model-accent),transparent 43%);
+  filter:blur(48px);
+  animation:stageAura 9s ease-in-out infinite alternate
+}
+.model-stage-wrap:after{mix-blend-mode:screen;opacity:.65}
+.model-stage canvas{position:relative;z-index:0}
+.model-tooltip{border-color:var(--model-accent);box-shadow:0 0 0 1px color-mix(in srgb,var(--model-accent) 26%,transparent),0 14px 38px #0008}
+.model-controls button{position:relative;overflow:hidden}
+.model-controls button:after{
+  content:"";position:absolute;inset:0;opacity:0;
+  background:linear-gradient(110deg,transparent,#ffffff18,transparent);
+  transform:translateX(-120%);transition:transform .45s,opacity .2s
+}
+.model-controls button:hover:after{opacity:1;transform:translateX(120%)}
+.model-controls button:hover{box-shadow:0 0 16px color-mix(in srgb,var(--model-accent) 20%,transparent)}
+.platform-stat{transition:transform .2s,border-color .2s,background .2s}
+.platform-stat:hover{transform:translateY(-2px);border-color:var(--model-accent);background:#343B45}
+.calendar-cell:not(.is-empty){cursor:crosshair}
+.calendar-cell:not(.is-empty):hover{box-shadow:0 0 12px var(--heat-accent),0 0 0 1px var(--heat-accent)}
+.trend-bar{box-shadow:0 -2px 10px color-mix(in srgb,var(--heat-accent) 20%,transparent)}
+.activity-insight{transition:transform .22s,border-color .22s,box-shadow .22s}
+.activity-insight:hover{transform:translateY(-3px);border-color:var(--insight-accent);box-shadow:0 16px 32px #0004}
+.live-pill i{background:var(--cobalt);box-shadow:0 0 0 4px var(--mood-glow),0 0 14px var(--cobalt)}
+.connection-card>strong{color:var(--cobalt)}
+@keyframes ambientDrift{0%{transform:translate3d(-1%,0,0) scale(1)}100%{transform:translate3d(1.5%,1%,0) scale(1.04)}}
+@keyframes stageAura{0%{transform:translate3d(-4%,2%,0) scale(.92);opacity:.13}100%{transform:translate3d(4%,-2%,0) scale(1.12);opacity:.32}}
+@keyframes toolbarSweep{0%{left:-35%}100%{left:120%}}
+@media(prefers-reduced-motion:reduce){
+ body:before,.studio-toolbar:after,.model-stage-wrap:before{animation:none!important}
+}
