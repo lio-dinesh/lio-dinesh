@@ -37,7 +37,7 @@ Repository: https://github.com/lio-dinesh/lio-dinesh
 
 ## Near-real-time automation schedule
 
-The live dashboard collector runs every 5 minutes. The separate GitHub profile cards and contribution snake workflows retain their own scheduled refreshes.
+The live dashboard collector runs every 5 minutes, beginning at minute :02 to avoid the top of the hour. The separate GitHub profile cards and contribution snake workflows retain their own scheduled refreshes.
 
 | Workflow | Minutes (IST) | Refreshes |
 |---|---|---|
