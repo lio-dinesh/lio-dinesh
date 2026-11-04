@@ -42,7 +42,7 @@ jobs:
         run: node scripts/generate-practice-streaks.mjs
         env:
           MONKEYTYPE_API_KEY: \${{ secrets.MONKEYTYPE_API_KEY }}
-          GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Commit refreshed data when it changes
         run: |
