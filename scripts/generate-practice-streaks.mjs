@@ -410,7 +410,9 @@ function dashboardSnapshot(platforms, today) {
         status: platform.status,
         currentStreak: platform.current,
         longestStreak: platform.longest,
-        activeDays: platform.activeDays,
+        activeDays: platform.activityAvailable
+          ? recent.filter((day) => Number(day.count) > 0).length
+          : null,
         lastActiveDate: platform.lastActiveDate,
         activityAvailable: Boolean(platform.activityAvailable),
         note: platform.note,
