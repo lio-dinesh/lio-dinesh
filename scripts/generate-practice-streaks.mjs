@@ -305,6 +305,125 @@ async function codechef(today) {
   }
 }
 
+async function githubActivity(today) {
+  try {
+    const token = process.env.GITHUB_TOKEN;
+    if (!token) throw new Error("GITHUB_TOKEN was not supplied to the workflow.");
+
+    const query = `query ProfileActivity($login: String!) {
+      user(login: $login) {
+        contributionsCollection {
+          contributionCalendar {
+            totalContributions
+            weeks {
+              contributionDays {
+                date
+                contributionCount
+              }
+            }
+          }
+        }
+      }
+    }`;
+    const payload = await getJson("https://api.github.com/graphql", {
+      method: "POST",
+      headers: {
+        authorization: "Bearer " + token,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ query, variables: { login: "lio-dinesh" } }),
+    });
+
+    const calendar = payload.data?.user?.contributionsCollection?.contributionCalendar;
+    if (!calendar) throw new Error("GitHub contribution calendar was not returned.");
+
+    const map = new Map();
+    for (const week of calendar.weeks ?? []) {
+      for (const day of week.contributionDays ?? []) {
+        const count = Number(day.contributionCount ?? 0);
+        if (count > 0) map.set(day.date, count);
+      }
+    }
+    const derived = streaks(map, today);
+    const recent = activityWindow(map, today);
+    const peak = Math.max(0, ...recent.map((day) => day.count));
+    const metrics = [
+      metric("CONTRIBUTIONS · 12M", calendar.totalContributions),
+      metric("ACTIVE DAYS · 13W", recent.filter((day) => day.count > 0).length),
+      metric("PEAK DAY · 13W", peak),
+      metric("AVG / ACTIVE DAY", recent.filter((day) => day.count > 0).length
+        ? (recent.reduce((sum, day) => sum + day.count, 0) / recent.filter((day) => day.count > 0).length).toFixed(1)
+        : "0"),
+    ];
+
+    return {
+      id: "github",
+      label: "GITHUB",
+      handle: "lio-dinesh",
+      color: "#58A6FF",
+      url: "https://github.com/lio-dinesh",
+      status: "GITHUB GRAPHQL",
+      current: derived.current,
+      longest: derived.longest,
+      activeDays: derived.activeDays,
+      lastActiveDate: derived.lastActiveDate,
+      activity: map,
+      activityAvailable: true,
+      metrics,
+      note: "GitHub contribution calendar; updates when GitHub records a contribution",
+    };
+  } catch (error) {
+    return unavailable(
+      "github",
+      "GITHUB",
+      "lio-dinesh",
+      "#58A6FF",
+      "https://github.com/lio-dinesh",
+      "GitHub contribution data unavailable: " + error.message
+    );
+  }
+}
+
+function dashboardSnapshot(platforms, today) {
+  const generatedAt = new Date().toISOString();
+  const generatedAtIST = new Intl.DateTimeFormat("en-IN", {
+    timeZone: "Asia/Kolkata",
+    dateStyle: "medium",
+    timeStyle: "medium",
+  }).format(new Date());
+
+  return {
+    schemaVersion: 1,
+    owner: "Dinesh G",
+    generatedAt,
+    generatedAtIST,
+    timezone: "Asia/Kolkata",
+    activityDate: today,
+    refreshIntervalSeconds: 300,
+    platforms: platforms.map((platform) => {
+      const recent = activityWindow(platform.activity, today);
+      return {
+        id: platform.id,
+        label: platform.label,
+        handle: platform.handle,
+        url: platform.url,
+        status: platform.status,
+        currentStreak: platform.current,
+        longestStreak: platform.longest,
+        activeDays: platform.activeDays,
+        lastActiveDate: platform.lastActiveDate,
+        activityAvailable: Boolean(platform.activityAvailable),
+        note: platform.note,
+        metrics: platform.metrics ?? [],
+        dailyActivity: recent.map((day) => ({
+          date: day.date,
+          count: Number(day.count ?? 0),
+        })),
+      };
+    }),
+  };
+}
+
 function formatDate(value) {
   if (!value) return "NO RECENT ACTIVITY";
   return new Intl.DateTimeFormat("en-IN", { day: "2-digit", month: "short", year: "numeric", timeZone: "UTC" }).format(new Date(value + "T00:00:00Z")).toUpperCase();
@@ -413,21 +532,35 @@ function renderSvg(platforms, today) {
 }
 async function main() {
   const today = dateInTimezone("Asia/Kolkata");
-  const results = await Promise.allSettled([monkeytype(today), leetcode(today), codechef(today)]);
+  const results = await Promise.allSettled([
+    monkeytype(today),
+    leetcode(today),
+    codechef(today),
+    githubActivity(today),
+  ]);
   const fallback = [
     ["monkeytype", "MONKEYTYPE", USER.monkeytype, C.amber, "https://monkeytype.com/profile/" + USER.monkeytype],
     ["leetcode", "LEETCODE", USER.leetcode, C.cyan, "https://leetcode.com/u/" + USER.leetcode + "/"],
     ["codechef", "CODECHEF", USER.codechef, C.violet, "https://www.codechef.com/users/" + USER.codechef],
+    ["github", "GITHUB", "lio-dinesh", "#58A6FF", "https://github.com/lio-dinesh"],
   ];
   const platforms = results.map((r, i) => r.status === "fulfilled" ? r.value : unavailable(...fallback[i], r.reason?.message ?? "Unknown error"));
+
   const output = path.resolve(process.cwd(), "assets/practice-streaks.svg");
   await fs.mkdir(path.dirname(output), { recursive: true });
-  await fs.writeFile(output, renderSvg(platforms, today), "utf8");
-  console.log("Generated assets/practice-streaks.svg for IST date " + today);
+  await fs.writeFile(output, renderSvg(platforms.slice(0, 3), today), "utf8");
+
+  const dashboardPath = path.resolve(process.cwd(), "dashboard/data.json");
+  await fs.mkdir(path.dirname(dashboardPath), { recursive: true });
+  const snapshot = dashboardSnapshot(platforms, today);
+  await fs.writeFile(dashboardPath, JSON.stringify(snapshot, null, 2) + "\n", "utf8");
+
+  console.log("Generated SVG and dashboard/data.json for IST date " + today);
   for (const p of platforms) {
     console.log(p.label + ": current=" + (p.current ?? "n/a") +
       " longest=" + (p.longest ?? "n/a") +
       " activeDays=" + (p.activeDays ?? "private/unavailable") +
+      " metrics=" + JSON.stringify(p.metrics ?? []) +
       " status=" + p.status);
   }
 }
