@@ -449,6 +449,20 @@ function setCounter(element,target,pad=0){
     element.textContent=Math.round(value.count).toString().padStart(pad,"0");
   }});
 }
+function setupMagneticInteractions(){
+  if(settings.reducedMotion)return;
+  document.querySelectorAll(".toolbar-action,.outline-link,.connection-actions button").forEach(element=>{
+    element.addEventListener("pointermove",event=>{
+      const rect=element.getBoundingClientRect();
+      const dx=event.clientX-(rect.left+rect.width/2);
+      const dy=event.clientY-(rect.top+rect.height/2);
+      gsap.to(element,{x:dx*.08,y:dy*.08,duration:.22,ease:"power2.out",overwrite:true});
+    });
+    element.addEventListener("pointerleave",()=>{
+      gsap.to(element,{x:0,y:0,duration:.35,ease:"power2.out",overwrite:true});
+    });
+  });
+}
 function setTimeAndCountdown(){
   const tick=()=>{
     $("clock").textContent=new Intl.DateTimeFormat("en-IN",{timeZone:"Asia/Kolkata",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}).format(new Date())+" IST";
@@ -474,6 +488,7 @@ function setupScrollReveal(){
 async function init(){
   setupControls();
   setupScrollReveal();
+  setupMagneticInteractions();
   const prefersReduced=window.matchMedia("(prefers-reduced-motion: reduce)");
   if(prefersReduced.matches)settings.reducedMotion=true;
   await refresh(false);
