@@ -87,12 +87,12 @@ function makeKeyLabel(text,color="#22262B"){
   const mat=new THREE.MeshBasicMaterial({map:texture,transparent:true,depthWrite:false});
   return mat;
 }
-function addKeyLegend(group,label,x,y,z){
-  if(!label)return;
+function addKeyLegend(key,label,height=.24){
+  if(!label||!key)return;
   const mesh=new THREE.Mesh(new THREE.PlaneGeometry(.32,.25),makeKeyLabel(label));
   mesh.rotation.x=-Math.PI/2;
-  mesh.position.set(x,y,z);
-  group.add(mesh);
+  mesh.position.set(0,height/2+.006,0);
+  key.add(mesh);
 }
 function addStudioRing(group,radius,tube,y,color){
   const ring=new THREE.Mesh(new THREE.TorusGeometry(radius,tube,16,96),material(color,{metalness:.68,roughness:.24}));
@@ -146,16 +146,16 @@ function makeKeyboard(platform){
       cap.userData.homeY=cap.position.y;
       cap.userData.phase=(r*13+c)*.16;
       cap.userData.index=index;
-      addKeyLegend(group,label, x,.735,row.z);
+      addKeyLegend(cap,label,.24);
       pickables.push(cap);animated.push(cap);index++;
     });
   });
   // Wide spacebar and a subtle central accent rail.
-  const space=addRoundedBox(group,[3.05,.22,.54],[0,.61,1.91],"#E58B67",.09,{
+  const space=addRoundedBox(group,[3.05,.22,.54],[0,.61,1.70],"#E58B67",.09,{
     title:"SPACE BAR",line1:"Best WPM: "+metric(platform,"BEST WPM"),line2:"Accuracy: "+metric(platform,"ACCURACY")
   },{roughness:.32,metalness:.16});
   space.userData.homeY=space.position.y;space.userData.phase=1.1;
-  addKeyLegend(group,"SPACE",0,.735,1.91);
+  addKeyLegend(space,"SPACE",.22);
   pickables.push(space);animated.push(space);
   const rail=addRoundedBox(group,[7.8,.045,.06],[0,.49,-1.57],"#6E8BFF",.02,null,{metalness:.5,roughness:.28});
   return {group,pickables,animate:t=>animated.forEach(key=>{
@@ -196,8 +196,8 @@ function makeLeetCode(platform){
     pickables.push(plaque);
   });
   return {group,pickables,animate:t=>animated.forEach(o=>{
-    o.ring.rotation.z=t*.43+o.phase;
-    o.inner.rotation.z=-t*.28-o.phase;
+    o.ring.rotation.y=t*.43+o.phase;
+    o.inner.rotation.y=-t*.28-o.phase;
     o.tower.position.y=.025+Math.sin(t*1.1+o.phase)*.035;
   })};
 }
@@ -249,7 +249,7 @@ function makeCodeChef(platform){
   return {group,pickables,animate:t=>{
     trophy.rotation.y=t*.32;
     trophy.position.y=.15+Math.sin(t*.95)*.035;
-    halo.rotation.z=t*.17;
+    halo.rotation.y=t*.17;
   }};
 }
 function makeGitHub(platform){
@@ -340,6 +340,8 @@ function initScene(platform){
       const hit=hits[0];
       let detail=hit.object.userData.detail;
       if(hit.instanceId!==undefined&&hit.object.userData.items)detail=hit.object.userData.items[hit.instanceId];
+      let parent=hit.object.parent;
+      while(!detail&&parent){detail=parent.userData.detail;parent=parent.parent;}
       if(!detail){tooltip.hidden=true;return;}
       tooltip.hidden=false;
       tooltip.style.left=Math.max(8,Math.min(rect.width-190,event.clientX-rect.left+12))+"px";
