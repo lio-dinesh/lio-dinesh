@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="theme-color" content="#F7F4ED"/>
+  <meta name="theme-color" content="#15171A"/>
   <meta name="description" content="Dinesh G's interactive coding performance dashboard."/>
-  <title>Dinesh G — Practice Studio</title>
+  <title>Dinesh G — Graphite Practice Studio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
@@ -14,7 +14,8 @@
     {
       "imports": {
         "three": "https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/"
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/",
+        "gsap": "https://cdn.jsdelivr.net/npm/gsap@3.13.0/index.js"
       }
     }
   </script>
@@ -37,8 +38,8 @@
       <section class="intro">
         <div class="intro-copy">
           <p class="eyebrow">PERSONAL PERFORMANCE / 001</p>
-          <h1>A little better,<br/><em>every single day.</em></h1>
-          <p class="intro-text">Four independent 3D experiences for my typing practice, problem solving, competitive programming and open-source contributions.</p>
+          <h1>Build skills.<br/><em>Compound progress.</em></h1>
+          <p class="intro-text">A focused performance studio for typing practice, algorithmic problem solving, competitive programming and open-source contributions.</p>
         </div>
         <aside class="connection-card">
           <div class="connection-top"><span class="status-dot"></span><span>DATA CONNECTION</span></div>
@@ -61,8 +62,21 @@
       <section class="platform-intro">
         <p class="eyebrow">FOUR SEPARATE 3D EXPERIENCES</p>
         <h2>Choose a practice world.</h2>
-        <p>Each platform has its own model, motion, camera and activity data. Drag to orbit, scroll to zoom and hover over the 3D objects for details.</p>
+        <p>Four independent 3D scenes, each with its own camera, animation and platform data. Choose a date range, rendering quality and camera preset; open any model in fullscreen.</p>
       </section>
+
+      <div class="studio-toolbar" aria-label="Dashboard display controls">
+        <div class="toolbar-group">
+          <label for="range-select">ACTIVITY WINDOW</label>
+          <select id="range-select"><option value="7">LAST 7 DAYS</option><option value="30">LAST 30 DAYS</option><option value="90" selected>LAST 90 DAYS</option></select>
+        </div>
+        <div class="toolbar-group">
+          <label for="quality-select">3D QUALITY</label>
+          <select id="quality-select"><option value="low">PERFORMANCE</option><option value="medium" selected>BALANCED</option><option value="high">HIGH FIDELITY</option></select>
+        </div>
+        <button id="pause-all" class="toolbar-action" type="button">Ⅱ PAUSE ALL</button>
+        <label class="motion-toggle"><input id="reduced-motion" type="checkbox"/> REDUCED MOTION</label>
+      </div>
 
       <section class="model-grid" aria-label="Individual platform models">
         <article class="model-card monkey-card" data-platform-card="monkeytype">
@@ -76,7 +90,15 @@
             <div class="model-tooltip" id="tooltip-monkeytype" hidden></div>
             <span class="stage-footnote">DRAG TO ROTATE · HOVER KEYS · SCROLL TO ZOOM</span>
           </div>
-          <div class="model-controls"><span class="source-status" id="status-monkeytype">LOADING PROFILE</span><button type="button" data-reset="monkeytype">RESET VIEW</button><button type="button" data-autorotate="monkeytype">PAUSE ROTATION</button></div>
+          <div class="model-controls">
+            <span class="source-status" id="status-monkeytype">LOADING PROFILE</span>
+            <button type="button" data-camera="front" data-scene="monkeytype">FRONT</button>
+            <button type="button" data-camera="top" data-scene="monkeytype">TOP</button>
+            <button type="button" data-camera="side" data-scene="monkeytype">SIDE</button>
+            <button type="button" data-reset="monkeytype">RESET</button>
+            <button type="button" data-autorotate="monkeytype">PAUSE</button>
+            <button type="button" data-fullscreen="monkeytype">FULL VIEW ↗</button>
+          </div>
           <div class="platform-stats" id="stats-monkeytype"><div class="stat-placeholder">Loading Monkeytype statistics…</div></div>
           <div class="mini-heatmap" id="heatmap-monkeytype"></div>
         </article>
@@ -92,7 +114,15 @@
             <div class="model-tooltip" id="tooltip-leetcode" hidden></div>
             <span class="stage-footnote">DRAG TO ROTATE · HOVER BLOCKS · SCROLL TO ZOOM</span>
           </div>
-          <div class="model-controls"><span class="source-status" id="status-leetcode">LOADING PROFILE</span><button type="button" data-reset="leetcode">RESET VIEW</button><button type="button" data-autorotate="leetcode">PAUSE ROTATION</button></div>
+          <div class="model-controls">
+            <span class="source-status" id="status-leetcode">LOADING PROFILE</span>
+            <button type="button" data-camera="front" data-scene="leetcode">FRONT</button>
+            <button type="button" data-camera="top" data-scene="leetcode">TOP</button>
+            <button type="button" data-camera="side" data-scene="leetcode">SIDE</button>
+            <button type="button" data-reset="leetcode">RESET</button>
+            <button type="button" data-autorotate="leetcode">PAUSE</button>
+            <button type="button" data-fullscreen="leetcode">FULL VIEW ↗</button>
+          </div>
           <div class="platform-stats" id="stats-leetcode"><div class="stat-placeholder">Loading LeetCode statistics…</div></div>
           <div class="mini-heatmap" id="heatmap-leetcode"></div>
         </article>
@@ -108,7 +138,15 @@
             <div class="model-tooltip" id="tooltip-codechef" hidden></div>
             <span class="stage-footnote">DRAG TO ROTATE · HOVER THE TROPHY · SCROLL TO ZOOM</span>
           </div>
-          <div class="model-controls"><span class="source-status" id="status-codechef">LOADING PROFILE</span><button type="button" data-reset="codechef">RESET VIEW</button><button type="button" data-autorotate="codechef">PAUSE ROTATION</button></div>
+          <div class="model-controls">
+            <span class="source-status" id="status-codechef">LOADING PROFILE</span>
+            <button type="button" data-camera="front" data-scene="codechef">FRONT</button>
+            <button type="button" data-camera="top" data-scene="codechef">TOP</button>
+            <button type="button" data-camera="side" data-scene="codechef">SIDE</button>
+            <button type="button" data-reset="codechef">RESET</button>
+            <button type="button" data-autorotate="codechef">PAUSE</button>
+            <button type="button" data-fullscreen="codechef">FULL VIEW ↗</button>
+          </div>
           <div class="platform-stats" id="stats-codechef"><div class="stat-placeholder">Loading CodeChef statistics…</div></div>
           <div class="mini-heatmap" id="heatmap-codechef"></div>
         </article>
@@ -124,7 +162,15 @@
             <div class="model-tooltip" id="tooltip-github" hidden></div>
             <span class="stage-footnote">DRAG TO ROTATE · HOVER CUBES · SCROLL TO ZOOM</span>
           </div>
-          <div class="model-controls"><span class="source-status" id="status-github">LOADING PROFILE</span><button type="button" data-reset="github">RESET VIEW</button><button type="button" data-autorotate="github">PAUSE ROTATION</button></div>
+          <div class="model-controls">
+            <span class="source-status" id="status-github">LOADING PROFILE</span>
+            <button type="button" data-camera="front" data-scene="github">FRONT</button>
+            <button type="button" data-camera="top" data-scene="github">TOP</button>
+            <button type="button" data-camera="side" data-scene="github">SIDE</button>
+            <button type="button" data-reset="github">RESET</button>
+            <button type="button" data-autorotate="github">PAUSE</button>
+            <button type="button" data-fullscreen="github">FULL VIEW ↗</button>
+          </div>
           <div class="platform-stats" id="stats-github"><div class="stat-placeholder">Loading GitHub statistics…</div></div>
           <div class="mini-heatmap" id="heatmap-github"></div>
         </article>
@@ -141,7 +187,7 @@
       </section>
     </main>
 
-    <footer class="footer"><span>DINESH G · PRACTICE STUDIO · THREE.JS</span><span>WARM IVORY / CHARCOAL / OLIVE / TERRACOTTA</span></footer>
+    <footer class="footer"><span>DINESH G · GRAPHITE PRACTICE STUDIO · THREE.JS + GSAP</span><span>GRAPHITE / PORCELAIN / COBALT / TERRACOTTA / LAVENDER / BRASS</span></footer>
   </div>
   <script type="module" src="./app.js"></script>
 </body>
