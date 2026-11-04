@@ -257,7 +257,7 @@ function makeGitHub(platform){
   addRoundedBox(group,[9.6,.24,6.6],[0,-.04,0],"#22262B",.16,null,{metalness:.25,roughness:.42});
   const days=platform.dailyActivity||[],max=Math.max(1,...days.map(x=>Number(x.count||0)));
   const geometry=new RoundedBoxGeometry(.43,1,.43,2,.055);
-  const material3d=material("#B5A1E8",{roughness:.37,metalness:.2});
+  const material3d=material("#FFFFFF",{roughness:.37,metalness:.2});
   const cubes=new THREE.InstancedMesh(geometry,material3d,Math.max(days.length,1));
   const dummy=new THREE.Object3D(),color=new THREE.Color();
   cubes.userData.items=[];
@@ -400,7 +400,7 @@ function renderActivityInsights(platforms){
   $('activity-insights').innerHTML=platforms.map(original=>{
     const p=rangedPlatform(original),days=p.dailyActivity||[];
     const total=days.reduce((sum,day)=>sum+Number(day.count||0),0);
-    const active=days.filter(day=>Number(day.count||0)>0).length;
+    const active=p.activityAvailable?days.filter(day=>Number(day.count||0)>0).length:null;
     const peak=days.reduce((best,day)=>Number(day.count||0)>Number(best&&best.count||0)?day:best,null);
     const average=active?(total/active).toFixed(1):'0.0';
     return '<article class="activity-insight" data-source="'+esc(p.id)+'"><div class="insight-top"><span>'+esc(p.label)+'</span><span>'+settings.range+' DAYS</span></div><strong>'+n(total)+'</strong><small>TOTAL ACTIVITY EVENTS</small><div class="insight-meta"><span>'+n(active)+' ACTIVE DAYS</span><span>AVG '+average+'/ACTIVE DAY</span></div><div class="insight-peak"><span>PEAK DAY</span><b>'+(peak&&Number(peak.count)>0?esc(dateLabel(peak.date))+' · '+n(peak.count):'NO ACTIVITY')+'</b></div></article>';
@@ -410,7 +410,7 @@ function renderCalendars(platforms){
   $('combined-heatmaps').innerHTML=platforms.map(original=>{
     const p=rangedPlatform(original),days=p.dailyActivity||[];
     const max=Math.max(1,...days.map(day=>Number(day.count||0)));
-    const active=days.filter(day=>Number(day.count||0)>0).length;
+    const active=p.activityAvailable?days.filter(day=>Number(day.count||0)>0).length:null;
     const total=days.reduce((sum,day)=>sum+Number(day.count||0),0);
     const peak=days.reduce((best,day)=>Number(day.count||0)>Number(best&&best.count||0)?day:best,null);
     const first=days.length?new Date(days[0].date+'T00:00:00Z'):new Date();
