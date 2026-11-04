@@ -5,7 +5,6 @@ Repository: https://github.com/lio-dinesh/lio-dinesh
 ## Installed profile analytics
 
 - `README.md` — animated profile, expanded technology catalog, featured projects, Monkeytype, LeetCode, CodeChef and self-hosted GitHub analytics.
-- `.github/workflows/profile-cards.yml` — renders GitHub analytics directly into this repository.
 - `.github/workflows/main.yml` — existing contribution snake workflow; retained as the only snake publisher.
 
 
@@ -65,30 +64,12 @@ Each workflow also supports manual dispatch from the Actions tab. The data SVGs 
 
 GitHub requires scheduled workflows to be on the default branch. The documented shortest schedule interval is five minutes; this repository uses 5-minute intervals to balance freshness, API usage and workflow queueing. Public-repository schedules may be disabled after 60 days without repository activity. See [GitHub workflow syntax](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#onschedule) and [schedule event guidance](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
 
-## GitHub analytics cards
+## GitHub analytics inside the live dashboard
 
-The `profile-cards` workflow uses `seijikohara/profile-cards-action@v1` to render SVGs and commit them to `assets/profile-cards/`.
-
-Generated cards:
-
-- `overview.light.svg` / `overview.dark.svg` — profile statistics.
-- `contributions.light.svg` / `contributions.dark.svg` — current streak, longest streak and 3D contribution calendar.
-- `momentum.light.svg` / `momentum.dark.svg` — contribution trend over time.
-- `languages.light.svg` / `languages.dark.svg` — programming-language treemap.
-
-No personal access token is required for this cards action; the workflow uses the repository's `GITHUB_TOKEN` and `contents: write` permission.
-
-To generate the first set of cards immediately:
-
-1. Open https://github.com/lio-dinesh/lio-dinesh/actions
-2. Select **Generate self-hosted GitHub profile cards**.
-3. Click **Run workflow** and select `main`.
-4. Wait for the run to finish with a green check mark.
-5. Confirm that `assets/profile-cards/` contains the eight SVG files listed above.
-6. Refresh https://github.com/lio-dinesh.
-
-The workflow runs every 15 minutes. Its rendered SVGs are stored in your repository, so the README no longer depends on the public `github-readme-stats.vercel.app` or `github-readme-activity-graph.vercel.app` image endpoints.
-
+- GitHub contribution history is retrieved through the GitHub GraphQL API using the repository's built-in Actions token.
+- The daily contribution feed includes 12-month contribution total, current and longest active streak, recent active days and peak contribution day.
+- The dashboard combines GitHub activity with Monkeytype, LeetCode and CodeChef in one interactive Three.js model.
+- The profile README links to the interactive page instead of embedding a static 3D contribution image.
 
 ## Daily Coding Practice — Streaks & Activity Breakdown
 
