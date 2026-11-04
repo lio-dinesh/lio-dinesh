@@ -348,8 +348,8 @@ A premium interactive dashboard built around four **separate 3D experiences**, n
 - **LeetCode / Problem Forge:** beveled, segmented Easy/Medium/Hard solution towers, dual metallic orbit rings and difficulty plaques.
 - **CodeChef / Contest Arena:** a lathed metallic trophy cup, sculpted handles, stepped podium, rotating halo and alternating activity bars.
 - **GitHub / Contribution Architecture:** a 7-row, week-aligned voxel calendar with individual contribution cubes, date-aware hover inspection and platform-coloured intensity.
-- **Premium visual system:** Graphite `#15171A`, panel `#22262B`, porcelain `#F2EFE8`, cobalt `#6E8BFF`, burnt orange `#E58B67`, lavender `#B5A1E8` and brass `#D6B365`.
-- **Pro interactions:** drag-to-orbit, scroll-to-zoom, Front/Top/Side camera presets, fullscreen per model, reset, pause/resume, hover inspection, magnetic control feedback and scroll reveals.
+- **Three interactive colour moods:** Graphite Signature (cobalt/orange/lavender/brass), Prism Energy (cyan/pink/lime/violet) and Ember Glow (coral/amethyst/amber/rose). The selector updates 3D materials, rim lights and activity heatmap accents together. The base interface stays graphite and readable.
+- **Pro interactions:** drag-to-orbit, scroll-to-zoom, Front/Top/Side camera presets, fullscreen per model, reset, pause/resume, hover lift, ambient particle drift, orbiting accent lights, pulsing rim lights, animated GitHub voxels, animated CodeChef bars, magnetic control feedback and scroll reveals.
 - **Performance controls:** 7/30/90-day activity window, Performance/Balanced/High rendering quality, global pause and reduced-motion mode.
 - **Daily activity breakdown:** weekday-aligned contribution calendars, month labels, intensity legend, total events, active days, peak day and a 14-day activity trend for each platform. The 7/30/90-day selector changes the displayed calendar and summaries.
 - **Live data:** collector polls every 5 minutes; the open page checks for new snapshots every 30 seconds.
