@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b0f0e" />
+  <meta name="description" content="Dinesh G's live coding practice dashboard — Monkeytype, LeetCode, CodeChef and GitHub activity." />
+  <title>Dinesh G — Live Coding Dashboard</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="./styles.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <a class="brand" href="https://github.com/lio-dinesh" aria-label="Dinesh G GitHub profile">
+        <span class="brand-mark">DG</span>
+        <span><strong>DINESH G</strong><small>DEVELOPER ACTIVITY CONSOLE</small></span>
+      </a>
+      <div class="topbar-right">
+        <span class="live-indicator"><i></i> LIVE VIEW</span>
+        <span id="clock" class="clock">--:--:-- IST</span>
+        <a class="icon-link" href="https://github.com/lio-dinesh/lio-dinesh/actions" target="_blank" rel="noreferrer">ACTIONS ↗</a>
+      </div>
+    </header>
+    <main>
+      <section class="hero">
+        <div>
+          <p class="eyebrow">PERSONAL PERFORMANCE / 001</p>
+          <h1>Code. Practice. <span>Progress.</span></h1>
+          <p class="hero-copy">A live-updating view of my coding routine across typing, problem solving, competitive programming and open-source contributions.</p>
+        </div>
+        <div class="refresh-panel">
+          <div class="refresh-label"><span class="pulse-dot"></span> DATA CONNECTION</div>
+          <strong id="data-status">CONNECTING</strong>
+          <small id="last-updated">Waiting for the first snapshot…</small>
+          <button id="refresh-button" class="refresh-button" type="button">↻ Check for updates</button>
+        </div>
+      </section>
+      <section class="metric-strip" aria-label="Daily overview">
+        <article class="metric-tile"><span class="tile-label">PLATFORMS TRACKED</span><strong id="platform-count">04</strong><small>Practice + development</small></article>
+        <article class="metric-tile"><span class="tile-label">TOTAL ACTIVE DAYS · 13W</span><strong id="active-total">—</strong><small>Across connected platforms</small></article>
+        <article class="metric-tile"><span class="tile-label">LATEST ACTIVITY</span><strong id="latest-activity">—</strong><small id="latest-platform">Waiting for data</small></article>
+        <article class="metric-tile"><span class="tile-label">NEXT DATA CHECK</span><strong id="next-check">00:30</strong><small>Browser refresh interval</small></article>
+      </section>
+      <section class="visual-section">
+        <div class="section-heading">
+          <div><p class="eyebrow">INTERACTIVE DATA MODEL</p><h2>Practice activity <span>in 3D</span></h2></div>
+          <div class="scene-controls">
+            <span class="scene-hint">DRAG TO ROTATE · SCROLL TO ZOOM · HOVER A BAR</span>
+            <button id="reset-camera" class="small-button" type="button">Reset view</button>
+          </div>
+        </div>
+        <div class="scene-shell">
+          <div id="three-stage" class="three-stage" aria-label="Interactive three-dimensional practice activity map"></div>
+          <div class="scene-overlay top-left"><span class="scene-kicker">ACTIVITY TERRAIN</span><strong>LAST 13 WEEKS</strong></div>
+          <div class="scene-overlay bottom-left">
+            <span><i class="legend-dot monkey"></i> MONKEYTYPE</span>
+            <span><i class="legend-dot leet"></i> LEETCODE</span>
+            <span><i class="legend-dot chef"></i> CODECHEF</span>
+            <span><i class="legend-dot git"></i> GITHUB</span>
+          </div>
+          <div id="hover-card" class="hover-card" hidden></div>
+          <div id="webgl-fallback" class="webgl-fallback" hidden>3D rendering is unavailable in this browser. Your activity cards and heatmaps below still work.</div>
+          <div class="scene-axis-labels"><span>OLDER</span><span>RECENT →</span></div>
+        </div>
+      </section>
+      <section class="platform-section">
+        <div class="section-heading compact">
+          <div><p class="eyebrow">SOURCE BREAKDOWN</p><h2>Platform performance</h2></div>
+          <span class="updated-chip" id="snapshot-date">SNAPSHOT —</span>
+        </div>
+        <div id="platform-grid" class="platform-grid"><div class="loading-card">Loading platform data…</div></div>
+      </section>
+      <section class="activity-section">
+        <div class="section-heading compact">
+          <div><p class="eyebrow">DAILY CONSISTENCY</p><h2>Activity calendar</h2></div>
+          <span class="updated-chip">ROLLING 91 DAYS</span>
+        </div>
+        <div id="heatmap-grid" class="heatmap-grid"></div>
+      </section>
+      <section class="data-note">
+        <strong>How live is this?</strong>
+        <p>The page checks for a new repository snapshot every 30 seconds. GitHub Actions collects platform data every 5 minutes. A completed typing test or accepted submission appears after the platform publishes it and the next collector run succeeds. This is near-real-time polling, not a direct keystroke stream or instant webhook.</p>
+      </section>
+    </main>
+    <footer class="footer">
+      <span>BUILT WITH THREE.JS · LIVE DATA SNAPSHOTS · ASIA/KOLKATA</span>
+      <span><a href="https://github.com/lio-dinesh">GITHUB</a> · <a href="https://monkeytype.com/profile/lio_dinesh">MONKEYTYPE</a> · <a href="https://leetcode.com/u/410725148010/">LEETCODE</a> · <a href="https://www.codechef.com/users/dce_25148010">CODECHEF</a></span>
+    </footer>
+  </div>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
