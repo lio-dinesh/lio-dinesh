@@ -526,7 +526,7 @@ function renderCalendars(platforms){
     const monthMarks=[];let lastMonth='';
     days.forEach((day,index)=>{const month=day.date.slice(0,7);if(month!==lastMonth){monthMarks.push({week:Math.floor((offset+index)/7),label:new Date(day.date+'T00:00:00Z').toLocaleDateString('en-IN',{month:'short',timeZone:'UTC'})});lastMonth=month;}});
     const monthLabels=monthMarks.map(mark=>'<span style="grid-column:'+(mark.week+1)+'">'+esc(mark.label)+'</span>').join('');
-    return '<article class="calendar-card" data-source="'+esc(p.id)+'" style="--heat-accent:'+(colors[p.id]||'#6E8BFF')+'">'+
+    return '<article class="calendar-card" data-source="'+esc(p.id)+'" style="--heat-accent:'+moodColorForPlatform(p.id)+'">'+
       '<div class="calendar-card-head"><div><strong>'+esc(p.label)+'</strong><small>'+settings.range+' DAYS · DAILY ACTIVITY MAP</small></div><span>'+n(active)+' ACTIVE</span></div>'+
       '<div class="calendar-months" style="--week-count:'+weeks+'"><span></span>'+monthLabels+'</div>'+
       '<div class="calendar-layout">'+labels+'<div class="calendar-weeks" style="--week-count:'+weeks+'">'+columns+'</div></div>'+
