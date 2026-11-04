@@ -261,7 +261,7 @@ function makeLeetCode(platform){
   })};
 }
 function makeCodeChef(platform){
-  const group=new THREE.Group(),pickables=[],days=(platform.dailyActivity||[]).slice(-21);
+  const group=new THREE.Group(),pickables=[],activityBars=[],days=(platform.dailyActivity||[]).slice(-21);
   addRoundedBox(group,[8.4,.25,4.8],[0,.02,0],"#22262B",.16,null,{roughness:.38,metalness:.24});
   addRoundedBox(group,[5.5,.34,2.9],[0,.30,0],"#414753",.12,null,{metalness:.38});
   addRoundedBox(group,[4.2,.30,2.45],[0,.61,0],"#9A684F",.10,{title:"CONTEST PLATFORM",line1:"CodeChef practice",line2:"Public profile data"});
