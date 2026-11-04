@@ -1,8 +1,8 @@
-name: Refresh daily coding practice breakdown
+name: Refresh live coding dashboard and deploy GitHub Pages
 
 on:
   schedule:
-    - cron: "2,17,32,47 * * * *" # Every 15 minutes
+    - cron: "*/5 * * * *" # Every 5 minutes
       timezone: "Asia/Kolkata"
   workflow_dispatch:
   push:
@@ -10,70 +10,80 @@ on:
     paths:
       - "scripts/generate-practice-streaks.mjs"
       - ".github/workflows/practice-streaks.yml"
+
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 concurrency:
-  group: profile-main-writers
+  group: live-coding-dashboard
   cancel-in-progress: false
 
 jobs:
-  generate:
+  refresh-and-deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: \${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Check out profile repository
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
 
-      - name: Refresh platform practice data
+      - name: Collect latest platform activity
         run: node scripts/generate-practice-streaks.mjs
         env:
-          MONKEYTYPE_API_KEY: ${{ secrets.MONKEYTYPE_API_KEY }}
+          MONKEYTYPE_API_KEY: \${{ secrets.MONKEYTYPE_API_KEY }}
+          GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
 
-      - name: Commit refreshed SVG
+      - name: Commit refreshed data when it changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/practice-streaks.svg
+          git add assets/practice-streaks.svg dashboard/data.json
           if git diff --cached --quiet; then
-            echo "Practice dashboard is already up to date."
-            exit 0
+            echo "Source data has not changed; keeping the existing snapshot."
+          else
+            git commit -m "chore(dashboard): refresh platform activity snapshot [skip ci]"
+            pushed=false
+            for attempt in 1 2 3; do
+              if git push origin HEAD:main; then
+                pushed=true
+                break
+              fi
+              if [ "$attempt" -eq 3 ]; then
+                break
+              fi
+              echo "Push rejected; retrying against latest main (attempt $attempt)."
+              git fetch origin main
+              git reset --mixed origin/main
+              git add assets/practice-streaks.svg dashboard/data.json
+              if git diff --cached --quiet; then
+                pushed=true
+                break
+              fi
+              git commit -m "chore(dashboard): refresh platform activity snapshot [skip ci]"
+            done
+            if [ "$pushed" != "true" ]; then
+              echo "::error::Could not publish the refreshed data snapshot after 3 attempts."
+              exit 1
+            fi
           fi
-          git commit -m "chore(profile): refresh 3D practice streak matrix [skip ci]"
 
-          # If another profile job or a manual README edit reaches main first,
-          # re-stage the generated SVG on the newest main and retry safely.
-          pushed=false
-          for attempt in 1 2 3; do
-            if git push origin HEAD:main; then
-              pushed=true
-              break
-            fi
+      - name: Upload interactive dashboard to GitHub Pages
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dashboard
+          retention-days: 1
 
-            if [ "$attempt" -eq 3 ]; then
-              break
-            fi
-
-            echo "Push rejected; refreshing main and retrying (attempt $attempt)."
-            git fetch origin main
-            git reset --mixed origin/main
-            git add assets/practice-streaks.svg
-
-            if git diff --cached --quiet; then
-              echo "The latest main already has the generated practice dashboard."
-              pushed=true
-              break
-            fi
-
-            git commit -m "chore(profile): refresh 3D practice streak matrix [skip ci]"
-          done
-
-          if [ "$pushed" != "true" ]; then
-            echo "::error::Could not push the daily practice dashboard after 3 attempts."
-            exit 1
-          fi
+      - name: Deploy interactive dashboard
+        id: deployment
+        uses: actions/deploy-pages@v4
