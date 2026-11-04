@@ -358,41 +358,17 @@ Explore an interactive Three.js dashboard instead of a static profile image:
   <a href="https://github.com/lio-dinesh">🐙 GitHub</a>
 </p>
 ---
-## 📈 GitHub Analytics & Contribution Streaks
+## 📈 Live GitHub Analytics
 
-These analytics cards are generated as SVG files inside this repository by GitHub Actions. This avoids depending on public image endpoints that can be rate-limited or temporarily unavailable.
+<p align="center">
+  <a href="https://lio-dinesh.github.io/lio-dinesh/">
+    <img src="https://img.shields.io/badge/EXPLORE-LIVE%20GITHUB%20ACTIVITY-2F81F7?style=for-the-badge&logo=github&logoColor=white" alt="Explore live GitHub contribution analytics" />
+  </a>
+</p>
 
-### Profile overview
+The interactive dashboard includes my GitHub contribution count, current and longest streak, daily contribution history, active days and a draggable 3D contribution lane alongside Monkeytype, LeetCode and CodeChef.
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/profile-cards/overview.dark.svg" />
-  <img src="./assets/profile-cards/overview.light.svg" width="100%" alt="Dinesh's GitHub overview: contributions, repositories, stars, followers and activity" />
-</picture>
-
-### 🔥 Contribution streak & 3D activity calendar
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/profile-cards/contributions.dark.svg" />
-  <img src="./assets/profile-cards/contributions.light.svg" width="100%" alt="Current and longest GitHub contribution streaks with an isometric 3D contribution calendar" />
-</picture>
-
-**This card shows both your current streak and your longest streak**, together with your contribution activity across the trailing 12 months.
-
-### 📊 Contribution momentum
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/profile-cards/momentum.dark.svg" />
-  <img src="./assets/profile-cards/momentum.light.svg" width="100%" alt="GitHub contribution momentum over time" />
-</picture>
-
-### 🧩 Programming language distribution
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/profile-cards/languages.dark.svg" />
-  <img src="./assets/profile-cards/languages.light.svg" width="100%" alt="Language treemap from public GitHub repositories" />
-</picture>
-
-<sub>Cards are refreshed every 15 minutes by the profile-cards GitHub Action. Their SVGs are stored in this repository, so profile rendering does not depend on a third-party stats server at page-view time. New cards appear after the first successful workflow run.</sub>
+<sub>The dashboard's source data is collected every 5 minutes; the open page checks for new snapshots every 30 seconds. GitHub's contribution calendar can update after GitHub processes a new contribution, so this is near-real-time polling rather than an instant event stream.</sub>
 
 
 ## 🐍 Contribution Animation
