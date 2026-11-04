@@ -338,13 +338,13 @@ I keep a regular practice routine to improve typing accuracy, speed, and algorit
 
 <p align="center">
   <a href="https://lio-dinesh.github.io/lio-dinesh/">
-    <img src="https://img.shields.io/badge/OPEN-LIVE%203D%20DASHBOARD-27B58A?style=for-the-badge&logo=three.js&logoColor=white" alt="Open Dinesh's interactive live coding dashboard" />
+    <img src="https://img.shields.io/badge/OPEN-LIVE%203D%20DASHBOARD-C17A5B?style=for-the-badge&logo=three.js&logoColor=white" alt="Open Dinesh's interactive live coding dashboard" />
   </a>
 </p>
 
-Explore an interactive Three.js dashboard instead of a static profile image:
+Explore four independent Three.js scenes instead of a static image. The interface uses warm ivory, soft charcoal, muted olive, terracotta, pale sage and natural sand — no neon-green dashboard theme.
 
-- **3D activity terrain:** drag to rotate, scroll to zoom, hover bars to inspect daily activity across Monkeytype, LeetCode, CodeChef and GitHub.
+- **Four separate animated 3D models:** Monkeytype mechanical keyboard, LeetCode difficulty towers, CodeChef trophy arena and GitHub contribution cube field. Each has its own camera, rotation, reset control and hover details.
 - **Live performance cards:** current/longest streaks, typing WPM and accuracy, accepted problem totals, CodeChef profile stats and GitHub contributions where the sources provide them.
 - **Activity calendars:** rolling 13-week heatmaps for all connected platforms.
 - **Automatic refresh:** GitHub Actions collects source data every 5 minutes; the open dashboard checks for a new snapshot every 30 seconds.
@@ -358,7 +358,7 @@ Explore an interactive Three.js dashboard instead of a static profile image:
   <a href="https://github.com/lio-dinesh">🐙 GitHub</a>
 </p>
 ---
-## 📈 Live GitHub Analytics
+## 📈 GitHub activity inside the live dashboard
 
 <p align="center">
   <a href="https://lio-dinesh.github.io/lio-dinesh/">
@@ -366,7 +366,7 @@ Explore an interactive Three.js dashboard instead of a static profile image:
   </a>
 </p>
 
-The interactive dashboard includes my GitHub contribution count, current and longest streak, daily contribution history, active days and a draggable 3D contribution lane alongside Monkeytype, LeetCode and CodeChef.
+The fourth independent 3D experience is the GitHub contribution model: a date-aware field of individual contribution cubes, with hover details, current/longest streak and recent active-day metrics.
 
 <sub>The dashboard's source data is collected every 5 minutes; the open page checks for new snapshots every 30 seconds. GitHub's contribution calendar can update after GitHub processes a new contribution, so this is near-real-time polling rather than an instant event stream.</sub>
 
