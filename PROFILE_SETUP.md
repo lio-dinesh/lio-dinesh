@@ -36,19 +36,18 @@ Repository: https://github.com/lio-dinesh/lio-dinesh
 
 ## Near-real-time automation schedule
 
-The live dashboard collector runs every 5 minutes, beginning at minute :02 to avoid the top of the hour. The separate GitHub profile cards and contribution snake workflows retain their own scheduled refreshes.
+The live dashboard collector runs every 5 minutes, beginning at minute :02 to avoid the top of the hour. The animated contribution snake retains its separate 15-minute schedule.
 
 | Workflow | Minutes (IST) | Refreshes |
 |---|---|---|
 | `Refresh live coding dashboard and deploy GitHub Pages` | `:02, :07, :12, :17, :22, :27, :32, :37, :42, :47, :52, :57` | Monkeytype, LeetCode, CodeChef and GitHub activity; 3D dashboard data feed and deployment |
-| `Refresh GitHub profile analytics` | `:07, :22, :37, :52` | Contributions, current/longest GitHub streak, contribution calendar, momentum and languages |
 | `Refresh GitHub contribution snake` | `:12, :27, :42, :57` | Contribution snake SVGs on the `output` branch |
 
 Each workflow also supports manual dispatch from the Actions tab. The data SVGs are committed only when their contents change, avoiding unnecessary commits when the upstream snapshot is identical.
 
 ### What 'near-real-time' means
 
-- The live dashboard polls upstream services every 5 minutes; the profile-cards and snake workflows retain their separate 15-minute schedules. A new contribution or coding session should normally appear on the next successful poll, not instantly.
+- The live dashboard polls upstream services every 5 minutes; the contribution-snake workflow refreshes every 15 minutes. A new contribution or coding session should normally appear on the next successful poll, not instantly.
 - GitHub Actions scheduled events can start late during high-load periods and GitHub does not guarantee exact execution at the cron minute. External providers can also cache or delay public profile data.
 - GitHub does not expose one universal contribution-created webhook that can notify this profile repository for every contribution made in every other repository. Polling is therefore the practical cross-platform approach here.
 - The activity calendar is rolling 91 days (13 weeks) and is rebuilt from the latest available source activity on each successful run.
@@ -59,7 +58,7 @@ Each workflow also supports manual dispatch from the Actions tab. The data SVGs 
 - **Monkeytype:** current/max streak and public performance values are fetched from the public profile API. Detailed daily activity history may require public activity access or the optional `MONKEYTYPE_API_KEY` secret.
 - **LeetCode:** the public GraphQL calendar and accepted-problem counts are polled. The upstream calendar may update after its own processing delay.
 - **CodeChef:** the public heatmap, summary, profile and rating-history endpoints are polled. Heatmap-derived streaks may not include official streak-freeze days.
-- **GitHub analytics:** the profile-cards action polls the public GitHub data and regenerates its self-hosted SVGs.
+- **GitHub analytics:** GitHub GraphQL data is collected by the live dashboard workflow and stored in `dashboard/data.json` alongside Monkeytype, LeetCode and CodeChef.
 - **Contribution snake:** the snake workflow regenerates its SVGs from the current GitHub contribution grid.
 
 GitHub requires scheduled workflows to be on the default branch. The documented shortest schedule interval is five minutes; this repository uses 5-minute intervals to balance freshness, API usage and workflow queueing. Public-repository schedules may be disabled after 60 days without repository activity. See [GitHub workflow syntax](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#onschedule) and [schedule event guidance](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
@@ -128,7 +127,7 @@ The existing `.github/workflows/main.yml` publishes `github-snake.svg` and `gith
 
 ## Important GitHub Actions setting
 
-In repository **Settings → Actions → General → Workflow permissions**, allow **Read and write permissions** so workflows can commit generated SVG assets. The `profile-cards` action requires `contents: write`.
+In repository **Settings → Actions → General → Workflow permissions**, allow **Read and write permissions** so the live dashboard workflow can commit refreshed data and SVG files. The Pages deployment also uses `pages: write` and `id-token: write` in the workflow.
 
 ## Troubleshooting
 
