@@ -394,12 +394,56 @@ function renderPlatform(original){
   $("heatmap-"+id).innerHTML='<div class="mini-heatmap-head"><span>ACTIVITY · LAST '+settings.range+' DAYS</span><span>'+(platform.activityAvailable?n(platform.activeDays)+" ACTIVE DAYS":"ACTIVITY PRIVATE")+'</span></div><div class="mini-heatmap-cells">'+days.map(day=>'<span class="mini-cell" data-level="'+level(Number(day.count||0),max)+'" title="'+esc(day.date)+' · '+Number(day.count||0)+' activity"></span>').join("")+'</div>';
   if(!settings.reducedMotion)gsap.fromTo($("stats-"+id).children,{y:8,opacity:0},{y:0,opacity:1,duration:.35,stagger:.045,ease:"power2.out"});
 }
+function renderActivityInsights(platforms){
+  $('activity-insights').innerHTML=platforms.map(original=>{
+    const p=rangedPlatform(original),days=p.dailyActivity||[];
+    const total=days.reduce((sum,day)=>sum+Number(day.count||0),0);
+    const active=days.filter(day=>Number(day.count||0)>0).length;
+    const peak=days.reduce((best,day)=>Number(day.count||0)>Number(best&&best.count||0)?day:best,null);
+    const average=active?(total/active).toFixed(1):'0.0';
+    return '<article class="activity-insight" data-source="'+esc(p.id)+'"><div class="insight-top"><span>'+esc(p.label)+'</span><span>'+settings.range+' DAYS</span></div><strong>'+n(total)+'</strong><small>TOTAL ACTIVITY EVENTS</small><div class="insight-meta"><span>'+n(active)+' ACTIVE DAYS</span><span>AVG '+average+'/ACTIVE DAY</span></div><div class="insight-peak"><span>PEAK DAY</span><b>'+(peak&&Number(peak.count)>0?esc(dateLabel(peak.date))+' · '+n(peak.count):'NO ACTIVITY')+'</b></div></article>';
+  }).join('');
+}
 function renderCalendars(platforms){
-  $("combined-heatmaps").innerHTML=platforms.map(original=>{
-    const p=rangedPlatform(original),days=p.dailyActivity||[],max=Math.max(1,...days.map(x=>Number(x.count||0)));
-    return '<article class="calendar-card"><div class="calendar-card-head"><strong>'+esc(p.label)+'</strong><span>'+(p.activityAvailable?n(p.activeDays)+" ACTIVE DAYS":"ACTIVITY PRIVATE")+'</span></div><div class="calendar-cells">'+days.map(d=>'<span class="calendar-cell" data-level="'+level(Number(d.count||0),max)+'" title="'+esc(d.date)+' · '+Number(d.count||0)+' activity"></span>').join("")+'</div><div class="calendar-foot"><span>'+(days.length?dateLabel(days[0].date):"—")+'</span><span>'+settings.range+' DAYS</span><span>'+(days.length?dateLabel(days[days.length-1].date):"—")+'</span></div></article>';
-  }).join("");
-  if(!settings.reducedMotion)gsap.fromTo(".calendar-card",{y:12,opacity:0},{y:0,opacity:1,duration:.45,stagger:.07,ease:"power2.out"});
+  $('combined-heatmaps').innerHTML=platforms.map(original=>{
+    const p=rangedPlatform(original),days=p.dailyActivity||[];
+    const max=Math.max(1,...days.map(day=>Number(day.count||0)));
+    const active=days.filter(day=>Number(day.count||0)>0).length;
+    const total=days.reduce((sum,day)=>sum+Number(day.count||0),0);
+    const peak=days.reduce((best,day)=>Number(day.count||0)>Number(best&&best.count||0)?day:best,null);
+    const first=days.length?new Date(days[0].date+'T00:00:00Z'):new Date();
+    const offset=(first.getUTCDay()+6)%7;
+    const weeks=Math.max(1,Math.ceil((offset+days.length)/7));
+    const slots=Array(offset).fill(null).concat(days);
+    while(slots.length<weeks*7)slots.push(null);
+    const weekday=['M','T','W','T','F','S','S'];
+    const labels='<div class="weekday-labels">'+weekday.map(x=>'<span>'+x+'</span>').join('')+'</div>';
+    let columns='';
+    for(let w=0;w<weeks;w++){
+      let cells='';
+      for(let d=0;d<7;d++){
+        const day=slots[w*7+d];
+        if(!day){cells+='<span class="calendar-cell is-empty"></span>';continue;}
+        const count=Number(day.count||0);
+        cells+='<span class="calendar-cell" data-level="'+level(count,max)+'" title="'+esc(day.date)+' · '+count+' activity events"></span>';
+      }
+      columns+='<div class="calendar-week">'+cells+'</div>';
+    }
+    const trend=days.slice(-14),trendMax=Math.max(1,...trend.map(day=>Number(day.count||0)));
+    const bars=trend.map(day=>{const value=Number(day.count||0),height=value?Math.max(8,Math.round(value/trendMax*100)):3;return '<span class="trend-bar" style="--bar-height:'+height+'%" title="'+esc(day.date)+' · '+value+' events"></span>';}).join('');
+    const monthMarks=[];let lastMonth='';
+    days.forEach((day,index)=>{const month=day.date.slice(0,7);if(month!==lastMonth){monthMarks.push({week:Math.floor((offset+index)/7),label:new Date(day.date+'T00:00:00Z').toLocaleDateString('en-IN',{month:'short',timeZone:'UTC'})});lastMonth=month;}});
+    const monthLabels=monthMarks.map(mark=>'<span style="grid-column:'+(mark.week+1)+'">'+esc(mark.label)+'</span>').join('');
+    return '<article class="calendar-card" data-source="'+esc(p.id)+'" style="--heat-accent:'+(colors[p.id]||'#6E8BFF')+'">'+
+      '<div class="calendar-card-head"><div><strong>'+esc(p.label)+'</strong><small>'+settings.range+' DAYS · DAILY ACTIVITY MAP</small></div><span>'+n(active)+' ACTIVE</span></div>'+
+      '<div class="calendar-months" style="--week-count:'+weeks+'"><span></span>'+monthLabels+'</div>'+
+      '<div class="calendar-layout">'+labels+'<div class="calendar-weeks" style="--week-count:'+weeks+'">'+columns+'</div></div>'+
+      '<div class="calendar-stats"><div><b>'+n(total)+'</b><span>TOTAL EVENTS</span></div><div><b>'+n(active)+'</b><span>ACTIVE DAYS</span></div><div><b>'+(peak&&Number(peak.count)>0?n(peak.count):'—')+'</b><span>PEAK DAY</span></div></div>'+
+      '<div class="trend-head"><span>LAST 14 DAYS · ACTIVITY TREND</span><span>PEAK '+n(trendMax)+'</span></div><div class="trend-chart">'+bars+'</div>'+
+      '<div class="calendar-foot"><span>'+(days.length?dateLabel(days[0].date):'—')+'</span><span>DAILY HISTORY</span><span>'+(days.length?dateLabel(days[days.length-1].date):'—')+'</span></div>'+
+      '<div class="intensity-legend"><span>LESS</span><i data-level="0"></i><i data-level="1"></i><i data-level="2"></i><i data-level="3"></i><i data-level="4"></i><span>MORE</span></div></article>';
+  }).join('');
+  if(!settings.reducedMotion)gsap.fromTo('.calendar-card',{y:18,opacity:0,scale:.985},{y:0,opacity:1,scale:1,duration:.55,stagger:.08,ease:'power3.out'});
 }
 function updateDashboard(data){
   currentSnapshot=data;
@@ -417,6 +461,7 @@ function updateDashboard(data){
     if(!records.has(platform.id))initScene(platform);
     updateScene(platform);
   });
+  renderActivityInsights(platforms);
   renderCalendars(platforms);
   $("connection-status").textContent="CONNECTED";
   $("connection-status").style.color="var(--cobalt)";
