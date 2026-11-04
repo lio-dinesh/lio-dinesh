@@ -27,7 +27,7 @@ jobs:
     timeout-minutes: 15
     environment:
       name: github-pages
-      url: \${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Check out profile repository
         uses: actions/checkout@v4
@@ -42,7 +42,7 @@ jobs:
       - name: Collect latest platform activity
         run: node scripts/generate-practice-streaks.mjs
         env:
-          MONKEYTYPE_API_KEY: \${{ secrets.MONKEYTYPE_API_KEY }}
+          MONKEYTYPE_API_KEY: ${{ secrets.MONKEYTYPE_API_KEY }}
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: Commit refreshed data when it changes
