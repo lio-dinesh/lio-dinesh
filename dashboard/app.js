@@ -65,7 +65,7 @@ function addBox(group,size,position,color,detail){
 }
 function addBase(scene){
   const floor=new THREE.Mesh(new THREE.PlaneGeometry(15,11),material("#22262B",{roughness:.96}));
-  floor.rotation.x=-Math.PI/2;floor.position.y=-.12;scene.add(floor);
+  floor.rotation.x=-Math.PI/2;floor.position.y=-.12;floor.receiveShadow=true;scene.add(floor);
   const grid=new THREE.GridHelper(14,28,"#414753","#2A2E35");
   grid.position.y=-.105;grid.material.transparent=true;grid.material.opacity=.5;scene.add(grid);
 }
@@ -204,6 +204,8 @@ function initScene(platform){
     renderer.outputColorSpace=THREE.SRGBColorSpace;
     renderer.toneMapping=THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure=1.08;
+    renderer.shadowMap.enabled=true;
+    renderer.shadowMap.type=THREE.PCFSoftShadowMap;
     host.appendChild(renderer.domElement);
 
     scene.add(new THREE.HemisphereLight("#F2EFE8","#414753",2.1));
