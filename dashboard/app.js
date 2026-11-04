@@ -18,7 +18,7 @@ const colors={
 const settings={range:90,quality:"medium",colorMood:"graphite",paused:false,reducedMotion:window.matchMedia("(prefers-reduced-motion: reduce)").matches};
 const colorMoods={
   graphite:{orange:"#E58B67",blue:"#6E8BFF",gold:"#D6B365",lavender:"#B5A1E8",warm:"#F2EFE8"},
-  prism:{orange:"#FF6B9D",blue:"#43D9FF",gold:"#C8F36B",lavender:"#B994FF",warm:"#F4F0FF"},
+  prism:{orange:"#FF6B9D",blue:"#43D9FF",gold:"#FFC857",lavender:"#B994FF",warm:"#F4F0FF"},
   ember:{orange:"#FF765E",blue:"#B58AFF",gold:"#FFC66D",lavender:"#FF9EBC",warm:"#FFE9DA"}
 };
 const accentKeys={
