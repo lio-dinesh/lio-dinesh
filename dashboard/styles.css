@@ -39,7 +39,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{ou
 .identity-copy small{display:block;margin-top:4px;font:8px var(--mono);letter-spacing:.1em;color:var(--muted)}
 .topbar-meta{display:flex;align-items:center;gap:18px;font:9px var(--mono);color:var(--muted)}
 .live-pill{color:#D8DCE5;letter-spacing:.12em}
-.live-pill i,.status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#78B89A;margin-right:7px;box-shadow:0 0 0 4px #78b89a20;animation:softPulse 2.4s ease-in-out infinite}
+.live-pill i,.status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#6E8BFF;margin-right:7px;box-shadow:0 0 0 4px #6e8bff20;animation:softPulse 2.4s ease-in-out infinite}
 .outline-link{padding:9px 12px;border:1px solid var(--line);border-radius:7px;text-decoration:none;color:var(--text);transition:border-color .2s,color .2s,background .2s}
 .outline-link:hover{border-color:var(--cobalt);color:var(--cobalt);background:#6e8bff0d}
 
