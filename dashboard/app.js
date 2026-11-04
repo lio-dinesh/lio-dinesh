@@ -104,7 +104,7 @@ function makeKeyboard(platform){
 }
 function makeLeetCode(platform){
   const group=new THREE.Group(),pickables=[],animated=[];
-  addBox(group,[8.3,.25,4.7],[0,.02,0],"#E5D8C6");
+  addBox(group,[8.3,.25,4.7],[0,.02,0],"#22262B");
   const difficulty=[
     {label:"EASY",value:metric(platform,"EASY"),color:"#6E8BFF"},
     {label:"MEDIUM",value:metric(platform,"MEDIUM"),color:"#B5A1E8"},
@@ -133,7 +133,7 @@ function makeCodeChef(platform){
   addBox(group,[8.4,.25,4.8],[0,.02,0],"#22262B");
   addBox(group,[5,.32,2.6],[0,.3,0],"#414753");
   addBox(group,[3.65,.38,1.95],[0,.65,0],"#9A684F");
-  addBox(group,[2.35,.42,1.35],[0,1.05,0],"#34372F");
+  addBox(group,[2.35,.42,1.35],[0,1.05,0],"#22262B");
   const trophy=new THREE.Group();
   const cup=new THREE.Mesh(new THREE.CylinderGeometry(.49,.78,.78,40),material("#D6B365",{metalness:.55,roughness:.24}));
   cup.position.y=2.05;trophy.add(cup);
@@ -156,7 +156,7 @@ function makeCodeChef(platform){
   days.forEach((day,i)=>{
     const value=Number(day.count||0),height=value?(.12+Math.sqrt(value/max)*1.15):.035;
     const bar=addBox(group,[.15,height,.15],[-3.15+(i%7)*.37,.16+height/2,-1.65+Math.floor(i/7)*.48],
-      i%3===0?"#D6B365":"#A66B4F",
+      i%3===0?"#D6B365":"#D6B365",
       {title:"CONTEST ACTIVITY",line1:day.date,line2:"Daily submissions: "+value});
     pickables.push(bar);
   });
