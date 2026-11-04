@@ -4,6 +4,7 @@ import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 import gsap from "gsap";
 
 const DATA_URL="./data.json";
@@ -63,6 +64,44 @@ function addBox(group,size,position,color,detail){
   group.add(obj);
   return obj;
 }
+function addRoundedBox(group,size,position,color,radius=.07,detail,extra={}){
+  const geometry=new RoundedBoxGeometry(size[0],size[1],size[2],3,radius);
+  const obj=new THREE.Mesh(geometry,material(color,extra));
+  obj.position.set(position[0],position[1],position[2]);
+  obj.castShadow=true;obj.receiveShadow=true;
+  if(detail)obj.userData.detail=detail;
+  group.add(obj);
+  return obj;
+}
+function makeKeyLabel(text,color="#22262B"){
+  const canvas=document.createElement("canvas");
+  canvas.width=256;canvas.height=256;
+  const ctx=canvas.getContext("2d");
+  ctx.clearRect(0,0,256,256);
+  ctx.fillStyle=color;
+  ctx.font="600 104px 'DM Mono', monospace";
+  ctx.textAlign="center";ctx.textBaseline="middle";
+  ctx.fillText(text,128,128);
+  const texture=new THREE.CanvasTexture(canvas);
+  texture.colorSpace=THREE.SRGBColorSpace;
+  const mat=new THREE.MeshBasicMaterial({map:texture,transparent:true,depthWrite:false});
+  return mat;
+}
+function addKeyLegend(group,label,x,y,z){
+  if(!label)return;
+  const mesh=new THREE.Mesh(new THREE.PlaneGeometry(.32,.25),makeKeyLabel(label));
+  mesh.rotation.x=-Math.PI/2;
+  mesh.position.set(x,y,z);
+  group.add(mesh);
+}
+function addStudioRing(group,radius,tube,y,color){
+  const ring=new THREE.Mesh(new THREE.TorusGeometry(radius,tube,16,96),material(color,{metalness:.68,roughness:.24}));
+  ring.rotation.x=Math.PI/2;
+  ring.position.y=y;
+  ring.castShadow=true;
+  group.add(ring);
+  return ring;
+}
 function addBase(scene){
   const floor=new THREE.Mesh(new THREE.PlaneGeometry(15,11),material("#22262B",{roughness:.96}));
   floor.rotation.x=-Math.PI/2;floor.position.y=-.12;floor.receiveShadow=true;scene.add(floor);
@@ -80,31 +119,54 @@ function disposeGroup(group){
 }
 function makeKeyboard(platform){
   const group=new THREE.Group(),pickables=[],animated=[];
-  addBox(group,[8.8,.36,3.4],[0,.2,0],"#22262B");
-  addBox(group,[8.4,.08,3.04],[0,.42,0],"#414753");
-  const days=platform.dailyActivity||[];
-  for(let r=0;r<4;r++)for(let c=0;c<11;c++){
-    const i=(r*11+c)%Math.max(1,days.length),day=days[i]||{count:0,date:""};
-    const isAccent=(r+c)%9===0;
-    const key=addBox(group,[.62,.21,.55],[-3.76+c*.75,.59,-1.06+r*.68],
-      isAccent?"#E58B67":"#D9DCE2",
-      {title:"KEY "+(r+1)+"-"+(c+1),line1:"Activity: "+(day.count||0),line2:day.date||"Typing practice"});
-    key.userData.homeY=key.position.y;key.userData.phase=(r*11+c)*.19;
-    pickables.push(key);animated.push(key);
-  }
-  const space=addBox(group,[3.15,.18,.53],[0,.58,1.16],"#AEB6C4",
-    {title:"SPACE BAR",line1:"Best WPM: "+metric(platform,"BEST WPM"),line2:"Accuracy: "+metric(platform,"ACCURACY")});
-  space.userData.homeY=space.position.y;space.userData.phase=1.8;
+  // An anodized chassis with a recessed deck and four low-profile feet.
+  addRoundedBox(group,[9.2,.38,3.65],[0,.16,0],"#292E35",.14,null,{metalness:.58,roughness:.3});
+  addRoundedBox(group,[8.82,.11,3.28],[0,.39,0],"#414753",.08);
+  addBox(group,[8.5,.045,2.96],[0,.465,0],"#171A20");
+  for(const x of [-3.8,3.8])for(const z of [-1.35,1.35])
+    addRoundedBox(group,[.38,.12,.28],[x,.015,z],"#596273",.08,null,{metalness:.7,roughness:.3});
+  // QWERTY layout with keycaps, readable legends and a few burnt-orange accent keys.
+  const rows=[
+    {labels:["ESC","1","2","3","4","5","6","7","8","9","0","⌫"],offset:-4.05,z:-1.08},
+    {labels:["TAB","Q","W","E","R","T","Y","U","I","O","P"],offset:-3.78,z:-.35},
+    {labels:["CAPS","A","S","D","F","G","H","J","K","L","↵"],offset:-3.78,z:.38},
+    {labels:["SHIFT","Z","X","C","V","B","N","M",",",".","SHIFT"],offset:-4.05,z:1.11}
+  ];
+  const activity=platform.dailyActivity||[];
+  let index=0;
+  rows.forEach((row,r)=>{
+    row.labels.forEach((label,c)=>{
+      const x=row.offset+c*.73;
+      const day=activity[index%Math.max(1,activity.length)]||{count:0,date:""};
+      const accent=["ESC","⌫","↵"].includes(label)||((r+c)%17===0);
+      const keyColor=accent?"#E58B67":"#D9DCE2";
+      const cap=addRoundedBox(group,[.62,.24,.56],[x,.61,row.z],keyColor,.07,{
+        title:"KEY "+label,line1:"Activity: "+(day.count||0),line2:day.date||"Typing practice"
+      },{roughness:.36,metalness:.13});
+      cap.userData.homeY=cap.position.y;
+      cap.userData.phase=(r*13+c)*.16;
+      cap.userData.index=index;
+      addKeyLegend(group,label, x,.735,row.z);
+      pickables.push(cap);animated.push(cap);index++;
+    });
+  });
+  // Wide spacebar and a subtle central accent rail.
+  const space=addRoundedBox(group,[3.05,.22,.54],[0,.61,1.91],"#E58B67",.09,{
+    title:"SPACE BAR",line1:"Best WPM: "+metric(platform,"BEST WPM"),line2:"Accuracy: "+metric(platform,"ACCURACY")
+  },{roughness:.32,metalness:.16});
+  space.userData.homeY=space.position.y;space.userData.phase=1.1;
+  addKeyLegend(group,"SPACE",0,.735,1.91);
   pickables.push(space);animated.push(space);
+  const rail=addRoundedBox(group,[7.8,.045,.06],[0,.49,-1.57],"#6E8BFF",.02,null,{metalness:.5,roughness:.28});
   return {group,pickables,animate:t=>animated.forEach(key=>{
     const wave=Math.max(0,Math.sin(t*2.5-key.userData.phase));
-    key.position.y=key.userData.homeY+wave*.07;
-    key.rotation.x=wave*.025;
+    key.position.y=key.userData.homeY+wave*.055;
+    key.rotation.x=wave*.018;
   })};
 }
 function makeLeetCode(platform){
   const group=new THREE.Group(),pickables=[],animated=[];
-  addBox(group,[8.3,.25,4.7],[0,.02,0],"#22262B");
+  addRoundedBox(group,[8.3,.25,4.7],[0,.02,0],"#22262B",.16,null,{roughness:.42,metalness:.25});
   const difficulty=[
     {label:"EASY",value:metric(platform,"EASY"),color:"#6E8BFF"},
     {label:"MEDIUM",value:metric(platform,"MEDIUM"),color:"#B5A1E8"},
@@ -113,79 +175,113 @@ function makeLeetCode(platform){
   difficulty.forEach((d,i)=>{
     const count=Number(d.value)||0;
     const height=Math.min(7,Math.max(1,Math.ceil(count/5)));
-    const tower=new THREE.Group();group.add(tower);
+    const tower=new THREE.Group();
+    const x=(i-1)*2.55;
+    // Individual floating solution blocks retain a visible seam and bevel.
     for(let k=0;k<height;k++){
-      const block=addBox(tower,[1.12,.46,1.12],[0,.4+k*.48,0],d.color,
-        {title:d.label+" SOLUTIONS",line1:"Accepted: "+count,line2:"LeetCode difficulty"});
+      const block=addRoundedBox(tower,[1.22,.43,1.22],[0,.38+k*.47,0],d.color,.09,{
+        title:d.label+" SOLUTIONS",line1:"Accepted: "+count,line2:"Layer "+(k+1)+" / "+height
+      },{roughness:.31,metalness:.16});
       pickables.push(block);
     }
-    const ring=new THREE.Mesh(new THREE.TorusGeometry(.9,.045,10,48),material("#D6B365",{metalness:.32}));
-    ring.rotation.x=Math.PI/2;ring.position.y=.3+height*.5;tower.add(ring);
-    tower.position.x=(i-1)*2.55;animated.push({tower,ring,phase:i*.8});
+    const ring=addStudioRing(tower,.91,.045,.28+height*.47,"#D6B365");
+    const inner=addStudioRing(tower,.66,.018,.31+height*.47,"#F2EFE8");
+    tower.position.x=x;
+    group.add(tower);
+    animated.push({tower,ring,inner,phase:i*.8,height});
+    // Pedestal plaques for the difficulty category.
+    addRoundedBox(group,[1.55,.13,.72],[x,.25,1.35],"#292E35",.06);
+    const plaque=addBox(group,[1.05,.025,.045],[x,.325,1.35],d.color);
+    plaque.userData.detail={title:d.label,line1:"Solved: "+count,line2:"LeetCode difficulty"};
+    pickables.push(plaque);
   });
   return {group,pickables,animate:t=>animated.forEach(o=>{
-    o.ring.rotation.z=t*.48+o.phase;
-    o.tower.position.y=.025+Math.sin(t*1.3+o.phase)*.04;
+    o.ring.rotation.z=t*.43+o.phase;
+    o.inner.rotation.z=-t*.28-o.phase;
+    o.tower.position.y=.025+Math.sin(t*1.1+o.phase)*.035;
   })};
 }
 function makeCodeChef(platform){
-  const group=new THREE.Group(),pickables=[];
-  addBox(group,[8.4,.25,4.8],[0,.02,0],"#22262B");
-  addBox(group,[5,.32,2.6],[0,.3,0],"#414753");
-  addBox(group,[3.65,.38,1.95],[0,.65,0],"#9A684F");
-  addBox(group,[2.35,.42,1.35],[0,1.05,0],"#22262B");
+  const group=new THREE.Group(),pickables=[],days=(platform.dailyActivity||[]).slice(-21);
+  addRoundedBox(group,[8.4,.25,4.8],[0,.02,0],"#22262B",.16,null,{roughness:.38,metalness:.24});
+  addRoundedBox(group,[5.5,.34,2.9],[0,.30,0],"#414753",.12,null,{metalness:.38});
+  addRoundedBox(group,[4.2,.30,2.45],[0,.61,0],"#9A684F",.10,{title:"CONTEST PLATFORM",line1:"CodeChef practice",line2:"Public profile data"});
+  addRoundedBox(group,[2.8,.37,1.78],[0,.93,0],"#292E35",.10,null,{metalness:.45});
   const trophy=new THREE.Group();
-  const cup=new THREE.Mesh(new THREE.CylinderGeometry(.49,.78,.78,40),material("#D6B365",{metalness:.55,roughness:.24}));
-  cup.position.y=2.05;trophy.add(cup);
-  const stem=new THREE.Mesh(new THREE.CylinderGeometry(.16,.22,.66,24),material("#B88C48",{metalness:.5}));
-  stem.position.y=1.36;trophy.add(stem);
-  const foot=new THREE.Mesh(new THREE.CylinderGeometry(.68,.72,.16,36),material("#414753",{metalness:.35}));
-  foot.position.y=1.05;trophy.add(foot);
-  const rim=new THREE.Mesh(new THREE.TorusGeometry(.51,.065,10,48),material("#E5C987",{metalness:.5}));
-  rim.rotation.x=Math.PI/2;rim.position.y=2.45;trophy.add(rim);
-  for(const side of [-1,1]){
-    const handle=new THREE.Mesh(new THREE.TorusGeometry(.32,.065,10,36,Math.PI),material("#D6B365",{metalness:.45}));
-    handle.rotation.z=side<0?Math.PI/2:-Math.PI/2;handle.position.set(side*.58,2.13,0);trophy.add(handle);
+  // A classic cup profile generated by revolving a smooth silhouette.
+  const profile=[
+    new THREE.Vector2(.18,0),new THREE.Vector2(.27,.12),new THREE.Vector2(.35,.28),
+    new THREE.Vector2(.48,.62),new THREE.Vector2(.60,.98),new THREE.Vector2(.67,1.30),
+    new THREE.Vector2(.60,1.46),new THREE.Vector2(.48,1.51),new THREE.Vector2(.28,1.48),
+    new THREE.Vector2(.14,1.38)
+  ];
+  const cup=new THREE.Mesh(new THREE.LatheGeometry(profile,64),material("#D6B365",{metalness:.82,roughness:.19}));
+  cup.position.y=1.48;cup.castShadow=true;trophy.add(cup);
+  const inside=new THREE.Mesh(new THREE.CylinderGeometry(.34,.43,.08,48),material("#E5C987",{metalness:.72,roughness:.23}));
+  inside.position.y=2.86;trophy.add(inside);
+  const stem=new THREE.Mesh(new THREE.CylinderGeometry(.13,.22,.62,32),material("#B88C48",{metalness:.78,roughness:.2}));
+  stem.position.y=1.34;trophy.add(stem);
+  for(const [radius,height] of [[.38,1.02],[.58,.93],[.76,.82]]){
+    const foot=new THREE.Mesh(new THREE.CylinderGeometry(radius*.92,radius,height*.16,48),material("#E5C987",{metalness:.72,roughness:.22}));
+    foot.position.y=height;trophy.add(foot);
   }
+  const rim=addStudioRing(trophy,.62,.065,2.96,"#F2D99A");
+  for(const side of [-1,1]){
+    const handle=new THREE.Mesh(new THREE.TorusGeometry(.39,.075,16,56,Math.PI),material("#E5C987",{metalness:.82,roughness:.2}));
+    handle.rotation.z=side<0?Math.PI/2:-Math.PI/2;
+    handle.position.set(side*.61,2.48,0);trophy.add(handle);
+  }
+  const medal=new THREE.Mesh(new THREE.SphereGeometry(.14,24,16),material("#E58B67",{metalness:.45,roughness:.26}));
+  medal.position.set(0,1.68,.51);trophy.add(medal);
   const trophyDetail={title:"CODECHEF TROPHY",line1:"Solved: "+metric(platform,"SOLVED"),line2:"Stars: "+metric(platform,"STARS")};
-  trophy.traverse(child=>{
-    if(child.isMesh){child.userData.detail=trophyDetail;pickables.push(child);}
-  });
-  group.add(trophy);
-  const days=(platform.dailyActivity||[]).slice(-21),max=Math.max(1,...days.map(x=>Number(x.count||0)));
+  trophy.traverse(child=>{if(child.isMesh){child.userData.detail=trophyDetail;pickables.push(child);}});
+  trophy.position.y=.15;group.add(trophy);
+  const halo=addStudioRing(group,1.28,.024,3.65,"#D6B365");
+  halo.rotation.x=.13;
+  const max=Math.max(1,...days.map(x=>Number(x.count||0)));
   days.forEach((day,i)=>{
-    const value=Number(day.count||0),height=value?(.12+Math.sqrt(value/max)*1.15):.035;
-    const bar=addBox(group,[.15,height,.15],[-3.15+(i%7)*.37,.16+height/2,-1.65+Math.floor(i/7)*.48],
-      i%3===0?"#D6B365":"#D6B365",
+    const value=Number(day.count||0),height=value?(.10+Math.sqrt(value/max)*1.12):.035;
+    const bar=addRoundedBox(group,[.17,height,.17],[-3.35+(i%7)*.39,.16+height/2,-1.55+Math.floor(i/7)*.48],
+      i%4===0?"#D6B365":"#E58B67",.035,
       {title:"CONTEST ACTIVITY",line1:day.date,line2:"Daily submissions: "+value});
     pickables.push(bar);
   });
-  return {group,pickables,animate:t=>{trophy.rotation.y=t*.42;trophy.position.y=Math.sin(t*1.25)*.055;}};
+  return {group,pickables,animate:t=>{
+    trophy.rotation.y=t*.32;
+    trophy.position.y=.15+Math.sin(t*.95)*.035;
+    halo.rotation.z=t*.17;
+  }};
 }
 function makeGitHub(platform){
   const group=new THREE.Group(),pickables=[];
-  addBox(group,[9,.22,6],[0,-.02,0],"#22262B");
+  addRoundedBox(group,[9.6,.24,6.6],[0,-.04,0],"#22262B",.16,null,{metalness:.25,roughness:.42});
   const days=platform.dailyActivity||[],max=Math.max(1,...days.map(x=>Number(x.count||0)));
-  const geometry=new THREE.BoxGeometry(.43,1,.43);
-  const material3d=material("#B5A1E8",{roughness:.42,metalness:.16});
+  const geometry=new RoundedBoxGeometry(.43,1,.43,2,.055);
+  const material3d=material("#B5A1E8",{roughness:.37,metalness:.2});
   const cubes=new THREE.InstancedMesh(geometry,material3d,Math.max(days.length,1));
   const dummy=new THREE.Object3D(),color=new THREE.Color();
   cubes.userData.items=[];
   days.forEach((day,i)=>{
-    const value=Number(day.count||0),height=value?.12+Math.sqrt(value/max)*1.7:.04;
-    const x=-4.05+Math.floor(i/7)*.68,z=-2.38+(i%7)*.68;
-    dummy.position.set(x,height/2+.09,z);dummy.scale.set(1,height,1);dummy.updateMatrix();
+    const value=Number(day.count||0),height=value?.12+Math.sqrt(value/max)*1.7:.045;
+    const x=-4.3+Math.floor(i/7)*.68,z=-2.45+(i%7)*.68;
+    dummy.position.set(x,height/2+.12,z);dummy.scale.set(1,height,1);dummy.updateMatrix();
     cubes.setMatrixAt(i,dummy.matrix);
     const ratio=value/max;
-    color.set(value?(ratio>.7?"#E58B67":ratio>.35?"#B5A1E8":"#6E8BFF"):"#414753");
+    color.set(value?(ratio>.72?"#E58B67":ratio>.36?"#B5A1E8":"#6E8BFF"):"#414753");
     cubes.setColorAt(i,color);
     cubes.userData.items[i]={title:"GITHUB CONTRIBUTION",date:day.date,count:value};
   });
   cubes.count=days.length;cubes.instanceMatrix.needsUpdate=true;
   if(cubes.instanceColor)cubes.instanceColor.needsUpdate=true;
+  cubes.castShadow=true;cubes.receiveShadow=true;
   group.add(cubes);pickables.push(cubes);
-  cubes.userData.detail={title:"CONTRIBUTION TERRAIN",line1:"12-month total: "+metric(platform,"CONTRIBUTIONS · 12M"),line2:"Hover individual days"};
-  return {group,pickables,animate:t=>{cubes.rotation.y=Math.sin(t*.2)*.018;}};
+  // Weekly edge rails make the calendar's 7-row structure easier to read in perspective.
+  for(let w=0;w<13;w++){
+    const rail=addBox(group,[.025,.035,5.0],[-4.3+w*.68,.10,0],"#596273");
+    rail.material.transparent=true;rail.material.opacity=.48;
+  }
+  cubes.userData.detail={title:"CONTRIBUTION TERRAIN",line1:"12-month total: "+metric(platform,"CONTRIBUTIONS · 12M"),line2:"Hover individual daily voxels"};
+  return {group,pickables,animate:t=>{cubes.rotation.y=Math.sin(t*.15)*.012;}};
 }
 const builders={monkeytype:makeKeyboard,leetcode:makeLeetCode,codechef:makeCodeChef,github:makeGitHub};
 
