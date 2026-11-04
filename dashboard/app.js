@@ -77,6 +77,8 @@ function applyColorMood(mode){
   document.body.dataset.colorMood=mode;
   if(currentSnapshot){
     currentSnapshot.platforms.forEach(platform=>updateScene(platform));
+    renderActivityInsights(currentSnapshot.platforms);
+    renderCalendars(currentSnapshot.platforms);
   }
   records.forEach(record=>{
     record.rimLight.color.set(moodColorForPlatform(record.id));
@@ -301,12 +303,17 @@ function makeCodeChef(platform){
     const bar=addRoundedBox(group,[.17,height,.17],[-3.35+(i%7)*.39,.16+height/2,-1.55+Math.floor(i/7)*.48],
       i%4===0?"#D6B365":"#E58B67",.035,
       {title:"CONTEST ACTIVITY",line1:day.date,line2:"Daily submissions: "+value});
-    pickables.push(bar);
+    bar.userData.homeY=bar.position.y;bar.userData.phase=i*.31;
+    activityBars.push(bar);pickables.push(bar);
   });
   return {group,pickables,animate:t=>{
     trophy.rotation.y=t*.32;
     trophy.position.y=.15+Math.sin(t*.95)*.035;
     halo.rotation.y=t*.17;
+    activityBars.forEach((bar,i)=>{
+      bar.position.y=bar.userData.homeY+Math.sin(t*1.4+bar.userData.phase)*.025;
+      bar.rotation.z=Math.sin(t*.8+bar.userData.phase)*.025;
+    });
   }};
 }
 function makeGitHub(platform){
@@ -316,7 +323,7 @@ function makeGitHub(platform){
   const geometry=new RoundedBoxGeometry(.43,1,.43,2,.055);
   const material3d=material("#FFFFFF",{roughness:.37,metalness:.2});
   const cubes=new THREE.InstancedMesh(geometry,material3d,Math.max(days.length,1));
-  const dummy=new THREE.Object3D(),color=new THREE.Color();
+  const dummy=new THREE.Object3D(),color=new THREE.Color(),voxelTransforms=[];
   cubes.userData.items=[];
   days.forEach((day,i)=>{
     const value=Number(day.count||0),height=value?.12+Math.sqrt(value/max)*1.7:.045;
@@ -327,6 +334,7 @@ function makeGitHub(platform){
     color.set(themeColor(value?(ratio>.72?"#E58B67":ratio>.36?"#B5A1E8":"#6E8BFF"):"#414753"));
     cubes.setColorAt(i,color);
     cubes.userData.items[i]={title:"GITHUB CONTRIBUTION",date:day.date,count:value};
+    voxelTransforms.push({x,y:height/2+.12,z,height,phase:i*.13,count:value});
   });
   cubes.count=days.length;cubes.instanceMatrix.needsUpdate=true;
   if(cubes.instanceColor)cubes.instanceColor.needsUpdate=true;
@@ -338,7 +346,17 @@ function makeGitHub(platform){
     rail.material.transparent=true;rail.material.opacity=.48;
   }
   cubes.userData.detail={title:"CONTRIBUTION TERRAIN",line1:"12-month total: "+metric(platform,"CONTRIBUTIONS · 12M"),line2:"Hover individual daily voxels"};
-  return {group,pickables,animate:t=>{cubes.rotation.y=Math.sin(t*.15)*.012;}};
+  return {group,pickables,animate:t=>{
+    cubes.rotation.y=Math.sin(t*.15)*.012;
+    voxelTransforms.forEach((voxel,i)=>{
+      const breathe=voxel.count>0?Math.sin(t*1.35+voxel.phase)*.035:0;
+      dummy.position.set(voxel.x,voxel.y+breathe,voxel.z);
+      dummy.scale.set(1,voxel.height,1);
+      dummy.updateMatrix();
+      cubes.setMatrixAt(i,dummy.matrix);
+    });
+    cubes.instanceMatrix.needsUpdate=true;
+  }};
 }
 const builders={monkeytype:makeKeyboard,leetcode:makeLeetCode,codechef:makeCodeChef,github:makeGitHub};
 
@@ -462,6 +480,7 @@ function updateScene(originalPlatform){
   const record=records.get(platform.id);
   if(!record)return;
   if(record.model){record.scene.remove(record.model);disposeGroup(record.model);}
+  record.hoveredObject=null;
   const built=builders[platform.id](platform);
   record.model=built.group;record.pickables=built.pickables;record.animate=built.animate;
   record.scene.add(record.model);
