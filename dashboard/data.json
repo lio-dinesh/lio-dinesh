@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "owner": "Dinesh G",
-  "generatedAt": "2026-11-04T18:30:04.671Z",
-  "generatedAtIST": "5 Nov 2026, 12:00:04 am",
+  "generatedAt": "2026-11-04T23:53:40.864Z",
+  "generatedAtIST": "5 Nov 2026, 5:23:40 am",
   "timezone": "Asia/Kolkata",
-  "activityDate": "2026-11-04",
+  "activityDate": "2026-11-05",
   "refreshIntervalSeconds": 300,
   "platforms": [
     {
@@ -15,7 +15,7 @@
       "status": "PUBLIC PROFILE",
       "currentStreak": 20,
       "longestStreak": 20,
-      "activeDays": 57,
+      "activeDays": 56,
       "lastActiveDate": "2026-11-04",
       "activityAvailable": true,
       "note": "Official current and maximum streak from public profile",
@@ -38,10 +38,6 @@
         }
       ],
       "dailyActivity": [
-        {
-          "date": "2026-08-06",
-          "count": 3
-        },
         {
           "date": "2026-08-07",
           "count": 6
@@ -401,6 +397,10 @@
         {
           "date": "2026-11-04",
           "count": 3
+        },
+        {
+          "date": "2026-11-05",
+          "count": 0
         }
       ]
     },
@@ -435,10 +435,6 @@
         }
       ],
       "dailyActivity": [
-        {
-          "date": "2026-08-06",
-          "count": 0
-        },
         {
           "date": "2026-08-07",
           "count": 0
@@ -798,6 +794,10 @@
         {
           "date": "2026-11-04",
           "count": 2
+        },
+        {
+          "date": "2026-11-05",
+          "count": 0
         }
       ]
     },
@@ -809,7 +809,7 @@
       "status": "PUBLIC HEATMAP",
       "currentStreak": 1,
       "longestStreak": 14,
-      "activeDays": 47,
+      "activeDays": 46,
       "lastActiveDate": "2026-11-04",
       "activityAvailable": true,
       "note": "Heatmap-derived submission streak; CodeChef streak freezes may not be reflected",
@@ -832,10 +832,6 @@
         }
       ],
       "dailyActivity": [
-        {
-          "date": "2026-08-06",
-          "count": 36
-        },
         {
           "date": "2026-08-07",
           "count": 19
@@ -1195,6 +1191,10 @@
         {
           "date": "2026-11-04",
           "count": 3
+        },
+        {
+          "date": "2026-11-05",
+          "count": 0
         }
       ]
     },
@@ -1229,10 +1229,6 @@
         }
       ],
       "dailyActivity": [
-        {
-          "date": "2026-08-06",
-          "count": 0
-        },
         {
           "date": "2026-08-07",
           "count": 0
@@ -1592,6 +1588,10 @@
         {
           "date": "2026-11-04",
           "count": 65
+        },
+        {
+          "date": "2026-11-05",
+          "count": 0
         }
       ]
     }
