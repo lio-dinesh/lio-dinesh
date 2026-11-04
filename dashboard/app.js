@@ -4,7 +4,7 @@ import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
-import { gsap } from "gsap";
+import gsap from "gsap";
 
 const DATA_URL="./data.json";
 const POLL_MS=30000;
@@ -226,7 +226,7 @@ function initScene(platform){
     const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();
     const record={
       id,host,scene,camera,renderer,composer,bloom,controls,raycaster,pointer,
-      model:null,pickables:[],animate:null,visible:true,
+      model:null,pickables:[],animate:null,visible:true,manualRotation:true,
       reset:{position:new THREE.Vector3(9,8,11),target:new THREE.Vector3(0,1,0)}
     };
     records.set(id,record);
@@ -376,7 +376,7 @@ function applyQuality(){
 }
 function applyMotionSettings(){
   records.forEach(record=>{
-    record.controls.autoRotate=motionEnabled();
+    record.controls.autoRotate=motionEnabled()&&record.manualRotation;
   });
 }
 function setupControls(){
@@ -393,8 +393,9 @@ function setupControls(){
   }));
   document.querySelectorAll("[data-autorotate]").forEach(button=>button.addEventListener("click",()=>{
     const record=records.get(button.dataset.autorotate);if(!record)return;
-    record.controls.autoRotate=!record.controls.autoRotate;
-    button.textContent=record.controls.autoRotate?"PAUSE":"RESUME";
+    record.manualRotation=!record.manualRotation;
+    record.controls.autoRotate=record.manualRotation&&motionEnabled();
+    button.textContent=record.manualRotation?"PAUSE":"RESUME";
   }));
   document.querySelectorAll("[data-camera]").forEach(button=>button.addEventListener("click",()=>{
     const record=records.get(button.dataset.scene);if(record)cameraPreset(record,button.dataset.camera);
