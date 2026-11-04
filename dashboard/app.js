@@ -15,7 +15,17 @@ const colors={
   codechef:"#D6B365",
   github:"#B5A1E8"
 };
-const settings={range:90,quality:"medium",paused:false,reducedMotion:window.matchMedia("(prefers-reduced-motion: reduce)").matches};
+const settings={range:90,quality:"medium",colorMood:"graphite",paused:false,reducedMotion:window.matchMedia("(prefers-reduced-motion: reduce)").matches};
+const colorMoods={
+  graphite:{orange:"#E58B67",blue:"#6E8BFF",gold:"#D6B365",lavender:"#B5A1E8",warm:"#F2EFE8"},
+  prism:{orange:"#FF6B9D",blue:"#43D9FF",gold:"#C8F36B",lavender:"#B994FF",warm:"#F4F0FF"},
+  ember:{orange:"#FF765E",blue:"#B58AFF",gold:"#FFC66D",lavender:"#FF9EBC",warm:"#FFE9DA"}
+};
+const accentKeys={
+  "#E58B67":"orange","#6E8BFF":"blue","#D6B365":"gold","#B5A1E8":"lavender",
+  "#A66B4F":"orange","#B88C48":"gold","#E5C987":"gold","#F2D99A":"gold",
+  "#FFFFFF":"warm","#F2EFE8":"warm"
+};
 const records=new Map();
 let currentSnapshot=null;
 let lastFetch=0;
@@ -43,8 +53,55 @@ function level(value,max){
   const ratio=value/Math.max(1,max);
   return ratio<=.25?1:ratio<=.5?2:ratio<=.75?3:4;
 }
+function themeColor(color){
+  const hex=String(color).toUpperCase();
+  const key=accentKeys[hex];
+  return key?colorMoods[settings.colorMood][key]:color;
+}
 function material(color,extra={}){
-  return new THREE.MeshStandardMaterial({color,roughness:.48,metalness:.12,...extra});
+  const mat=new THREE.MeshStandardMaterial({color:themeColor(color),roughness:.48,metalness:.12,...extra});
+  mat.userData.sourceColor=String(color).toUpperCase();
+  return mat;
+}
+function applyColorMood(mode){
+  if(!colorMoods[mode])return;
+  settings.colorMood=mode;
+  const mood=colorMoods[mode];
+  const root=document.documentElement;
+  root.style.setProperty("--orange",mood.orange);
+  root.style.setProperty("--cobalt",mood.blue);
+  root.style.setProperty("--brass",mood.gold);
+  root.style.setProperty("--lavender",mood.lavender);
+  root.style.setProperty("--mood-glow",mood.blue+"22");
+  root.style.setProperty("--mood-warm",mood.orange+"18");
+  document.body.dataset.colorMood=mode;
+  if(currentSnapshot){
+    currentSnapshot.platforms.forEach(platform=>updateScene(platform));
+  }
+  records.forEach(record=>{
+    record.rimLight.color.set(moodColorForPlatform(record.id));
+    record.fillLight.color.set(mood.gold);
+    if(record.particleMaterial)record.particleMaterial.color.set(moodColorForPlatform(record.id));
+  });
+}
+function moodColorForPlatform(id){
+  const mood=colorMoods[settings.colorMood];
+  return mood[id==="monkeytype"?"orange":id==="leetcode"?"blue":id==="codechef"?"gold":"lavender"];
+}
+function createAmbientParticles(scene,id){
+  const count=110,positions=new Float32Array(count*3);
+  for(let i=0;i<count;i++){
+    positions[i*3]=(Math.random()-.5)*13;
+    positions[i*3+1]=Math.random()*5+.4;
+    positions[i*3+2]=(Math.random()-.5)*10;
+  }
+  const geometry=new THREE.BufferGeometry();
+  geometry.setAttribute("position",new THREE.BufferAttribute(positions,3));
+  const mat=new THREE.PointsMaterial({color:moodColorForPlatform(id),size:.045,transparent:true,opacity:.58,depthWrite:false,blending:THREE.AdditiveBlending});
+  const points=new THREE.Points(geometry,mat);
+  points.userData.baseY=0;
+  scene.add(points);
+  return {points,material:mat,geometry};
 }
 function rangedPlatform(platform){
   const days=platform.dailyActivity||[];
@@ -306,8 +363,10 @@ function initScene(platform){
 
     scene.add(new THREE.HemisphereLight("#F2EFE8","#414753",2.1));
     const key=new THREE.DirectionalLight("#FFFFFF",3.4);key.position.set(-5,10,7);scene.add(key);
-    const rim=new THREE.DirectionalLight(colors[id],2.0);rim.position.set(7,5,-5);scene.add(rim);
-    const fill=new THREE.PointLight("#D6B365",12,22);fill.position.set(5,5,-5);scene.add(fill);
+    const rim=new THREE.DirectionalLight(moodColorForPlatform(id),2.25);rim.position.set(7,5,-5);scene.add(rim);
+    const fill=new THREE.PointLight(colorMoods[settings.colorMood].gold,15,24);fill.position.set(5,5,-5);scene.add(fill);
+    const particles=createAmbientParticles(scene,id);
+    const aura=new THREE.PointLight(moodColorForPlatform(id),7,18);aura.position.set(-4,2.2,3);scene.add(aura);
     addBase(scene);
 
     const composer=new EffectComposer(renderer);
@@ -324,7 +383,8 @@ function initScene(platform){
     const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();
     const record={
       id,host,scene,camera,renderer,composer,bloom,controls,raycaster,pointer,
-      model:null,pickables:[],animate:null,visible:true,manualRotation:true,
+      rimLight:rim,fillLight:fill,auraLight:aura,particles:particles.points,particleMaterial:particles.material,
+      model:null,pickables:[],animate:null,visible:true,manualRotation:true,hoveredObject:null,
       reset:{position:new THREE.Vector3(9,8,11),target:new THREE.Vector3(0,1,0)}
     };
     records.set(id,record);
@@ -336,8 +396,30 @@ function initScene(platform){
       pointer.y=-((event.clientY-rect.top)/rect.height)*2+1;
       raycaster.setFromCamera(pointer,camera);
       const hits=raycaster.intersectObjects(record.pickables,true);
-      if(!hits.length){tooltip.hidden=true;return;}
+      if(!hits.length){
+        tooltip.hidden=true;
+        if(record.hoveredObject){
+          const previous=record.hoveredObject;
+          if(previous.userData.hoverTween)previous.userData.hoverTween.kill();
+          if(previous.userData.baseScale)gsap.to(previous.scale,{x:previous.userData.baseScale.x,y:previous.userData.baseScale.y,z:previous.userData.baseScale.z,duration:.2,ease:"power2.out"});
+          record.hoveredObject=null;
+        }
+        renderer.domElement.style.cursor="grab";
+        return;
+      }
       const hit=hits[0];
+      if(record.hoveredObject!==hit.object){
+        if(record.hoveredObject&&record.hoveredObject.userData.baseScale){
+          const previous=record.hoveredObject;
+          gsap.to(previous.scale,{x:previous.userData.baseScale.x,y:previous.userData.baseScale.y,z:previous.userData.baseScale.z,duration:.18,ease:"power2.out"});
+        }
+        record.hoveredObject=hit.object;
+        if(!hit.object.userData.baseScale)hit.object.userData.baseScale=hit.object.scale.clone();
+        if(!(hit.object instanceof THREE.InstancedMesh)&&!settings.reducedMotion){
+          gsap.to(hit.object.scale,{x:hit.object.userData.baseScale.x*1.08,y:hit.object.userData.baseScale.y*1.08,z:hit.object.userData.baseScale.z*1.08,duration:.18,ease:"back.out(2)"});
+        }
+        renderer.domElement.style.cursor="pointer";
+      }
       let detail=hit.object.userData.detail;
       if(hit.instanceId!==undefined&&hit.object.userData.items)detail=hit.object.userData.items[hit.instanceId];
       let parent=hit.object.parent;
@@ -562,6 +644,11 @@ function setupControls(){
     settings.quality=event.target.value;
     applyQuality();
   });
+  $("color-mode").value=settings.colorMood;
+  $("color-mode").addEventListener("change",event=>{
+    applyColorMood(event.target.value);
+    if(!settings.reducedMotion)gsap.fromTo(".model-card",{filter:"brightness(.82)"},{filter:"brightness(1)",duration:.55,stagger:.07,ease:"power2.out"});
+  });
   $("pause-all").addEventListener("click",()=>{
     settings.paused=!settings.paused;
     $("pause-all").textContent=settings.paused?"▶ RESUME ALL":"Ⅱ PAUSE ALL";
@@ -578,7 +665,16 @@ function animate(){
   records.forEach(record=>{
     if(!record.visible)return;
     record.controls.update();
-    if(motionEnabled()&&record.animate)record.animate(time);
+    if(motionEnabled()){
+      if(record.animate)record.animate(time);
+      record.particles.rotation.y=time*.018;
+      record.particles.rotation.x=Math.sin(time*.22)*.025;
+      record.auraLight.position.x=Math.cos(time*.42)*4.5;
+      record.auraLight.position.z=Math.sin(time*.42)*4.5;
+      record.auraLight.intensity=6.2+Math.sin(time*1.4)*1.4;
+      record.rimLight.intensity=1.9+Math.sin(time*.9)*.24;
+      if(settings.quality==="high")record.bloom.strength=.12+Math.sin(time*1.1)*.018;
+    }
     if(settings.quality==="low")record.renderer.render(record.scene,record.camera);
     else record.composer.render();
   });
