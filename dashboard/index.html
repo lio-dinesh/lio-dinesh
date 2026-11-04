@@ -1,13 +1,15 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#0b0f0e" />
-  <meta name="description" content="Dinesh G's live coding practice dashboard — Monkeytype, LeetCode, CodeChef and GitHub activity." />
-  <title>Dinesh G — Live Coding Dashboard</title>
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
-  <link rel="stylesheet" href="./styles.css" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="theme-color" content="#F7F4ED"/>
+  <meta name="description" content="Dinesh G's interactive coding performance dashboard."/>
+  <title>Dinesh G — Practice Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="./styles.css"/>
   <script type="importmap">
     {
       "imports": {
@@ -18,83 +20,128 @@
   </script>
 </head>
 <body>
-  <div class="page-shell">
+  <div class="site-wrap">
     <header class="topbar">
-      <a class="brand" href="https://github.com/lio-dinesh" aria-label="Dinesh G GitHub profile">
-        <span class="brand-mark">DG</span>
-        <span><strong>DINESH G</strong><small>DEVELOPER ACTIVITY CONSOLE</small></span>
+      <a class="identity" href="https://github.com/lio-dinesh">
+        <span class="identity-mark">DG</span>
+        <span class="identity-copy"><strong>DINESH G</strong><small>DEVELOPER PRACTICE STUDIO</small></span>
       </a>
-      <div class="topbar-right">
-        <span class="live-indicator"><i></i> LIVE VIEW</span>
-        <span id="clock" class="clock">--:--:-- IST</span>
-        <a class="icon-link" href="https://github.com/lio-dinesh/lio-dinesh/actions" target="_blank" rel="noreferrer">ACTIONS ↗</a>
+      <div class="topbar-meta">
+        <span class="live-pill"><i></i> LIVE DATA</span>
+        <time id="clock">--:--:-- IST</time>
+        <a class="outline-link" href="https://github.com/lio-dinesh/lio-dinesh/actions" target="_blank" rel="noreferrer">AUTOMATIONS ↗</a>
       </div>
     </header>
+
     <main>
-      <section class="hero">
-        <div>
+      <section class="intro">
+        <div class="intro-copy">
           <p class="eyebrow">PERSONAL PERFORMANCE / 001</p>
-          <h1>Code. Practice. <span>Progress.</span></h1>
-          <p class="hero-copy">A live-updating view of my coding routine across typing, problem solving, competitive programming and open-source contributions.</p>
+          <h1>A little better,<br/><em>every single day.</em></h1>
+          <p class="intro-text">Four independent 3D experiences for my typing practice, problem solving, competitive programming and open-source contributions.</p>
         </div>
-        <div class="refresh-panel">
-          <div class="refresh-label"><span class="pulse-dot"></span> DATA CONNECTION</div>
-          <strong id="data-status">CONNECTING</strong>
-          <small id="last-updated">Waiting for the first snapshot…</small>
-          <button id="refresh-button" class="refresh-button" type="button">↻ Check for updates</button>
-        </div>
-      </section>
-      <section class="metric-strip" aria-label="Daily overview">
-        <article class="metric-tile"><span class="tile-label">PLATFORMS TRACKED</span><strong id="platform-count">04</strong><small>Practice + development</small></article>
-        <article class="metric-tile"><span class="tile-label">TOTAL ACTIVE DAYS · 13W</span><strong id="active-total">—</strong><small>Across connected platforms</small></article>
-        <article class="metric-tile"><span class="tile-label">LATEST ACTIVITY</span><strong id="latest-activity">—</strong><small id="latest-platform">Waiting for data</small></article>
-        <article class="metric-tile"><span class="tile-label">NEXT DATA CHECK</span><strong id="next-check">00:30</strong><small>Browser refresh interval</small></article>
-      </section>
-      <section class="visual-section">
-        <div class="section-heading">
-          <div><p class="eyebrow">INTERACTIVE DATA MODEL</p><h2>Practice activity <span>in 3D</span></h2></div>
-          <div class="scene-controls">
-            <span class="scene-hint">DRAG TO ROTATE · SCROLL TO ZOOM · HOVER A BAR</span>
-            <button id="reset-camera" class="small-button" type="button">Reset view</button>
+        <aside class="connection-card">
+          <div class="connection-top"><span class="status-dot"></span><span>DATA CONNECTION</span></div>
+          <strong id="connection-status">CONNECTING</strong>
+          <small id="snapshot-time">Waiting for the latest source snapshot</small>
+          <div class="connection-actions">
+            <button id="refresh-now" type="button">↻ Refresh data</button>
+            <span id="next-refresh">CHECKING…</span>
           </div>
-        </div>
-        <div class="scene-shell">
-          <div id="three-stage" class="three-stage" aria-label="Interactive three-dimensional practice activity map"></div>
-          <div class="scene-overlay top-left"><span class="scene-kicker">ACTIVITY TERRAIN</span><strong>LAST 13 WEEKS</strong></div>
-          <div class="scene-overlay bottom-left">
-            <span><i class="legend-dot monkey"></i> MONKEYTYPE</span>
-            <span><i class="legend-dot leet"></i> LEETCODE</span>
-            <span><i class="legend-dot chef"></i> CODECHEF</span>
-            <span><i class="legend-dot git"></i> GITHUB</span>
+        </aside>
+      </section>
+
+      <section class="overview-grid" aria-label="Overview">
+        <article class="overview-card"><span class="mini-label">CONNECTED PLATFORMS</span><strong id="platform-count">04</strong><small>Practice + development</small></article>
+        <article class="overview-card"><span class="mini-label">ACTIVE DAYS · LAST 13 WEEKS</span><strong id="total-active">—</strong><small>Across separate activity sources</small></article>
+        <article class="overview-card"><span class="mini-label">LATEST ACTIVITY</span><strong id="latest-date">—</strong><small id="latest-source">Waiting for data</small></article>
+        <article class="overview-card"><span class="mini-label">DATA POLLING</span><strong>05 <small>MIN</small></strong><small>Collector schedule · browser checks every 30 seconds</small></article>
+      </section>
+
+      <section class="platform-intro">
+        <p class="eyebrow">FOUR SEPARATE 3D EXPERIENCES</p>
+        <h2>Choose a practice world.</h2>
+        <p>Each platform has its own model, motion, camera and activity data. Drag to orbit, scroll to zoom and hover over the 3D objects for details.</p>
+      </section>
+
+      <section class="model-grid" aria-label="Individual platform models">
+        <article class="model-card monkey-card" data-platform-card="monkeytype">
+          <div class="model-card-head">
+            <div class="platform-title"><span class="platform-index">01 / TYPING LAB</span><h3>Monkeytype</h3><p>Mechanical keyboard · typing rhythm</p></div>
+            <a href="https://monkeytype.com/profile/lio_dinesh" target="_blank" rel="noreferrer">OPEN PROFILE ↗</a>
           </div>
-          <div id="hover-card" class="hover-card" hidden></div>
-          <div id="webgl-fallback" class="webgl-fallback" hidden>3D rendering is unavailable in this browser. Your activity cards and heatmaps below still work.</div>
-          <div class="scene-axis-labels"><span>OLDER</span><span>RECENT →</span></div>
-        </div>
+          <div class="model-stage-wrap">
+            <div class="model-stage" id="scene-monkeytype"></div>
+            <div class="model-overlay"><span>INTERACTIVE KEYBOARD MODEL</span><strong>TYPE / ACCURACY / CONSISTENCY</strong></div>
+            <div class="model-tooltip" id="tooltip-monkeytype" hidden></div>
+            <span class="stage-footnote">DRAG TO ROTATE · HOVER KEYS · SCROLL TO ZOOM</span>
+          </div>
+          <div class="model-controls"><span class="source-status" id="status-monkeytype">LOADING PROFILE</span><button type="button" data-reset="monkeytype">RESET VIEW</button><button type="button" data-autorotate="monkeytype">PAUSE ROTATION</button></div>
+          <div class="platform-stats" id="stats-monkeytype"><div class="stat-placeholder">Loading Monkeytype statistics…</div></div>
+          <div class="mini-heatmap" id="heatmap-monkeytype"></div>
+        </article>
+
+        <article class="model-card leet-card" data-platform-card="leetcode">
+          <div class="model-card-head">
+            <div class="platform-title"><span class="platform-index">02 / PROBLEM FORGE</span><h3>LeetCode</h3><p>Difficulty towers · accepted solutions</p></div>
+            <a href="https://leetcode.com/u/410725148010/" target="_blank" rel="noreferrer">OPEN PROFILE ↗</a>
+          </div>
+          <div class="model-stage-wrap">
+            <div class="model-stage" id="scene-leetcode"></div>
+            <div class="model-overlay"><span>INTERACTIVE SOLUTION MODEL</span><strong>EASY / MEDIUM / HARD</strong></div>
+            <div class="model-tooltip" id="tooltip-leetcode" hidden></div>
+            <span class="stage-footnote">DRAG TO ROTATE · HOVER BLOCKS · SCROLL TO ZOOM</span>
+          </div>
+          <div class="model-controls"><span class="source-status" id="status-leetcode">LOADING PROFILE</span><button type="button" data-reset="leetcode">RESET VIEW</button><button type="button" data-autorotate="leetcode">PAUSE ROTATION</button></div>
+          <div class="platform-stats" id="stats-leetcode"><div class="stat-placeholder">Loading LeetCode statistics…</div></div>
+          <div class="mini-heatmap" id="heatmap-leetcode"></div>
+        </article>
+
+        <article class="model-card chef-card" data-platform-card="codechef">
+          <div class="model-card-head">
+            <div class="platform-title"><span class="platform-index">03 / CONTEST ARENA</span><h3>CodeChef</h3><p>Competition trophy · practice activity</p></div>
+            <a href="https://www.codechef.com/users/dce_25148010" target="_blank" rel="noreferrer">OPEN PROFILE ↗</a>
+          </div>
+          <div class="model-stage-wrap">
+            <div class="model-stage" id="scene-codechef"></div>
+            <div class="model-overlay"><span>INTERACTIVE CONTEST MODEL</span><strong>RATING / SOLVED / ACTIVITY</strong></div>
+            <div class="model-tooltip" id="tooltip-codechef" hidden></div>
+            <span class="stage-footnote">DRAG TO ROTATE · HOVER THE TROPHY · SCROLL TO ZOOM</span>
+          </div>
+          <div class="model-controls"><span class="source-status" id="status-codechef">LOADING PROFILE</span><button type="button" data-reset="codechef">RESET VIEW</button><button type="button" data-autorotate="codechef">PAUSE ROTATION</button></div>
+          <div class="platform-stats" id="stats-codechef"><div class="stat-placeholder">Loading CodeChef statistics…</div></div>
+          <div class="mini-heatmap" id="heatmap-codechef"></div>
+        </article>
+
+        <article class="model-card github-card" data-platform-card="github">
+          <div class="model-card-head">
+            <div class="platform-title"><span class="platform-index">04 / OPEN SOURCE TERRAIN</span><h3>GitHub</h3><p>Contribution architecture · consistency grid</p></div>
+            <a href="https://github.com/lio-dinesh" target="_blank" rel="noreferrer">OPEN PROFILE ↗</a>
+          </div>
+          <div class="model-stage-wrap">
+            <div class="model-stage" id="scene-github"></div>
+            <div class="model-overlay"><span>INTERACTIVE CONTRIBUTION MODEL</span><strong>CONTRIBUTIONS / STREAK / DAYS</strong></div>
+            <div class="model-tooltip" id="tooltip-github" hidden></div>
+            <span class="stage-footnote">DRAG TO ROTATE · HOVER CUBES · SCROLL TO ZOOM</span>
+          </div>
+          <div class="model-controls"><span class="source-status" id="status-github">LOADING PROFILE</span><button type="button" data-reset="github">RESET VIEW</button><button type="button" data-autorotate="github">PAUSE ROTATION</button></div>
+          <div class="platform-stats" id="stats-github"><div class="stat-placeholder">Loading GitHub statistics…</div></div>
+          <div class="mini-heatmap" id="heatmap-github"></div>
+        </article>
       </section>
-      <section class="platform-section">
-        <div class="section-heading compact">
-          <div><p class="eyebrow">SOURCE BREAKDOWN</p><h2>Platform performance</h2></div>
-          <span class="updated-chip" id="snapshot-date">SNAPSHOT —</span>
-        </div>
-        <div id="platform-grid" class="platform-grid"><div class="loading-card">Loading platform data…</div></div>
+
+      <section class="activity-summary">
+        <div class="summary-head"><div><p class="eyebrow">DATA HISTORY</p><h2>Daily activity breakdown</h2></div><span id="summary-updated">SNAPSHOT —</span></div>
+        <div id="combined-heatmaps" class="combined-heatmaps"></div>
       </section>
-      <section class="activity-section">
-        <div class="section-heading compact">
-          <div><p class="eyebrow">DAILY CONSISTENCY</p><h2>Activity calendar</h2></div>
-          <span class="updated-chip">ROLLING 91 DAYS</span>
-        </div>
-        <div id="heatmap-grid" class="heatmap-grid"></div>
-      </section>
-      <section class="data-note">
-        <strong>How live is this?</strong>
-        <p>The page checks for a new repository snapshot every 30 seconds. GitHub Actions collects platform data every 5 minutes. A completed typing test or accepted submission appears after the platform publishes it and the next collector run succeeds. This is near-real-time polling, not a direct keystroke stream or instant webhook.</p>
+
+      <section class="data-disclaimer">
+        <strong>About the refresh speed</strong>
+        <p>The dashboard checks the repository data every 30 seconds. GitHub Actions collects the latest available platform data every 5 minutes. A typing test appears after Monkeytype records the completed test; a submission appears after LeetCode or CodeChef publishes it. This is frequent polling, not live capture of keystrokes or an instant provider webhook.</p>
       </section>
     </main>
-    <footer class="footer">
-      <span>BUILT WITH THREE.JS · LIVE DATA SNAPSHOTS · ASIA/KOLKATA</span>
-      <span><a href="https://github.com/lio-dinesh">GITHUB</a> · <a href="https://monkeytype.com/profile/lio_dinesh">MONKEYTYPE</a> · <a href="https://leetcode.com/u/410725148010/">LEETCODE</a> · <a href="https://www.codechef.com/users/dce_25148010">CODECHEF</a></span>
-    </footer>
+
+    <footer class="footer"><span>DINESH G · PRACTICE STUDIO · THREE.JS</span><span>WARM IVORY / CHARCOAL / OLIVE / TERRACOTTA</span></footer>
   </div>
   <script type="module" src="./app.js"></script>
 </body>
