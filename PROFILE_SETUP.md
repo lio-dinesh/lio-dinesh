@@ -47,7 +47,7 @@ The live dashboard collector runs every 5 minutes, beginning at minute :02 to av
 | `Refresh live coding dashboard and deploy GitHub Pages` | `:02, :07, :12, :17, :22, :27, :32, :37, :42, :47, :52, :57` | Monkeytype, LeetCode, CodeChef and GitHub activity; 3D dashboard data feed and deployment |
 | `Refresh GitHub contribution snake` | `:12, :27, :42, :57` | Contribution snake SVGs on the `output` branch |
 
-Each workflow also supports manual dispatch from the Actions tab. The data SVGs are committed only when their contents change, avoiding unnecessary commits when the upstream snapshot is identical.
+Each workflow also supports manual dispatch from the Actions tab. The dashboard JSON feed and fallback SVG are committed only when their contents change, avoiding unnecessary commits when the upstream snapshot is identical.
 
 ### What 'near-real-time' means
 
