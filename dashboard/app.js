@@ -595,6 +595,176 @@ function saveGoals(){
   try{localStorage.setItem(GOAL_STORAGE_KEY,JSON.stringify(dailyGoals));}catch(error){console.warn("Goals could not be saved in this browser",error);}
   if(cloudUser&&cloudHydrated&&!applyingCloudSettings)queueCloudSave();
 }
+function setCloudUI(status,message){
+  const statusNode=$("cloud-sync-status"),messageNode=$("cloud-sync-message");
+  if(statusNode)statusNode.textContent=status;
+  if(messageNode)messageNode.textContent=message;
+  const signIn=$("cloud-signin-controls"),account=$("cloud-account-controls");
+  if(signIn)signIn.hidden=Boolean(cloudUser);
+  if(account)account.hidden=!cloudUser;
+  const emailNode=$("cloud-account-email");
+  if(emailNode)emailNode.textContent=cloudUser?.email||"SIGNED IN";
+}
+function mapCloudSettings(row){
+  return {
+    monkeytype:Number(row.goal_monkeytype)||1,
+    leetcode:Number(row.goal_leetcode)||1,
+    codechef:Number(row.goal_codechef)||1,
+    github:Number(row.goal_github)||1
+  };
+}
+function applyCloudSettings(row){
+  applyingCloudSettings=true;
+  try{
+    dailyGoals=mapCloudSettings(row);
+    try{localStorage.setItem(GOAL_STORAGE_KEY,JSON.stringify(dailyGoals));}catch{}
+    applyColorMood(row.color_mood==="prism"?"prism":"graphite",{sync:false});
+    if(currentSnapshot){
+      renderDailyGoals(currentSnapshot.platforms);
+      renderAchievements(currentSnapshot.platforms);
+    }
+  }finally{applyingCloudSettings=false;}
+}
+function cloudSettingsPayload(){
+  return {
+    user_id:cloudUser.id,
+    goal_monkeytype:dailyGoals.monkeytype,
+    goal_leetcode:dailyGoals.leetcode,
+    goal_codechef:dailyGoals.codechef,
+    goal_github:dailyGoals.github,
+    color_mood:settings.colorMood,
+    updated_at:new Date().toISOString()
+  };
+}
+function queueCloudSave(){
+  if(!cloudUser||!cloudHydrated||applyingCloudSettings)return;
+  clearTimeout(cloudSaveTimer);
+  cloudSaveTimer=setTimeout(()=>void saveCloudSettings(),500);
+}
+async function saveCloudSettings(){
+  if(!cloudUser||!cloudHydrated)return;
+  setCloudUI("SYNCING","Saving goals and theme preference to your Supabase account…");
+  const {error}=await supabase.from("user_settings").upsert(cloudSettingsPayload(),{onConflict:"user_id"});
+  if(error){
+    console.error("Supabase settings sync failed",error);
+    setCloudUI("SYNC ISSUE","Saved in this browser, but cloud sync failed: "+error.message);
+    return;
+  }
+  setCloudUI("CLOUD SYNCED","Your goals and theme are saved to your account.");
+}
+async function syncCloudSettings(user){
+  if(!user?.id)return;
+  cloudUser=user;
+  cloudHydrated=false;
+  setCloudUI("LOADING SETTINGS","Restoring your cloud goals and theme…");
+  if(cloudChannel){
+    await supabase.removeChannel(cloudChannel);
+    cloudChannel=null;
+  }
+  const {data,error}=await supabase.from("user_settings")
+    .select("user_id,goal_monkeytype,goal_leetcode,goal_codechef,goal_github,color_mood,updated_at")
+    .eq("user_id",user.id)
+    .maybeSingle();
+  if(error){
+    console.error("Could not load Supabase user settings",error);
+    setCloudUI("SYNC ISSUE","Could not load settings: "+error.message);
+    return;
+  }
+  if(data){
+    applyCloudSettings(data);
+    cloudHydrated=true;
+    setCloudUI("CLOUD SYNCED","Your saved settings were restored from Supabase.");
+  }else{
+    cloudHydrated=true;
+    const {error:insertError}=await supabase.from("user_settings").upsert(cloudSettingsPayload(),{onConflict:"user_id"});
+    if(insertError){
+      cloudHydrated=false;
+      console.error("Could not create initial settings",insertError);
+      setCloudUI("SYNC ISSUE","Could not create your cloud settings: "+insertError.message);
+      return;
+    }
+    setCloudUI("CLOUD SYNCED","Your existing local goals and theme were copied to your account.");
+  }
+  cloudChannel=supabase.channel("developer-settings-"+user.id)
+    .on("postgres_changes",{
+      event:"*",
+      schema:"public",
+      table:"user_settings",
+      filter:"user_id=eq."+user.id
+    },payload=>{
+      if(payload.new?.user_id===user.id){
+        clearTimeout(cloudSaveTimer);
+        applyCloudSettings(payload.new);
+        cloudHydrated=true;
+        setCloudUI("CLOUD SYNCED","Your settings were updated from another signed-in device.");
+      }
+    })
+    .subscribe(status=>{
+      if(status==="SUBSCRIBED")setCloudUI("CLOUD SYNCED","Realtime sync is active across your signed-in devices.");
+      if(status==="CHANNEL_ERROR"||status==="TIMED_OUT")setCloudUI("CONNECTED · SAVE ACTIVE","Realtime is unavailable; settings will still save when changed.");
+    });
+}
+function setupCloudAuth(){
+  $("cloud-send-link").addEventListener("click",async()=>{
+    const email=$("cloud-email").value.trim();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+      setCloudUI("EMAIL REQUIRED","Enter a valid email address to receive a secure sign-in link.");
+      $("cloud-email").focus();
+      return;
+    }
+    const button=$("cloud-send-link");
+    button.disabled=true;
+    button.textContent="SENDING…";
+    const {error}=await supabase.auth.signInWithOtp({
+      email,
+      options:{emailRedirectTo:SUPABASE_REDIRECT_URL}
+    });
+    button.disabled=false;
+    button.textContent="SEND MAGIC LINK ↗";
+    if(error){
+      console.error("Supabase sign-in request failed",error);
+      setCloudUI("SIGN-IN ISSUE",error.message);
+    }else{
+      setCloudUI("CHECK YOUR EMAIL","A secure sign-in link was sent to "+email+". Open it and return to this dashboard.");
+    }
+  });
+  $("cloud-email").addEventListener("keydown",event=>{
+    if(event.key==="Enter")$("cloud-send-link").click();
+  });
+  $("cloud-sign-out").addEventListener("click",async()=>{
+    setCloudUI("SIGNING OUT","Signing out of your Supabase account…");
+    const {error}=await supabase.auth.signOut();
+    if(error){
+      setCloudUI("SIGN-OUT ISSUE",error.message);
+      return;
+    }
+    cloudUser=null;
+    cloudHydrated=false;
+    if(cloudChannel){
+      await supabase.removeChannel(cloudChannel);
+      cloudChannel=null;
+    }
+    setCloudUI("SIGNED OUT","Your goals remain saved in this browser. Sign in again to sync across devices.");
+  });
+  supabase.auth.onAuthStateChange((event,session)=>{
+    if(session?.user){
+      cloudUser=session.user;
+      $("cloud-account-email").textContent=session.user.email||"SIGNED IN";
+      if(event==="SIGNED_IN"||event==="INITIAL_SESSION"||event==="TOKEN_REFRESHED"){
+        setTimeout(()=>void syncCloudSettings(session.user),0);
+      }
+    }else if(event==="SIGNED_OUT"){
+      cloudUser=null;
+      cloudHydrated=false;
+      if(cloudChannel){
+        void supabase.removeChannel(cloudChannel);
+        cloudChannel=null;
+      }
+      setCloudUI("SIGNED OUT","Your goals remain saved in this browser. Sign in to sync across devices.");
+    }
+  });
+}
+
 function todayCount(platform){
   if(!currentSnapshot||!platform.activityAvailable)return null;
   const day=(platform.dailyActivity||[]).find(item=>item.date===currentSnapshot.activityDate);
@@ -995,6 +1165,7 @@ async function init(){
   setupScrollReveal();
   setupMagneticInteractions();
   setupReportActions();
+  setupCloudAuth();
   const prefersReduced=window.matchMedia("(prefers-reduced-motion: reduce)");
   if(prefersReduced.matches)settings.reducedMotion=true;
   await refresh(false);
