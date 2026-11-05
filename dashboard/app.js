@@ -6,16 +6,21 @@ import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js"
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 import gsap from "gsap";
+import { createClient } from "@supabase/supabase-js";
 
 const DATA_URL="./data.json";
 const POLL_MS=30000;
+const SUPABASE_URL="https://bdbnblvdnxxhojnbtpxi.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_vU814wKiBGm_EusL-sujTA_0a5XcH2b";
+const SUPABASE_REDIRECT_URL="https://lio-dinesh.github.io/lio-dinesh/";
+const supabase=createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const colors={
   monkeytype:"#E58B67",
   leetcode:"#6E8BFF",
   codechef:"#D6B365",
   github:"#B5A1E8"
 };
-const settings={range:90,quality:"medium",colorMood:"graphite",paused:false,reducedMotion:window.matchMedia("(prefers-reduced-motion: reduce)").matches};
+const settings={range:90,quality:"medium",colorMood:(localStorage.getItem("dinesh-command-center-color-mood-v1")==="prism"?"prism":"graphite"),paused:false,reducedMotion:window.matchMedia("(prefers-reduced-motion: reduce)").matches};
 const colorMoods={
   graphite:{orange:"#E58B67",blue:"#6E8BFF",gold:"#D6B365",lavender:"#B5A1E8",warm:"#F2EFE8"},
   prism:{orange:"#FF6B9D",blue:"#43D9FF",gold:"#FFC857",lavender:"#B994FF",warm:"#F4F0FF"},
@@ -29,6 +34,11 @@ const records=new Map();
 let currentSnapshot=null;
 let monthlyHistory=null;
 let lastFetch=0;
+let cloudUser=null;
+let cloudChannel=null;
+let cloudSaveTimer=null;
+let cloudHydrated=false;
+let applyingCloudSettings=false;
 let animationFrame=0;
 const $=id=>document.getElementById(id);
 
@@ -63,9 +73,10 @@ function material(color,extra={}){
   mat.userData.sourceColor=String(color).toUpperCase();
   return mat;
 }
-function applyColorMood(mode){
+function applyColorMood(mode,options={}){
   if(!colorMoods[mode])return;
   settings.colorMood=mode;
+  try{localStorage.setItem("dinesh-command-center-color-mood-v1",mode);}catch{}
   const mood=colorMoods[mode];
   const root=document.documentElement;
   root.style.setProperty("--orange",mood.orange);
@@ -95,6 +106,7 @@ function applyColorMood(mode){
     record.fillLight.color.set(mood.gold);
     if(record.particleMaterial)record.particleMaterial.color.set(moodColorForPlatform(record.id));
   });
+  if(options.sync!==false&&cloudUser&&cloudHydrated&&!applyingCloudSettings)queueCloudSave();
 }
 function moodColorForPlatform(id){
   const mood=colorMoods[settings.colorMood];
@@ -581,6 +593,7 @@ function loadGoals(){
 let dailyGoals=loadGoals();
 function saveGoals(){
   try{localStorage.setItem(GOAL_STORAGE_KEY,JSON.stringify(dailyGoals));}catch(error){console.warn("Goals could not be saved in this browser",error);}
+  if(cloudUser&&cloudHydrated&&!applyingCloudSettings)queueCloudSave();
 }
 function todayCount(platform){
   if(!currentSnapshot||!platform.activityAvailable)return null;
