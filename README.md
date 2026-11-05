@@ -342,7 +342,7 @@ I keep a regular practice routine to improve typing accuracy, speed, and algorit
   </a>
 </p>
 
-A premium interactive dashboard built around four **separate 3D experiences**, not a static activity image.
+A premium interactive dashboard built around four **separate 3D experiences**, not a static activity image. Its headline uses Space Grotesk display typography, porcelain-white lettering and a vivid pink accent inspired by the dashboard's visual identity.
 
 - **Monkeytype / Typing Lab:** a detailed mechanical keyboard with rounded keycaps, readable legends, metallic chassis, individual key bounce and typing metrics.
 - **LeetCode / Problem Forge:** beveled, segmented Easy/Medium/Hard solution towers, dual metallic orbit rings and difficulty plaques.
@@ -352,6 +352,8 @@ A premium interactive dashboard built around four **separate 3D experiences**, n
 - **Pro interactions:** drag-to-orbit, scroll-to-zoom, Front/Top/Side camera presets, fullscreen per model, reset, pause/resume, hover lift, ambient particle drift, orbiting accent lights, pulsing rim lights, animated GitHub voxels, animated CodeChef bars, magnetic control feedback and scroll reveals.
 - **Performance controls:** 7/30/90-day activity window, Performance/Balanced/High rendering quality, global pause and reduced-motion mode.
 - **Daily activity breakdown:** weekday-aligned contribution calendars, month labels, intensity legend, total events, active days, peak day and a 14-day activity trend for each platform. The 7/30/90-day selector changes the displayed calendar and summaries.
+- **Personal growth tools:** editable daily goals saved in your browser, source-metric achievements, active-day consistency comparisons, weekly momentum insights, and CSV / print-to-PDF reports.
+- **Historical analytics:** the collector archives one compact record per IST date and creates monthly aggregates. The 12-month chart grows as daily records accumulate; it starts from the archive rollout date and does not invent earlier activity.
 - **Live data:** collector polls every 5 minutes; the open page checks for new snapshots every 30 seconds.
 
 <sub>GSAP coordinates entrances, model assembly, camera moves and metric count-ups. Three.js EffectComposer adds restrained bloom and soft studio shadows. Activity changes only after the source platform publishes it and the next successful collector run completes; this is near-real-time polling, not instant keystroke streaming.</sub>
