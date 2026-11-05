@@ -253,7 +253,29 @@ async function sendCoachMessage(text){
     if(input&&!input.disabled)input.focus();
   }
 }
+function bindCoachAuth(){
+  if(coachState.bound)return;
+  const supabase=coachBridge()?.getSupabase?.();
+  if(!supabase?.auth?.onAuthStateChange)return;
+  coachState.bound=true;
+  supabase.auth.onAuthStateChange((event,session)=>{
+    if(event==="SIGNED_IN"||event==="INITIAL_SESSION"||event==="TOKEN_REFRESHED"){
+      if(session?.user&&coachState.userId!==session.user.id)loadChatHistory(session.user.id);
+      void maybeInitializeCoach();
+    }
+    if(event==="SIGNED_OUT"){
+      coachState.autoStarted=false;
+      coachState.last=null;
+      loadChatHistory(null);
+      const snapshot=coachSnapshot();
+      if(snapshot)renderCoach(localCoach(snapshot),{status:"SIGNED OUT · LOCAL SNAPSHOT"});
+      setChatAvailability(null);
+    }
+  });
+}
+
 async function maybeInitializeCoach(){
+  bindCoachAuth();
   const snapshot=coachSnapshot();
   if(!snapshot)return;
   try{
@@ -279,21 +301,4 @@ async function maybeInitializeCoach(){
 window.initAIPerformanceCoach=()=>void maybeInitializeCoach();
 window.onDashboardSnapshotUpdated=()=>{if(!coachState.autoStarted)void maybeInitializeCoach();};
 window.addEventListener("load",()=>setTimeout(()=>void maybeInitializeCoach(),800));
-const bridge=coachBridge();
-const coachSupabase=bridge?.getSupabase?.();
-if(coachSupabase?.auth?.onAuthStateChange){
-  coachSupabase.auth.onAuthStateChange((event,session)=>{
-    if(event==="SIGNED_IN"||event==="INITIAL_SESSION"||event==="TOKEN_REFRESHED"){
-      if(session?.user&&coachState.userId!==session.user.id)loadChatHistory(session.user.id);
-      void maybeInitializeCoach();
-    }
-    if(event==="SIGNED_OUT"){
-      coachState.autoStarted=false;
-      coachState.last=null;
-      loadChatHistory(null);
-      const snapshot=coachSnapshot();
-      if(snapshot)renderCoach(localCoach(snapshot),{status:"SIGNED OUT · LOCAL SNAPSHOT"});
-      setChatAvailability(null);
-    }
-  });
-}
+// Auth listener is attached lazily after the dashboard bridge is available.
