@@ -43,7 +43,7 @@ function ghControls(){
 async function ghErr(error){
  let d="",status=error?.context?.status||error?.status;
  try{if(error?.context?.clone){const j=await error.context.clone().json().catch(async()=>({error:await error.context.clone().text().catch(()=> "")}));d=String(j?.details||j?.error||j?.message||"");}}catch{}
- return (String(error?.message||"Request failed.")+(status?" (HTTP "+status+")")+(d&&d!==error?.message?" · "+d:"")).slice(0,500);
+ return (String(error?.message||"Request failed.")+(status?" (HTTP "+status+")":"")+(d&&d!==error?.message?" · "+d:"")).slice(0,500);
 }
 async function ghCall(body){
  const {data,error}=await ghState.supabase.functions.invoke(GH_FN,{body});
