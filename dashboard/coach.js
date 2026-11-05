@@ -82,29 +82,33 @@ function ensureCoachMarkup(){
   host.innerHTML=`
     <div class="coach-head">
       <div><p class="eyebrow">AI PERFORMANCE COACH</p><h2>Practice with intention.</h2><p id="coach-summary" class="coach-summary">Loading your latest performance snapshot…</p></div>
-      <div class="coach-score"><span>PERFORMANCE</span><strong id="coach-score">—</strong><small id="coach-trend">/ 100 · awaiting analysis</small></div>
+      <div class="coach-score"><span>PERFORMANCE INDEX</span><strong id="coach-score">—</strong><small id="coach-trend">/ 100 · awaiting analysis</small></div>
     </div>
+    <div class="coach-score-breakdown" id="coach-score-breakdown"></div>
     <div class="coach-grid">
-      <div class="coach-column"><span class="coach-label">STRENGTH SIGNALS</span><div id="coach-strengths"></div></div>
-      <div class="coach-column"><span class="coach-label">WATCH NEXT</span><div id="coach-weaknesses"></div></div>
-      <div class="coach-column coach-plan"><span class="coach-label">TODAY'S PLAN</span><div id="coach-plan"></div></div>
+      <div class="coach-column"><span class="coach-label">YOUR STRENGTHS</span><div id="coach-strengths"></div></div>
+      <div class="coach-column"><span class="coach-label">BEST NEXT IMPROVEMENTS</span><div id="coach-weaknesses"></div></div>
+      <div class="coach-column coach-plan"><span class="coach-label">TODAY'S ACTION PLAN</span><div id="coach-plan"></div></div>
     </div>
-    <div class="coach-recommendations" id="coach-recommendations"></div>
+    <section class="coach-detail-section"><div class="coach-detail-heading"><div><span class="coach-label">FOUR-PLATFORM REVIEW</span><h3>What your activity is telling us</h3></div><span>MEASURED EVIDENCE → NEXT STEP</span></div><div class="coach-platform-grid" id="coach-platform-insights"></div></section>
+    <section class="coach-detail-section"><div class="coach-detail-heading"><div><span class="coach-label">YOUR NEXT SEVEN DAYS</span><h3>A realistic improvement rhythm</h3></div><span>DATED · ACTIONABLE · FLEXIBLE</span></div><div class="coach-week-grid" id="coach-weekly-plan"></div></section>
+    <section class="coach-recommendation-section"><span class="coach-label">PRIORITISED RECOMMENDATIONS</span><div class="coach-recommendations" id="coach-recommendations"></div><div id="coach-data-gaps" class="coach-data-gaps"></div></section>
     <div class="coach-footer"><span id="coach-engine-status">LOCAL SNAPSHOT ANALYSIS</span><div class="coach-footer-actions"><button id="coach-test" type="button">✓ TEST GEMINI</button><button id="coach-refresh" type="button">↻ ANALYZE LATEST DATA</button></div></div>
     <section class="coach-chat" aria-label="Chat with your AI performance coach">
-      <div class="coach-chat-heading"><div><span class="coach-label">PRIVATE COACH CONVERSATION</span><h3>Ask about your progress.</h3><p>Chat about practice, weaknesses, study plans, coding goals and your next steps.</p></div><span id="coach-auth-status" class="coach-auth-status">CHECKING SIGN-IN…</span></div>
+      <div class="coach-chat-heading"><div><span class="coach-label">PRIVATE COACH CONVERSATION</span><h3>Ask better questions. Get a useful plan.</h3><p>Your coach uses the latest dashboard snapshot, explains the evidence, and can teach concepts step by step.</p></div><span id="coach-auth-status" class="coach-auth-status">CHECKING SIGN-IN…</span></div>
       <div id="coach-chat-log" class="coach-chat-log" aria-live="polite"></div>
       <div class="coach-prompts" aria-label="Suggested questions">
-        <button type="button" data-coach-prompt="What should I practise today based on my latest data?">What should I practise today?</button>
-        <button type="button" data-coach-prompt="Which platform or skill is my weakest right now, and why?">Find my weakest area</button>
-        <button type="button" data-coach-prompt="Create a realistic 7-day improvement plan using my current activity.">Build a 7-day plan</button>
+        <button type="button" data-coach-prompt="Analyse my latest performance. Show the exact metrics, what they mean, my top three priorities and how to improve each one.">Deep performance review</button>
+        <button type="button" data-coach-prompt="Create a realistic 7-day study plan using my latest activity. Include daily time, exact tasks, steps and measurable completion checks.">Build a 7-day plan</button>
+        <button type="button" data-coach-prompt="Review my LeetCode progress. Explain what my solved difficulty mix tells us, what we cannot know without topic data, and create a diagnostic practice plan.">Improve problem solving</button>
+        <button type="button" data-coach-prompt="Review my Monkeytype speed and accuracy together. Give me a 14-day plan that improves consistency without sacrificing accuracy.">Improve typing</button>
       </div>
       <form id="coach-chat-form" class="coach-chat-form">
         <label class="sr-only" for="coach-chat-input">Message your AI Performance Coach</label>
-        <textarea id="coach-chat-input" rows="2" maxlength="1600" placeholder="Ask: How can I improve my LeetCode problem-solving?" disabled></textarea>
+        <textarea id="coach-chat-input" rows="3" maxlength="2500" placeholder="Ask: Review my progress and give me three specific improvements…" disabled></textarea>
         <button id="coach-send" type="submit" disabled>SEND ↗</button>
       </form>
-      <div class="coach-chat-foot"><span id="coach-chat-note">Sign in above using Cloud Settings Sync to enable Gemini chat.</span><span>SHIFT + ENTER FOR NEW LINE</span></div>
+      <div class="coach-chat-foot"><span id="coach-chat-note">Sign in above using Cloud Settings Sync to enable Gemini chat.</span><span>ENTER TO SEND · SHIFT + ENTER FOR NEW LINE</span></div>
     </section>`;
   host.dataset.ready="true";
   host.addEventListener("click",event=>{
@@ -129,28 +133,103 @@ function ensureCoachMarkup(){
   });
   return host;
 }
+function coachPriority(value){
+  const priority=String(value||"medium").toLowerCase();
+  return ["high","medium","low"].includes(priority)?priority:"medium";
+}
 function renderCoach(data,meta={}){
   ensureCoachMarkup();
   const $=id=>document.getElementById(id);
   if(!$("coach-summary"))return;
-  $("coach-summary").textContent=data.summary||"Your coach is ready.";
+  $("coach-summary").textContent=data.summary||"Your latest activity has been reviewed.";
   $("coach-score").textContent=String(Math.max(0,Math.min(100,Math.round(Number(data.performance_score)||0))));
   $("coach-trend").textContent="/ 100 · "+(data.trend||"steady");
-  const list=(id,items,empty)=>$(id).innerHTML=(items||[]).slice(0,4).map((x,i)=>'<div class="coach-item '+(id==="coach-strengths"?"positive":"caution")+'"><i>'+(id==="coach-strengths"?"+":"↗")+'</i><span>'+coachEscape(x)+'</span></div>').join("")||'<div class="coach-item"><span>'+coachEscape(empty)+'</span></div>';
-  list("coach-strengths",data.strengths,"Building strength signals…");
-  list("coach-weaknesses",data.weaknesses,"No clear weakness detected in this snapshot.");
-  $("coach-plan").innerHTML=(data.today_plan||[]).slice(0,4).map(x=>'<div class="coach-plan-row"><strong>'+coachEscape(x.platform)+'</strong><span>'+coachEscape(x.task)+'</span><small>'+coachEscape(x.reason||"Based on your recent data.")+'</small></div>').join("")||'<div class="coach-plan-row">No plan available yet.</div>';
-  $("coach-recommendations").innerHTML=(data.recommendations||[]).slice(0,4).map(x=>'<span>'+coachEscape(x)+'</span>').join("");
-  $("coach-engine-status").textContent=meta.ai?((meta.model||"GEMINI")+" · "+(meta.saved?"INSIGHT SAVED TO SUPABASE":"LIVE RESPONSE")+(meta.usedFallback?" · AUTOMATIC FALLBACK":"")):(meta.status||"LOCAL SNAPSHOT ANALYSIS");
+  $("coach-score-breakdown").innerHTML=(data.score_breakdown||[]).map(part=>{
+    const score=Number.isFinite(Number(part.score))?Math.max(0,Math.min(100,Number(part.score))):0;
+    return '<div class="coach-score-part"><div><strong>'+coachEscape(part.label)+'</strong><span>'+coachEscape(part.weight_pct)+'% weight</span></div><div class="coach-score-track"><i style="width:'+score+'%"></i></div><small>'+coachEscape(part.explanation||"")+'</small></div>';
+  }).join("")+(data.score_methodology?'<p class="coach-methodology">'+coachEscape(data.score_methodology)+'</p>':"");
+  const renderInsightList=(id,items,kind,empty)=>{
+    $(id).innerHTML=(items||[]).slice(0,4).map(item=>{
+      const obj=typeof item==="string"?{title:item}:item||{};
+      const extra=kind==="strength"?obj.why_it_matters:obj.impact;
+      const action=kind==="strength"?obj.action:obj.improvement;
+      return '<article class="coach-evidence-item '+kind+'"><strong>'+coachEscape(obj.title||"Coaching insight")+'</strong>'+
+        (obj.evidence?'<p class="coach-evidence">'+coachEscape(obj.evidence)+'</p>':"")+
+        (extra?'<p>'+coachEscape(extra)+'</p>':"")+
+        (action?'<p class="coach-action-line"><b>Next:</b> '+coachEscape(action)+'</p>':"")+'</article>';
+    }).join("")||'<p class="coach-empty">'+coachEscape(empty)+'</p>';
+  };
+  renderInsightList("coach-strengths",data.strengths,"strength","More activity is needed to identify a reliable strength.");
+  renderInsightList("coach-weaknesses",data.weaknesses,"weakness","No clear weakness is supported by the available data.");
+  $("coach-plan").innerHTML=(data.today_plan||[]).map(item=>
+    '<article class="coach-plan-row"><div class="coach-plan-top"><strong>'+coachEscape(item.platform)+'</strong><span class="coach-priority '+coachPriority(item.priority)+'">'+coachEscape(item.priority||"medium")+'</span></div>'+
+    '<span class="coach-plan-objective">'+coachEscape(item.objective||"Measurable practice")+'</span>'+
+    '<p>'+coachEscape(item.task)+'</p>'+
+    (Array.isArray(item.steps)&&item.steps.length?'<ol>'+item.steps.map(step=>'<li>'+coachEscape(step)+'</li>').join("")+'</ol>':"")+
+    '<small>TIME · '+coachEscape(item.estimated_minutes||20)+' MIN</small>'+
+    (item.success_check?'<div class="coach-success-check"><b>DONE WHEN</b> '+coachEscape(item.success_check)+'</div>':"")+'</article>'
+  ).join("")||'<p class="coach-empty">No daily plan is available yet.</p>';
+  $("coach-platform-insights").innerHTML=(data.platform_insights||[]).map(item=>
+    '<article class="coach-platform-insight"><div class="coach-insight-head"><strong>'+coachEscape(item.platform)+'</strong><span>'+coachEscape(item.confidence||data.confidence||"medium")+' confidence</span></div>'+
+    '<h4>'+coachEscape(item.headline||"Activity review")+'</h4>'+
+    (Array.isArray(item.evidence)&&item.evidence.length?'<ul>'+item.evidence.map(ev=>'<li>'+coachEscape(ev)+'</li>').join("")+'</ul>':"")+
+    '<p>'+coachEscape(item.interpretation||"")+'</p><div class="coach-insight-next"><b>NEXT STEP</b>'+coachEscape(item.next_step||"")+'</div></article>'
+  ).join("");
+  $("coach-weekly-plan").innerHTML=(data.weekly_plan||[]).map(day=>
+    '<article class="coach-week-day"><div class="coach-week-date"><strong>'+coachEscape(day.day||"Day")+'</strong><span>'+coachEscape(day.date||"")+'</span></div><h4>'+coachEscape(day.focus||"Practice and review")+'</h4>'+
+    '<div class="coach-week-tasks">'+(day.tasks||[]).map(task=>'<div><span>'+coachEscape(task.platform)+'</span><p>'+coachEscape(task.task)+'</p><small>'+coachEscape(task.minutes||20)+' min</small></div>').join("")+'</div>'+
+    '<div class="coach-week-total">'+coachEscape(day.total_minutes||0)+' MIN TOTAL</div><small class="coach-week-done">'+coachEscape(day.done_when||"Complete the selected tasks.")+'</small></article>'
+  ).join("")||'<p class="coach-empty">A seven-day plan will appear after the next analysis.</p>';
+  $("coach-recommendations").innerHTML=(data.recommendations||[]).map(item=>{
+    const obj=typeof item==="string"?{title:item}:item||{};
+    return '<article class="coach-recommendation"><span class="coach-priority '+coachPriority(obj.priority)+'">'+coachEscape(obj.priority||"medium")+'</span><div><strong>'+coachEscape(obj.title||"Next improvement")+'</strong>'+
+      (obj.reason?'<p>'+coachEscape(obj.reason)+'</p>':"")+(obj.action?'<small>'+coachEscape(obj.action)+'</small>':"")+'</div></article>';
+  }).join("")||'<p class="coach-empty">No additional recommendations.</p>';
+  const gaps=Array.isArray(data.data_gaps)?data.data_gaps:[];
+  $("coach-data-gaps").innerHTML=gaps.length?'<strong>DATA LIMITATIONS</strong><ul>'+gaps.slice(0,7).map(gap=>'<li>'+coachEscape(gap)+'</li>').join("")+'</ul>':'<span>All four platform feeds supplied activity data for this report.</span>';
+  $("coach-engine-status").textContent=meta.ai?((meta.model||"GEMINI")+" · "+(meta.saved?"DETAILED REPORT SAVED":"LIVE REPORT")+(meta.usedFallback?" · AUTOMATIC FALLBACK":"")+" · "+(data.confidence||"medium").toUpperCase()+" CONFIDENCE"):(meta.status||"LOCAL SNAPSHOT ANALYSIS");
   $("coach-refresh").disabled=coachState.analysisLoading;
   $("coach-refresh").textContent=coachState.analysisLoading?"ANALYZING…":"↻ ANALYZE LATEST DATA";
   renderChat();
 }
+function formatCoachMessage(value){
+  const chunks=String(value||"").split(/```([\\w+-]*)\\n([\\s\\S]*?)```/g);
+  let html="";
+  for(let i=0;i<chunks.length;i++){
+    if(i%3===1){
+      const code=chunks[i+1]||"";
+      html+='<pre class="coach-code"><code>'+coachEscape(code)+'</code></pre>';
+      i+=2;
+      continue;
+    }
+    const lines=chunks[i].split("\\n");
+    let paragraph=[],list=[],listType="";
+    const flushParagraph=()=>{if(paragraph.length){html+='<p>'+paragraph.map(line=>coachEscape(line).replace(/\\*\\*(.+?)\\*\\*/g,"<strong>$1</strong>").replace(/`([^`]+)`/g,"<code>$1</code>")).join("<br>")+'</p>';paragraph=[];}};
+    const flushList=()=>{if(list.length){html+=(listType==="ol"?"<ol>":"<ul>")+list.map(line=>'<li>'+coachEscape(line).replace(/\\*\\*(.+?)\\*\\*/g,"<strong>$1</strong>").replace(/`([^`]+)`/g,"<code>$1</code>")+'</li>').join("")+(listType==="ol"?"</ol>":"</ul>");list=[];listType="";}};
+    for(const line of lines){
+      const trimmed=line.trim();
+      const heading=trimmed.match(/^(#{1,3})\\s+(.+)$/);
+      const bullet=trimmed.match(/^[-*]\\s+(.+)$/);
+      const numbered=trimmed.match(/^\\d+[.)]\\s+(.+)$/);
+      if(heading){flushParagraph();flushList();html+='<h4>'+coachEscape(heading[2])+'</h4>';continue;}
+      if(bullet||numbered){
+        flushParagraph();
+        const type=numbered?"ol":"ul";
+        if(listType&&listType!==type)flushList();
+        listType=type;list.push((bullet||numbered)[1]);continue;
+      }
+      if(!trimmed){flushParagraph();flushList();continue;}
+      flushList();paragraph.push(line);
+    }
+    flushParagraph();flushList();
+  }
+  return html;
+}
 function renderChat(typing=false){
   const log=document.getElementById("coach-chat-log");
   if(!log)return;
-  const items=coachState.history.length?coachState.history:[{role:"assistant",content:"Hi Dinesh — I’m your performance coach. Ask me about your latest activity, what to practise next, your coding weaknesses, or a realistic study plan."}];
-  log.innerHTML=items.map(m=>'<div class="coach-message '+(m.role==="user"?"user":"assistant")+'"><span>'+(m.role==="user"?"YOU":"COACH")+'</span><p>'+coachEscape(m.content)+'</p></div>').join("")+(typing?'<div class="coach-message assistant typing"><span>COACH</span><p>Thinking through your latest data…</p></div>':"");
+  const items=coachState.history.length?coachState.history:[{role:"assistant",content:"Hi Dinesh — I’m your performance coach. Ask for a detailed performance review, a realistic weekly plan, help with a coding concept, or a step-by-step way to improve one platform."}];
+  log.innerHTML=items.map(m=>'<div class="coach-message '+(m.role==="user"?"user":"assistant")+'"><span>'+(m.role==="user"?"YOU":"COACH")+'</span><div class="coach-message-body">'+(m.role==="assistant"?formatCoachMessage(m.content):'<p>'+coachEscape(m.content)+'</p>')+'</div></div>').join("")+(typing?'<div class="coach-message assistant typing"><span>COACH</span><p>Reviewing your metrics and preparing a practical answer…</p></div>':"");
   log.scrollTop=log.scrollHeight;
 }
 function setChatAvailability(session,reason=""){
