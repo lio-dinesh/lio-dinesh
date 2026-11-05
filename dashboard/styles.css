@@ -496,3 +496,26 @@ body{font-family:var(--display-font)}
 .performance-insight>strong{color:#F2EFE8;font:600 16px var(--display-font);letter-spacing:-.025em}
 .performance-insight>small{color:var(--insight-accent);font:8px var(--mono);line-height:1.55}
 @media(max-width:760px){.performance-insights{grid-template-columns:1fr}}
+
+/* Private Supabase account sync panel */
+.cloud-sync-panel{margin-top:14px;padding:12px 13px;border:1px solid #46536A;border-radius:9px;background:linear-gradient(145deg,#242B36,#1B2028)}
+.cloud-sync-heading{display:flex;align-items:center;gap:7px;flex-wrap:wrap;color:#9DA8B8;font:7px var(--mono);letter-spacing:.1em}
+.cloud-sync-dot{width:7px;height:7px;border-radius:50%;background:var(--cobalt);box-shadow:0 0 10px var(--cobalt)}
+.cloud-sync-heading strong{margin-left:auto;color:var(--cobalt);font-size:7px}
+.cloud-sync-panel p{margin:8px 0 10px;color:#A7B0BD;font-size:8px;line-height:1.65}
+.cloud-signin-controls{display:flex;gap:6px;align-items:center}
+.cloud-signin-controls[hidden],.cloud-account-controls[hidden]{display:none!important}
+.cloud-signin-controls input{min-width:0;flex:1;padding:8px 9px;border:1px solid #4A5361;border-radius:5px;background:#15191F;color:#F2EFE8;font:9px var(--sans)}
+.cloud-signin-controls input::placeholder{color:#7F8997}
+.cloud-signin-controls button,.cloud-account-controls button{padding:8px 9px;border:1px solid #586989;border-radius:5px;background:#303C54;color:#EAF0FF;font:7px var(--mono);white-space:nowrap;cursor:pointer;transition:.2s}
+.cloud-signin-controls button:hover,.cloud-account-controls button:hover{border-color:var(--cobalt);box-shadow:0 0 0 3px var(--mood-glow)}
+.cloud-signin-controls button:disabled{opacity:.6;cursor:wait}
+.cloud-account-controls{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.cloud-account-controls span{min-width:0;overflow:hidden;text-overflow:ellipsis;color:#DAE1EC;font:8px var(--mono)}
+.cloud-sync-footnote{display:block;margin-top:9px;color:#748091;font:6px var(--mono);letter-spacing:.04em}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:600px){
+  .cloud-signin-controls{flex-wrap:wrap}
+  .cloud-signin-controls input{flex-basis:100%}
+  .cloud-signin-controls button{width:100%}
+}
