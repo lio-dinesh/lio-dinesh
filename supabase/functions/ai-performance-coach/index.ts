@@ -196,7 +196,11 @@ function buildPerformanceEvidence(snapshot) {
     { key: "streak_strength", label: "Streak strength", weight_pct: 20, score: streak, explanation: "Current streak normalised to a 21-day coaching target; capped at 100." },
     { key: "data_coverage", label: "Data coverage", weight_pct: 20, score: coverage, explanation: "Share of platform feeds that currently provide activity history." },
   ];
-  const score = Math.round(scoreParts.reduce((total, part) => total + (Number.isFinite(part.score) ? part.score * part.weight_pct / 100 : 0), 0));
+  const measurableScoreParts = scoreParts.filter(part => Number.isFinite(part.score));
+  const availableWeight = measurableScoreParts.reduce((total, part) => total + part.weight_pct, 0);
+  const score = availableWeight
+    ? Math.round(measurableScoreParts.reduce((total, part) => total + part.score * part.weight_pct, 0) / availableWeight)
+    : 0;
   const comparable = available.filter(p => p.trend_comparison_available);
   const delta = comparable.reduce((total, p) => total + p.latest_7d.active_days - p.previous_7d.active_days, 0);
   const improving = comparable.filter(p => p.latest_7d.active_days > p.previous_7d.active_days).length;
@@ -229,7 +233,7 @@ function buildPerformanceEvidence(snapshot) {
         ...part,
         score: Number.isFinite(part.score) ? Math.round(part.score) : null,
       })),
-      methodology: "35% consistency + 25% recent 7-day momentum + 20% current streak strength (21-day target) + 20% connected activity-data coverage. This is a coaching index, not a measure of coding ability.",
+      methodology: "Target weights: 35% consistency + 25% recent 7-day momentum + 20% current streak strength (21-day target) + 20% connected activity-data coverage. If a component is unavailable, the remaining measurable weights are renormalised to 100%. This is a coaching index, not a measure of coding ability.",
     },
     trend: {
       label: trend,
