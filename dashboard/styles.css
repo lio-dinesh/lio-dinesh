@@ -488,3 +488,11 @@ body{font-family:var(--display-font)}
   .monthly-legend span{font-size:7px}
   .monthly-head{align-items:flex-start;flex-direction:column}
 }
+
+.performance-insights{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 15px}
+.performance-insight{--insight-accent:var(--cobalt);display:flex;flex-direction:column;gap:6px;min-width:0;padding:13px 15px;border:1px solid #3A414C;border-radius:9px;background:linear-gradient(145deg,#252A31,#1B1F25);position:relative;overflow:hidden}
+.performance-insight:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--insight-accent)}
+.performance-insight>span{color:#8994A2;font:7px var(--mono);letter-spacing:.12em}
+.performance-insight>strong{color:#F2EFE8;font:600 16px var(--display-font);letter-spacing:-.025em}
+.performance-insight>small{color:var(--insight-accent);font:8px var(--mono);line-height:1.55}
+@media(max-width:760px){.performance-insights{grid-template-columns:1fr}}
