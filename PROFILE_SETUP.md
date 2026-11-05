@@ -34,6 +34,22 @@ Repository: https://github.com/lio-dinesh/lio-dinesh
 4. Click **Run workflow** on `main` to perform the first data refresh and Pages deployment.
 5. When the deployment job succeeds, open https://lio-dinesh.github.io/lio-dinesh/.
 
+### Supabase cloud settings setup
+
+- Project: `DeveloperCommandCenter` (`bdbnblvdnxxhojnbtpxi`, `ap-south-1`).
+- API URL: `https://bdbnblvdnxxhojnbtpxi.supabase.co`.
+- Browser configuration uses the `sb_publishable_...` key only. Never place the project's secret/service-role key in this static repository.
+- Table: `public.user_settings`, keyed by `user_id` referencing `auth.users(id)`, with four daily goal integers, `color_mood`, and `updated_at`.
+- RLS: SELECT, INSERT and UPDATE policies all compare `(select auth.uid())` with `user_id`; public/anon access is revoked.
+- Realtime: `public.user_settings` is included in `supabase_realtime`; the client subscribes to the signed-in account row.
+- Sign-in: email magic link via `auth.signInWithOtp`; session persistence is enabled by the Supabase browser client.
+- Local fallback: goals remain in browser local storage when signed out or when cloud sync is unavailable. First sign-in without an existing cloud row imports the current browser goals/theme into the account.
+
+**Required one-time dashboard setting:** open [Auth → URL Configuration](https://supabase.com/dashboard/project/bdbnblvdnxxhojnbtpxi/auth/url-configuration), set Site URL to `https://lio-dinesh.github.io/lio-dinesh/`, and add that same value under Additional Redirect URLs. The Auth URL Configuration API is not available through the connected Supabase management actions in this session, so this setting must be applied in the Supabase dashboard.
+
+After saving the redirect URL, visit the [live dashboard](https://lio-dinesh.github.io/lio-dinesh/), enter your email under Cloud Settings Sync, request the magic link, and open it on the same browser/device. For production email deliverability, configure custom SMTP; the default email sender is intended for limited testing.
+
+To verify database configuration, inspect `public.user_settings`, the three policies, the `supabase_realtime` publication entry and Supabase security/performance advisors.
 ### Developer Command Center growth features
 
 - Hero typography: Space Grotesk with oversized bold two-line display type, porcelain text, vivid pink emphasis and cyan micro-labels.
