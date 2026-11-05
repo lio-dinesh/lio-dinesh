@@ -41,7 +41,7 @@ Deno.serve(async(req)=>{
       "Explain why recommendations follow from the data.",
       "SOURCE SNAPSHOT:\n"+JSON.stringify(snapshot)
     ].join("\n\n");
-    const gemini=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent",{
+    const gemini=await fetch("https://generativelanguage.googleapis.com/v1beta/interactions",{
       method:"POST",
       headers:{"Content-Type":"application/json","x-goog-api-key":apiKey},
       body:JSON.stringify({
