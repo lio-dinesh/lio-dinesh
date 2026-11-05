@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="theme-color" content="#15171A"/>
   <meta name="description" content="Dinesh G's interactive coding performance dashboard."/>
-  <title>Dinesh G — Graphite Practice Studio</title>
+  <title>Dinesh G — Developer Command Center</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="./styles.css"/>
   <script type="importmap">
     {
@@ -27,7 +27,7 @@
         <span class="identity-mark">DG</span>
         <span class="identity-copy"><strong>DINESH G</strong><small>DEVELOPER PRACTICE STUDIO</small></span>
       </a>
-      <nav class="site-nav" aria-label="Dashboard navigation"><a href="#overview">OVERVIEW</a><a href="#practice-worlds">3D WORLDS</a><a href="#activity-history">ACTIVITY</a></nav>
+      <nav class="site-nav" aria-label="Dashboard navigation"><a href="#overview">OVERVIEW</a><a href="#practice-worlds">3D WORLDS</a><a href="#activity-history">ACTIVITY</a><a href="#daily-goals">GOALS</a><a href="#achievements">MILESTONES</a></nav>
       <div class="topbar-meta">
         <span class="live-pill"><i></i> LIVE DATA</span>
         <time id="clock">--:--:-- IST</time>
@@ -40,7 +40,7 @@
         <div class="intro-copy">
           <p class="eyebrow">PERSONAL PERFORMANCE / 001</p>
           <h1>Build skills.<br/><em>Compound progress.</em></h1>
-          <p class="intro-text">A focused performance studio for typing practice, algorithmic problem solving, competitive programming and open-source contributions.</p>
+          <p class="intro-text">Typing faster. Solving harder. Building consistently. One measurable day at a time.</p>
         </div>
         <aside class="connection-card">
           <div class="connection-top"><span class="status-dot"></span><span>DATA CONNECTION</span></div>
@@ -105,6 +105,7 @@
             <button type="button" data-camera="front" data-scene="monkeytype">FRONT</button>
             <button type="button" data-camera="top" data-scene="monkeytype">TOP</button>
             <button type="button" data-camera="side" data-scene="monkeytype">SIDE</button>
+            <button type="button" data-camera="cinematic" data-scene="monkeytype">CINEMA</button>
             <button type="button" data-reset="monkeytype">RESET</button>
             <button type="button" data-autorotate="monkeytype">PAUSE</button>
             <button type="button" data-fullscreen="monkeytype">FULL VIEW ↗</button>
@@ -129,6 +130,7 @@
             <button type="button" data-camera="front" data-scene="leetcode">FRONT</button>
             <button type="button" data-camera="top" data-scene="leetcode">TOP</button>
             <button type="button" data-camera="side" data-scene="leetcode">SIDE</button>
+            <button type="button" data-camera="cinematic" data-scene="leetcode">CINEMA</button>
             <button type="button" data-reset="leetcode">RESET</button>
             <button type="button" data-autorotate="leetcode">PAUSE</button>
             <button type="button" data-fullscreen="leetcode">FULL VIEW ↗</button>
@@ -153,6 +155,7 @@
             <button type="button" data-camera="front" data-scene="codechef">FRONT</button>
             <button type="button" data-camera="top" data-scene="codechef">TOP</button>
             <button type="button" data-camera="side" data-scene="codechef">SIDE</button>
+            <button type="button" data-camera="cinematic" data-scene="codechef">CINEMA</button>
             <button type="button" data-reset="codechef">RESET</button>
             <button type="button" data-autorotate="codechef">PAUSE</button>
             <button type="button" data-fullscreen="codechef">FULL VIEW ↗</button>
@@ -177,6 +180,7 @@
             <button type="button" data-camera="front" data-scene="github">FRONT</button>
             <button type="button" data-camera="top" data-scene="github">TOP</button>
             <button type="button" data-camera="side" data-scene="github">SIDE</button>
+            <button type="button" data-camera="cinematic" data-scene="github">CINEMA</button>
             <button type="button" data-reset="github">RESET</button>
             <button type="button" data-autorotate="github">PAUSE</button>
             <button type="button" data-fullscreen="github">FULL VIEW ↗</button>
@@ -192,13 +196,39 @@
         <div id="combined-heatmaps" class="combined-heatmaps"></div>
       </section>
 
+      <section class="growth-section" id="daily-goals">
+        <div class="summary-head"><div><p class="eyebrow">PERSONAL ROUTINE</p><h2>Daily goals & consistency</h2></div><span>EDITABLE · SAVED ON THIS DEVICE</span></div>
+        <p class="section-intro">Set a realistic daily activity target for each platform. Progress is calculated from the latest published activity snapshot for today.</p>
+        <div id="daily-goals-grid" class="daily-goals-grid"></div>
+      </section>
+
+      <section class="growth-section" id="achievements">
+        <div class="summary-head"><div><p class="eyebrow">MILESTONES</p><h2>Achievements & personal records</h2></div><span>UNLOCKED FROM VERIFIED SOURCE METRICS</span></div>
+        <div id="achievements-grid" class="achievements-grid"></div>
+      </section>
+
+      <section class="growth-section" id="performance-comparison">
+        <div class="summary-head"><div><p class="eyebrow">CROSS-PLATFORM ANALYTICS</p><h2>Consistency comparison</h2></div><span id="comparison-window">LAST 90 DAYS</span></div>
+        <div id="comparison-grid" class="comparison-grid"></div>
+        <p class="comparison-note">Activity event totals have different meanings on each platform. The consistency percentage compares active days within the selected window, not the number of problems, tests or commits directly.</p>
+      </section>
+
+      <section class="growth-section report-section" id="reports">
+        <div class="summary-head"><div><p class="eyebrow">YOUR PRACTICE DATA</p><h2>Reports & exports</h2></div><span>SELECTED ACTIVITY WINDOW</span></div>
+        <div class="report-panel">
+          <div><strong>Take your progress with you.</strong><p>Export daily platform activity as CSV for spreadsheet analysis, or print a clean summary and save it as PDF from your browser.</p></div>
+          <div class="report-actions"><button id="export-csv" type="button">↓ EXPORT CSV</button><button id="print-report" type="button">↗ PRINT / SAVE PDF</button></div>
+          <small id="report-status">Includes source-reported activity, streaks and the selected 7/30/90-day window.</small>
+        </div>
+      </section>
+
       <section class="data-disclaimer">
         <strong>About the refresh speed</strong>
         <p>The dashboard checks the repository data every 30 seconds. GitHub Actions collects the latest available platform data every 5 minutes. A typing test appears after Monkeytype records the completed test; a submission appears after LeetCode or CodeChef publishes it. This is frequent polling, not live capture of keystrokes or an instant provider webhook.</p>
       </section>
     </main>
 
-    <footer class="footer"><span>DINESH G · GRAPHITE PRACTICE STUDIO · THREE.JS + GSAP</span><span>GRAPHITE / PORCELAIN / COBALT / TERRACOTTA / LAVENDER / BRASS</span></footer>
+    <footer class="footer"><span>DINESH G · DEVELOPER COMMAND CENTER · THREE.JS + GSAP</span><span>GRAPHITE / PORCELAIN / COBALT / TERRACOTTA / LAVENDER / BRASS</span></footer>
   </div>
   <script type="module" src="./app.js"></script>
 </body>
