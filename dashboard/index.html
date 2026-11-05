@@ -15,7 +15,8 @@
       "imports": {
         "three": "https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js",
         "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/",
-        "gsap": "https://cdn.jsdelivr.net/npm/gsap@3.13.0/+esm"
+        "gsap": "https://cdn.jsdelivr.net/npm/gsap@3.13.0/+esm",
+        "@supabase/supabase-js": "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.0/+esm"
       }
     }
   </script>
@@ -49,6 +50,24 @@
           <div class="connection-actions">
             <button id="refresh-now" type="button">↻ Refresh data</button>
             <span id="next-refresh">CHECKING…</span>
+          </div>
+          <div class="cloud-sync-panel" id="cloud-sync-panel">
+            <div class="cloud-sync-heading">
+              <span class="cloud-sync-dot"></span>
+              <span>CLOUD SETTINGS SYNC</span>
+              <strong id="cloud-sync-status">SIGN IN TO SYNC</strong>
+            </div>
+            <p id="cloud-sync-message">Sign in with your email to sync daily goals and theme preferences across devices.</p>
+            <div id="cloud-signin-controls" class="cloud-signin-controls">
+              <label class="sr-only" for="cloud-email">Email address</label>
+              <input id="cloud-email" type="email" autocomplete="email" placeholder="Enter your email address"/>
+              <button id="cloud-send-link" type="button">SEND MAGIC LINK ↗</button>
+            </div>
+            <div id="cloud-account-controls" class="cloud-account-controls" hidden>
+              <span id="cloud-account-email"></span>
+              <button id="cloud-sign-out" type="button">SIGN OUT</button>
+            </div>
+            <small id="cloud-sync-footnote">Private account data · secured with Supabase Auth + RLS</small>
           </div>
         </aside>
       </section>
