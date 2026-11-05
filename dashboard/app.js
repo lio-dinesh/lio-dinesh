@@ -611,7 +611,7 @@ function renderDailyGoals(platforms){
 function metricNumber(platform,label){
   const value=metric(platform,label);
   if(value==="—"||value===null||value===undefined)return null;
-  const match=String(value).replace(/,/g,"").match(/-?\\d+(?:\\.\\d+)?/);
+  const match=String(value).replace(/,/g,"").match(/-?\d+(?:\.\d+)?/);
   return match?Number(match[0]):null;
 }
 function buildAchievements(platforms){
@@ -706,8 +706,8 @@ function exportCsv(){
       platform.currentStreak??"",platform.longestStreak??"",currentSnapshot.activityDate
     ]));
   });
-  const csv=rows.map(row=>row.map(value=>'"'+String(value).replace(/"/g,'""')+'"').join(",")).join("\\r\\n");
-  const blob=new Blob(["\\uFEFF",csv],{type:"text/csv;charset=utf-8"});
+  const csv=rows.map(row=>row.map(value=>'"'+String(value).replace(/"/g,'""')+'"').join(",")).join("\r\n");
+  const blob=new Blob(["\uFEFF",csv],{type:"text/csv;charset=utf-8"});
   const url=URL.createObjectURL(blob),anchor=document.createElement("a");
   anchor.href=url;anchor.download="dinesh-practice-activity-"+settings.range+"-days.csv";
   document.body.appendChild(anchor);anchor.click();anchor.remove();URL.revokeObjectURL(url);
