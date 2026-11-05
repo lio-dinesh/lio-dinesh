@@ -237,9 +237,9 @@ async function testGeminiConnection(){
     if(error)throw error;
     if(data?.error)throw new Error(data.details||data.error);
     if(!data?.ok)throw new Error("Gemini did not confirm a successful response.");
-    if(status)status.textContent="CONNECTED · "+(data.model||"GEMINI")+" · SUPABASE AUTH VERIFIED";
+    if(status)status.textContent="CONNECTED · "+(data.model||"GEMINI")+" · SUPABASE AUTH VERIFIED"+(data.usedFallback?" · FALLBACK MODEL":"");
     const note=document.getElementById("coach-chat-note");
-    if(note)note.textContent="Connection test passed. You can now chat with Gemini.";
+    if(note)note.textContent=data.usedFallback?"Connection test passed using the automatic fallback model. You can now chat with Gemini.":"Connection test passed. You can now chat with Gemini.";
   }catch(error){
     console.error("Gemini connection test failed",error);
     const detail=await coachErrorDetails(error);
