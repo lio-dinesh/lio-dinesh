@@ -19,7 +19,6 @@ const settings={range:90,quality:"medium",colorMood:"graphite",paused:false,redu
 const colorMoods={
   graphite:{orange:"#E58B67",blue:"#6E8BFF",gold:"#D6B365",lavender:"#B5A1E8",warm:"#F2EFE8"},
   prism:{orange:"#FF6B9D",blue:"#43D9FF",gold:"#FFC857",lavender:"#B994FF",warm:"#F4F0FF"},
-  ember:{orange:"#FF765E",blue:"#B58AFF",gold:"#FFC66D",lavender:"#FF9EBC",warm:"#FFE9DA"}
 };
 const accentKeys={
   "#E58B67":"orange","#6E8BFF":"blue","#D6B365":"gold","#B5A1E8":"lavender",
@@ -75,6 +74,16 @@ function applyColorMood(mode){
   root.style.setProperty("--mood-glow",mood.blue+"22");
   root.style.setProperty("--mood-warm",mood.orange+"18");
   document.body.dataset.colorMood=mode;
+  const toggle=$("color-mode-toggle");
+  const action=$("color-mode-action");
+  const current=$("color-mode-current");
+  if(toggle){
+    const isPrism=mode==="prism";
+    toggle.setAttribute("aria-pressed",String(isPrism));
+    toggle.dataset.activeMood=mode;
+  }
+  if(action)action.textContent=mode==="graphite"?"SWITCH TO PRISM ENERGY":"SWITCH TO GRAPHITE SIGNATURE";
+  if(current)current.textContent="CURRENT: "+(mode==="graphite"?"GRAPHITE SIGNATURE":"PRISM ENERGY");
   if(currentSnapshot){
     currentSnapshot.platforms.forEach(platform=>updateScene(platform));
     renderActivityInsights(currentSnapshot.platforms);
@@ -671,11 +680,14 @@ function setupControls(){
     settings.quality=event.target.value;
     applyQuality();
   });
-  $("color-mode").value=settings.colorMood;
-  $("color-mode").addEventListener("change",event=>{
-    applyColorMood(event.target.value);
-    if(!settings.reducedMotion)gsap.fromTo(".model-card",{filter:"brightness(.82)"},{filter:"brightness(1)",duration:.55,stagger:.07,ease:"power2.out"});
+  $("color-mode-toggle").addEventListener("click",()=>{
+    applyColorMood(settings.colorMood==="graphite"?"prism":"graphite");
+    if(!settings.reducedMotion){
+      gsap.fromTo(".model-card",{filter:"brightness(.78)",y:3},{filter:"brightness(1)",y:0,duration:.58,stagger:.065,ease:"power3.out",clearProps:"filter,transform"});
+      gsap.fromTo(".calendar-card",{filter:"brightness(.82)"},{filter:"brightness(1)",duration:.48,stagger:.045,ease:"power2.out",clearProps:"filter"});
+    }
   });
+  applyColorMood("graphite");
   $("pause-all").addEventListener("click",()=>{
     settings.paused=!settings.paused;
     $("pause-all").textContent=settings.paused?"▶ RESUME ALL":"Ⅱ PAUSE ALL";
