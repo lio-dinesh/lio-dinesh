@@ -27,6 +27,7 @@ const accentKeys={
 };
 const records=new Map();
 let currentSnapshot=null;
+let monthlyHistory=null;
 let lastFetch=0;
 let animationFrame=0;
 const $=id=>document.getElementById(id);
@@ -565,6 +566,172 @@ function renderCalendars(platforms){
   }).join('');
   if(!settings.reducedMotion)gsap.fromTo('.calendar-card',{y:18,opacity:0,scale:.985},{y:0,opacity:1,scale:1,duration:.55,stagger:.08,ease:'power3.out'});
 }
+const GOAL_STORAGE_KEY="dinesh-command-center-goals-v1";
+const DEFAULT_GOALS={monkeytype:1,leetcode:1,codechef:1,github:1};
+const PLATFORM_TITLES={monkeytype:"Monkeytype",leetcode:"LeetCode",codechef:"CodeChef",github:"GitHub"};
+function loadGoals(){
+  try{
+    const saved=JSON.parse(localStorage.getItem(GOAL_STORAGE_KEY)||"{}");
+    return Object.fromEntries(Object.keys(DEFAULT_GOALS).map(id=>{
+      const value=Number(saved[id]);
+      return [id,Number.isFinite(value)&&value>0?Math.min(9999,Math.round(value)):DEFAULT_GOALS[id]];
+    }));
+  }catch{return {...DEFAULT_GOALS};}
+}
+let dailyGoals=loadGoals();
+function saveGoals(){
+  try{localStorage.setItem(GOAL_STORAGE_KEY,JSON.stringify(dailyGoals));}catch(error){console.warn("Goals could not be saved in this browser",error);}
+}
+function todayCount(platform){
+  if(!currentSnapshot||!platform.activityAvailable)return null;
+  const day=(platform.dailyActivity||[]).find(item=>item.date===currentSnapshot.activityDate);
+  return day?Number(day.count||0):0;
+}
+function renderDailyGoals(platforms){
+  const html=platforms.map(platform=>{
+    const id=platform.id,actual=todayCount(platform),goal=dailyGoals[id]||1;
+    const progress=actual===null?0:Math.min(100,Math.round(actual/goal*100));
+    const label=actual===null?"DATA UNAVAILABLE":actual>=goal?"GOAL COMPLETE":actual+" / "+goal+" TODAY";
+    return '<article class="goal-card" data-goal-card="'+id+'">'+
+      '<div class="goal-card-head"><div><span class="goal-accent"></span><strong>'+esc(PLATFORM_TITLES[id]||platform.label)+'</strong></div><span>'+label+'</span></div>'+
+      '<div class="goal-progress-track"><span style="width:'+progress+'%"></span></div>'+
+      '<div class="goal-card-foot"><span>DAILY TARGET</span><label><input type="number" min="1" max="9999" step="1" inputmode="numeric" data-goal-input="'+id+'" value="'+goal+'" aria-label="'+esc(PLATFORM_TITLES[id]||id)+' daily target"/></label>'+
+      '<span>'+(actual===null?"—":n(actual))+' / '+n(goal)+'</span></div>'+
+      '</article>';
+  }).join("");
+  $("daily-goals-grid").innerHTML=html;
+  $("daily-goals-grid").querySelectorAll("[data-goal-input]").forEach(input=>{
+    input.addEventListener("change",()=>{
+      const id=input.dataset.goalInput,value=Math.max(1,Math.min(9999,Math.round(Number(input.value)||1)));
+      dailyGoals[id]=value;input.value=value;saveGoals();
+      if(currentSnapshot)renderDailyGoals(currentSnapshot.platforms);
+    });
+  });
+}
+function metricNumber(platform,label){
+  const value=metric(platform,label);
+  if(value==="—"||value===null||value===undefined)return null;
+  const match=String(value).replace(/,/g,"").match(/-?\\d+(?:\\.\\d+)?/);
+  return match?Number(match[0]):null;
+}
+function buildAchievements(platforms){
+  const byId=Object.fromEntries(platforms.map(platform=>[platform.id,platform]));
+  const achievements=[];
+  const add=(id,title,description,current,target,accent)=>{
+    const valid=Number.isFinite(current),unlocked=valid&&current>=target;
+    achievements.push({id,title,description,current:valid?current:null,target,unlocked,progress:valid?Math.min(100,Math.round(current/target*100)):0,accent});
+  };
+  const monkey=byId.monkeytype,leet=byId.leetcode,chef=byId.codechef,git=byId.github;
+  if(monkey){
+    add("wpm-60","Typing rhythm","Reach 60 best WPM",metricNumber(monkey,"BEST WPM"),60,"orange");
+    add("wpm-80","Speed specialist","Reach 80 best WPM",metricNumber(monkey,"BEST WPM"),80,"orange");
+    add("accuracy-98","Precision typist","Reach 98% best accuracy",metricNumber(monkey,"ACCURACY"),98,"orange");
+    add("typing-2000","Practice archive","Complete 2,000 typing tests",metricNumber(monkey,"TESTS DONE"),2000,"orange");
+  }
+  if(leet){
+    [50,100,250,500].forEach(target=>add("lc-"+target,target+" solutions","Solve "+target+" LeetCode problems",metricNumber(leet,"SOLVED"),target,"blue"));
+  }
+  if(chef){
+    [1000,1500,2000].forEach(target=>add("cc-"+target,target.toLocaleString("en-IN")+" solved","Reach "+target.toLocaleString("en-IN")+" CodeChef problems",metricNumber(chef,"SOLVED"),target,"gold"));
+  }
+  if(git){
+    [250,500,1000].forEach(target=>add("gh-"+target,target+" contributions","Reach "+target+" GitHub contributions in the last 12 months",metricNumber(git,"CONTRIBUTIONS · 12M"),target,"lavender"));
+  }
+  platforms.forEach(platform=>{
+    const streak=Number(platform.currentStreak);
+    if(Number.isFinite(streak)){
+      add(platform.id+"-streak-7",platform.label+" 7-day streak","Maintain a 7-day active streak",streak,7,platform.id==="monkeytype"?"orange":platform.id==="leetcode"?"blue":platform.id==="codechef"?"gold":"lavender");
+    }
+  });
+  return achievements;
+}
+function renderAchievements(platforms){
+  const achievements=buildAchievements(platforms);
+  const unlocked=achievements.filter(item=>item.unlocked).length;
+  $("achievements-grid").innerHTML=
+    '<div class="achievement-summary"><strong>'+unlocked+' / '+achievements.length+'</strong><span>MILESTONES UNLOCKED</span></div>'+
+    achievements.map(item=>'<article class="achievement-card '+(item.unlocked?"is-unlocked":"is-locked")+'" data-accent="'+item.accent+'">'+
+      '<div class="achievement-icon">'+(item.unlocked?"✦":"◇")+'</div>'+
+      '<div class="achievement-copy"><strong>'+esc(item.title)+'</strong><span>'+esc(item.description)+'</span>'+
+      '<div class="achievement-progress"><i style="width:'+item.progress+'%"></i></div></div>'+
+      '<b>'+(item.current===null?"—":n(item.current)+" / "+n(item.target))+'</b>'+
+      '</article>').join("");
+}
+function renderComparison(platforms){
+  $("comparison-window").textContent="LAST "+settings.range+" DAYS";
+  $("comparison-grid").innerHTML=platforms.map(platform=>{
+    const p=rangedPlatform(platform),days=p.dailyActivity||[];
+    const active=p.activityAvailable?days.filter(day=>Number(day.count||0)>0).length:null;
+    const ratio=active===null?null:Math.round(active/Math.max(1,days.length)*100);
+    const total=days.reduce((sum,day)=>sum+Number(day.count||0),0);
+    return '<article class="comparison-card" data-source="'+esc(p.id)+'">'+
+      '<div><strong>'+esc(PLATFORM_TITLES[p.id]||p.label)+'</strong><span>'+(ratio===null?"NO ACTIVITY DATA":ratio+"% CONSISTENCY")+'</span></div>'+
+      '<div class="comparison-track"><i style="width:'+(ratio||0)+'%"></i></div>'+
+      '<footer><span>'+n(active)+' ACTIVE DAYS</span><span>'+n(total)+' EVENTS</span></footer>'+
+      '</article>';
+  }).join("");
+}
+function renderMonthlyHistory(history){
+  const host=$("monthly-trend");
+  if(!host)return;
+  const months=(history?.months||[]).slice(-12);
+  if(!months.length){
+    host.innerHTML='<div class="monthly-empty"><strong>Monthly history is starting now.</strong><span>Daily archives are being collected automatically. Your first monthly trend will build as new daily snapshots accumulate.</span></div>';
+    return;
+  }
+  const platformIds=["monkeytype","leetcode","codechef","github"];
+  const platformColors={monkeytype:"#E58B67",leetcode:"#6E8BFF",codechef:"#D6B365",github:"#B5A1E8"};
+  const maxima=Object.fromEntries(platformIds.map(id=>[id,Math.max(1,...months.map(month=>Number(month.platforms.find(p=>p.id===id)?.totalActivity||0)))]));
+  const legend=platformIds.map(id=>'<span><i style="background:'+platformColors[id]+'"></i>'+PLATFORM_TITLES[id]+'</span>').join("");
+  const columns=months.map(month=>{
+    const bars=platformIds.map(id=>{
+      const p=month.platforms.find(item=>item.id===id);
+      const value=Number(p?.totalActivity||0);
+      const height=value?Math.max(4,Math.round(value/maxima[id]*100)):2;
+      return '<span class="month-bar" style="--bar-height:'+height+'%;--bar-color:'+platformColors[id]+'" title="'+esc(PLATFORM_TITLES[id])+' · '+n(value)+' events"></span>';
+    }).join("");
+    const label=new Date(month.month+"-01T00:00:00Z").toLocaleDateString("en-IN",{month:"short",year:"2-digit",timeZone:"UTC"});
+    return '<div class="month-column"><div class="month-bars">'+bars+'</div><small>'+esc(label)+'</small></div>';
+  }).join("");
+  host.innerHTML='<div class="monthly-head"><strong>12-MONTH ACTIVITY HISTORY</strong><span>'+history.months.length+' MONTH BUCKETS · '+history.generatedFor+'</span></div>'+
+    '<div class="monthly-legend">'+legend+'</div><div class="monthly-chart">'+columns+'</div>'+
+    '<p class="monthly-note">Each platform is scaled against its own monthly peak so the shape of its trend is readable. Event counts are not directly comparable across platforms. Historical archive begins when this daily snapshot system is enabled.</p>';
+}
+function exportCsv(){
+  if(!currentSnapshot)return;
+  const rows=[["date","platform","activity_count","activity_available","current_streak","longest_streak","snapshot_date"]];
+  currentSnapshot.platforms.forEach(platform=>{
+    rangedPlatform(platform).dailyActivity.forEach(day=>rows.push([
+      day.date,platform.id,Number(day.count||0),Boolean(platform.activityAvailable),
+      platform.currentStreak??"",platform.longestStreak??"",currentSnapshot.activityDate
+    ]));
+  });
+  const csv=rows.map(row=>row.map(value=>'"'+String(value).replace(/"/g,'""')+'"').join(",")).join("\\r\\n");
+  const blob=new Blob(["\\uFEFF",csv],{type:"text/csv;charset=utf-8"});
+  const url=URL.createObjectURL(blob),anchor=document.createElement("a");
+  anchor.href=url;anchor.download="dinesh-practice-activity-"+settings.range+"-days.csv";
+  document.body.appendChild(anchor);anchor.click();anchor.remove();URL.revokeObjectURL(url);
+  $("report-status").textContent="CSV exported for the selected "+settings.range+"-day window.";
+}
+function setupReportActions(){
+  $("export-csv").addEventListener("click",exportCsv);
+  $("print-report").addEventListener("click",()=>{
+    $("report-status").textContent="Use your browser's print dialog and choose Save as PDF.";
+    window.print();
+  });
+}
+async function loadMonthlyHistory(){
+  try{
+    const response=await fetch("./history/monthly.json?v="+Date.now(),{cache:"no-store"});
+    if(!response.ok)throw new Error("Monthly history HTTP "+response.status);
+    monthlyHistory=await response.json();
+    renderMonthlyHistory(monthlyHistory);
+  }catch(error){
+    console.info("Monthly history archive is not available yet",error);
+    renderMonthlyHistory(null);
+  }
+}
+
 function updateDashboard(data){
   currentSnapshot=data;
   const platforms=data.platforms||[];
@@ -583,6 +750,9 @@ function updateDashboard(data){
   });
   renderActivityInsights(platforms);
   renderCalendars(platforms);
+  renderDailyGoals(platforms);
+  renderAchievements(platforms);
+  renderComparison(platforms);
   $("connection-status").textContent="CONNECTED";
   $("connection-status").style.color="var(--cobalt)";
   if(!settings.reducedMotion)gsap.fromTo(".overview-card",{y:8,opacity:.65},{y:0,opacity:1,duration:.45,stagger:.06,ease:"power2.out"});
@@ -609,7 +779,8 @@ function cameraPreset(record,preset){
   const positions={
     front:new THREE.Vector3(0,5.6,13),
     side:new THREE.Vector3(13,6,0),
-    top:new THREE.Vector3(0,16,.01)
+    top:new THREE.Vector3(0,16,.01),
+    cinematic:new THREE.Vector3(11,10,14)
   };
   const destination=positions[preset];
   if(!destination)return;
@@ -769,10 +940,13 @@ async function init(){
   setupControls();
   setupScrollReveal();
   setupMagneticInteractions();
+  setupReportActions();
   const prefersReduced=window.matchMedia("(prefers-reduced-motion: reduce)");
   if(prefersReduced.matches)settings.reducedMotion=true;
   await refresh(false);
+  await loadMonthlyHistory();
   setInterval(()=>refresh(false),POLL_MS);
+  setInterval(loadMonthlyHistory,300000);
   setTimeAndCountdown();
   animate();
   $("refresh-now").addEventListener("click",()=>refresh(true));
