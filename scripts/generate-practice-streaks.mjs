@@ -590,7 +590,7 @@ async function main() {
   }
 
   const historyFiles = (await fs.readdir(historyDir))
-    .filter((name) => /^\\d{4}-\\d{2}-\\d{2}\\.json$/.test(name))
+    .filter((name) => /^\d{4}-\d{2}-\d{2}\.json$/.test(name))
     .sort()
     .slice(-730)
     .reverse();
