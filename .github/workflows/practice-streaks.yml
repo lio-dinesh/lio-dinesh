@@ -41,8 +41,8 @@ jobs:
 
       - name: Validate dashboard JavaScript module
         run: node --input-type=module --check < dashboard/app.js
-      - name: Validate AI coach JavaScript module
-        run: node --check dashboard/coach.js
+      - name: Validate Personal GitHub Assistant module
+        run: node --check dashboard/github-assistant.js
       - name: Validate data collector module
         run: node --check scripts/generate-practice-streaks.mjs
 
