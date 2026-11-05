@@ -69,7 +69,7 @@ jobs:
               echo "Push rejected; retrying against latest main (attempt $attempt)."
               git fetch origin main
               git reset --mixed origin/main
-              git add assets/practice-streaks.svg dashboard/data.json
+              git add assets/practice-streaks.svg dashboard/data.json dashboard/history/
               if git diff --cached --quiet; then
                 pushed=true
                 break
