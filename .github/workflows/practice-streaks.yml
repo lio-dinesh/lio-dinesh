@@ -52,7 +52,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/practice-streaks.svg dashboard/data.json
+          git add assets/practice-streaks.svg dashboard/data.json dashboard/history/
           if git diff --cached --quiet; then
             echo "Source data has not changed; keeping the existing snapshot."
           else
