@@ -96,7 +96,7 @@
         {
           "id": "github",
           "label": "GITHUB",
-          "totalActivity": 72,
+          "totalActivity": 75,
           "activeDays": 1,
           "observedDays": 1,
           "availableDays": 1,
@@ -105,7 +105,7 @@
           "latestMetrics": [
             {
               "label": "CONTRIBUTIONS · 12M",
-              "value": "553"
+              "value": "556"
             },
             {
               "label": "ACTIVE DAYS · 13W",
@@ -113,11 +113,11 @@
             },
             {
               "label": "PEAK DAY · 13W",
-              "value": "72"
+              "value": "75"
             },
             {
               "label": "AVG / ACTIVE DAY",
-              "value": "11.6"
+              "value": "11.7"
             }
           ],
           "lastActivityDate": "2026-11-05"
