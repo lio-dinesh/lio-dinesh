@@ -314,3 +314,35 @@ body:before{
 @media(prefers-reduced-motion:reduce){
  body:before,.studio-toolbar:after,.model-stage-wrap:before{animation:none!important}
 }
+
+/* Two-mode theme switch: Graphite Signature by default, Prism Energy on demand. */
+.color-mode-toggle{
+  min-width:210px;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:9px 11px;border:1px solid #59647A;border-radius:7px;
+  background:linear-gradient(120deg,#303746,#292E35);color:var(--text);
+  font:8px var(--mono);letter-spacing:.045em;cursor:pointer;
+  transition:transform .2s,border-color .2s,background .25s,box-shadow .25s;
+}
+.color-mode-toggle:hover{
+  border-color:var(--cobalt);
+  background:linear-gradient(120deg,color-mix(in srgb,var(--cobalt) 18%,#303746),#292E35);
+  box-shadow:0 0 0 3px var(--mood-glow),0 8px 20px #0003;
+  transform:translateY(-1px);
+}
+.color-mode-toggle[aria-pressed="true"]{
+  border-color:var(--orange);
+  background:linear-gradient(120deg,color-mix(in srgb,var(--cobalt) 16%,#303746),color-mix(in srgb,var(--orange) 13%,#292E35));
+}
+.theme-swatch{
+  flex:0 0 34px;height:9px;border-radius:99px;
+  background:linear-gradient(90deg,var(--cobalt) 0 28%,var(--orange) 28% 54%,var(--lavender) 54% 78%,var(--brass) 78%);
+  box-shadow:0 0 12px var(--mood-glow);
+  transition:background .25s,box-shadow .25s;
+}
+#color-mode-action{flex:1;text-align:left}
+#color-mode-current{display:block;margin-top:5px;color:#8E98A6;font:7px var(--mono);letter-spacing:.09em}
+.color-mode-group{min-width:220px}
+@media(max-width:600px){
+  .color-mode-group{min-width:calc(50% - 6px)}
+  .color-mode-toggle{width:100%;min-width:0;padding:9px 8px;font-size:7px;gap:6px}
+}
