@@ -28,6 +28,7 @@ Deno.serve(async(req)=>{
   if(req.method==="OPTIONS")return new Response("ok",{headers:corsHeaders});
   if(req.method!=="POST")return response({error:"POST required"},405);
   const apiKey=Deno.env.get("GEMINI_API_KEY");
+  const model=Deno.env.get("GEMINI_MODEL")||"gemini-3.8-flash";
   if(!apiKey)return response({error:"GEMINI_API_KEY is not configured in Supabase Edge Function secrets."},503);
   try{
     const {snapshot}=await req.json();
@@ -41,7 +42,7 @@ Deno.serve(async(req)=>{
       "Explain why recommendations follow from the data.",
       "SOURCE SNAPSHOT:\n"+JSON.stringify(snapshot)
     ].join("\n\n");
-    const gemini=await fetch("https://generativelanguage.googleapis.com/v1beta/interactions",{
+    const gemini=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,{
       method:"POST",
       headers:{"Content-Type":"application/json","x-goog-api-key":apiKey},
       body:JSON.stringify({
@@ -55,9 +56,11 @@ Deno.serve(async(req)=>{
     });
     const raw=await gemini.json();
     if(!gemini.ok)return response({error:"Gemini API error",details:raw},502);
-    const text=raw?.candidates?.[0]?.content?.parts?.map(p=>p.text||"").join("")||"";
+    const text=raw?.candidates?.[0]?.content?.parts?.map(p=>p.text||"").join("")||raw?.output?.[0]?.text||"";
+    if(!text) return response({error:"Gemini returned an empty response."},502);
     const parsed=JSON.parse(text);
     parsed.performance_score=Math.max(0,Math.min(100,Math.round(Number(parsed.performance_score)||0)));
+    if(!Array.isArray(parsed.today_plan) || parsed.today_plan.length!==4) return response({error:"Gemini returned an invalid four-platform plan."},502);
     return response(parsed);
   }catch(error){
     console.error(error);
