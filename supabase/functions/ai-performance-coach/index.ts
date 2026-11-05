@@ -2,7 +2,9 @@ import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.119.0";
 
 const MODEL = Deno.env.get("GEMINI_MODEL") || "gemini-3.8-flash";
-const FALLBACK_MODEL = Deno.env.get("GEMINI_FALLBACK_MODEL") || "gemini-3.7-flash";
+// Keep the fallback on a distinct, lower-latency model family. Gemini 3.7 Flash
+// requests are automatically routed to 3.8 Flash by the Developer API.
+const FALLBACK_MODEL = Deno.env.get("GEMINI_FALLBACK_MODEL") || "gemini-3.5-flash-lite";
 const ALLOWED_ORIGINS = new Set([
   "https://lio-dinesh.github.io",
   "http://localhost:5500",
@@ -145,8 +147,9 @@ async function callGemini({ apiKey, model, input, maxOutputTokens = 1400 }) {
   let lastFailure = { error: "Gemini is temporarily unavailable.", status: 503 };
 
   for (const candidate of models) {
-    // Retry one 503 for each model, then fail over to the next stable model.
-    for (let attempt = 0; attempt < 2; attempt++) {
+    // Retry the preferred model once. Give the independent fallback one attempt.
+    const maxAttempts = candidate === model ? 2 : 1;
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
       let result;
       try {
         result = await fetch("https://generativelanguage.googleapis.com/v1beta/interactions", {
@@ -159,7 +162,7 @@ async function callGemini({ apiKey, model, input, maxOutputTokens = 1400 }) {
             generation_config: { max_output_tokens: maxOutputTokens, thinking_level: "low" },
             store: false,
           }),
-          signal: AbortSignal.timeout(45000),
+          signal: AbortSignal.timeout(30000),
         });
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
