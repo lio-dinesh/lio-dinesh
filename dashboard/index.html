@@ -76,12 +76,13 @@
           <select id="quality-select"><option value="low">PERFORMANCE</option><option value="medium" selected>BALANCED</option><option value="high">HIGH FIDELITY</option></select>
         </div>
         <div class="toolbar-group color-mode-group">
-          <label for="color-mode">COLOUR MOOD</label>
-          <select id="color-mode">
-            <option value="graphite" selected>GRAPHITE SIGNATURE</option>
-            <option value="prism">PRISM ENERGY</option>
-            <option value="ember">EMBER GLOW</option>
-          </select>
+          <label>COLOUR MOOD</label>
+          <button id="color-mode-toggle" class="color-mode-toggle" type="button" aria-pressed="false">
+            <span class="theme-swatch" aria-hidden="true"></span>
+            <span id="color-mode-action">SWITCH TO PRISM ENERGY</span>
+            <span aria-hidden="true">↗</span>
+          </button>
+          <small id="color-mode-current">CURRENT: GRAPHITE SIGNATURE</small>
         </div>
         <button id="pause-all" class="toolbar-action" type="button">Ⅱ PAUSE ALL</button>
         <label class="motion-toggle"><input id="reduced-motion" type="checkbox"/> REDUCED MOTION</label>
