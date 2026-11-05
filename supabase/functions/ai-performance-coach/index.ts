@@ -66,8 +66,14 @@ function respond(req, body, status = 200) {
 
 function getText(raw) {
   if (typeof raw?.output_text === "string" && raw.output_text.trim()) return raw.output_text.trim();
-  const parts = Array.isArray(raw?.output) ? raw.output : [];
-  return parts.filter((item) => item?.type === "text" && typeof item.text === "string").map((item) => item.text).join("\n").trim();
+  const steps = Array.isArray(raw?.steps) ? raw.steps : [];
+  const modelSteps = steps.filter((step) => step?.type === "model_output");
+  const stepText = modelSteps.flatMap((step) => Array.isArray(step.content) ? step.content : [])
+    .filter((item) => item?.type === "text" && typeof item.text === "string")
+    .map((item) => item.text).join("\n").trim();
+  if (stepText) return stepText;
+  const output = Array.isArray(raw?.output) ? raw.output : [];
+  return output.filter((item) => item?.type === "text" && typeof item.text === "string").map((item) => item.text).join("\n").trim();
 }
 
 function parseJson(text) {
