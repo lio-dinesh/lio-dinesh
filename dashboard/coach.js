@@ -358,7 +358,7 @@ async function testGeminiConnection(){
 async function sendCoachMessage(text){
   const message=String(text||"").trim();
   if(!message||coachState.loading)return;
-  if(message.length>1600)return;
+  if(message.length>2500)return;
   const snapshot=coachSnapshot();
   if(!snapshot){const note=document.getElementById("coach-chat-note");if(note)note.textContent="The platform snapshot is still loading. Try again in a moment.";return;}
   let session,supabase;
