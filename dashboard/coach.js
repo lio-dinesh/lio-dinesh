@@ -5,6 +5,28 @@ function coachBridge(){return window.commandCenterBridge||null;}
 function coachEscape(value){
   return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
+async function coachErrorDetails(error){
+  let detail="";
+  let status=error?.context?.status||error?.status||null;
+  try{
+    const response=error?.context;
+    if(response&&typeof response.clone==="function"){
+      const copy=response.clone();
+      const payload=await copy.json().catch(async()=>{
+        const text=await response.clone().text().catch(()=> "");
+        return text?{error:text}:null;
+      });
+      if(payload&&typeof payload==="object"){
+        detail=String(payload.details||payload.error||payload.message||"");
+        if(payload.code)detail+=" · "+String(payload.code);
+      }else if(payload)detail=String(payload);
+    }
+  }catch(parseError){console.warn("Could not read Edge Function error response",parseError);}
+  const base=String(error?.message||"Request failed.");
+  const statusText=status?" (HTTP "+status+")":"";
+  const extra=detail&&detail!==base?" · "+detail:"";
+  return (base+statusText+extra).slice(0,420);
+}
 function coachSnapshot(){
   const bridge=coachBridge();
   const data=bridge?.getSnapshot?.();
@@ -191,7 +213,8 @@ async function runAICoach(force=false){
     coachState.last=local;
     renderCoach(local,{status:"GEMINI UNAVAILABLE · LOCAL ANALYSIS ACTIVE"});
     const status=document.getElementById("coach-status");
-    if(status)status.textContent="COACH CONNECTION ISSUE · "+String(error.message||error).slice(0,90);
+    const detail=await coachErrorDetails(error);
+    if(status)status.textContent="COACH CONNECTION ISSUE · "+detail;
     try{const {session}=await getCoachSession();setChatAvailability(session,"Gemini is unavailable. Check the function logs and API key.");}catch{}
   }finally{
     coachState.analysisLoading=false;
@@ -219,9 +242,10 @@ async function testGeminiConnection(){
     if(note)note.textContent="Connection test passed. You can now chat with Gemini.";
   }catch(error){
     console.error("Gemini connection test failed",error);
-    if(status)status.textContent="CONNECTION TEST FAILED · "+String(error.message||error).slice(0,130);
+    const detail=await coachErrorDetails(error);
+    if(status)status.textContent="CONNECTION TEST FAILED · "+detail;
     const note=document.getElementById("coach-chat-note");
-    if(note)note.textContent="Test failed. Check sign-in, GEMINI_API_KEY secret, Gemini access/billing and Edge Function logs.";
+    if(note)note.textContent="Diagnostic: "+detail+". Check the GEMINI_API_KEY secret, AI Studio API access and project quota.";
   }finally{
     coachState.testing=false;
     if(button){button.disabled=false;button.textContent="✓ TEST GEMINI";}
@@ -271,7 +295,8 @@ async function sendCoachMessage(text){
     if(note)note.textContent="Gemini replied using your latest platform snapshot.";
   }catch(error){
     console.error("AI Performance Coach chat failed",error);
-    coachState.history.push({role:"assistant",content:"I couldn't reach Gemini just now. "+String(error.message||error).slice(0,220)+" Please check your sign-in and Supabase function logs, then try again."});
+    const detail=await coachErrorDetails(error);
+    coachState.history.push({role:"assistant",content:"I couldn't reach Gemini just now. "+detail+" Check the Gemini API key and quota, then try again."});
     coachState.history=coachState.history.slice(-16);
     saveChatHistory();
     renderChat();
