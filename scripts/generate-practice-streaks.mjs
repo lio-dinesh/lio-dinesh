@@ -650,7 +650,7 @@ async function main() {
     })),
   };
   const monthlyPath = path.join(historyDir, "monthly.json");
-  const monthlyContent = JSON.stringify(monthlyHistory, null, 2) + "\\n";
+  const monthlyContent = JSON.stringify(monthlyHistory, null, 2) + "\n";
   let existingMonthly = "";
   try { existingMonthly = await fs.readFile(monthlyPath, "utf8"); } catch {}
   if (existingMonthly !== monthlyContent) {
