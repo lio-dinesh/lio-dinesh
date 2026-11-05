@@ -117,7 +117,7 @@ function normalizeAnalysis(value, snapshot) {
 
 function metricNumber(value) {
   if (value === null || value === undefined) return null;
-  const match = String(value).replace(/,/g, "").match(/-?\\d+(?:\\.\\d+)?/);
+  const match = String(value).replace(/,/g, "").match(/-?\d+(?:\.\d+)?/);
   return match ? Number(match[0]) : null;
 }
 
@@ -131,7 +131,7 @@ function metricMap(platform) {
 }
 
 function makeCalendarDays(startDate) {
-  const base = /^\\d{4}-\\d{2}-\\d{2}$/.test(String(startDate || ""))
+  const base = /^\d{4}-\d{2}-\d{2}$/.test(String(startDate || ""))
     ? new Date(String(startDate) + "T00:00:00Z")
     : new Date();
   return Array.from({ length: 7 }, (_, index) => {
@@ -165,8 +165,8 @@ function buildPerformanceEvidence(snapshot) {
       tracked_days: trackedDays,
       active_days_in_range: activeDays,
       active_rate_pct: trackedDays ? Math.round(activeDays / trackedDays * 100) : null,
-      current_streak: Number.isFinite(Number(platform.current_streak)) ? Number(platform.current_streak) : null,
-      longest_streak: Number.isFinite(Number(platform.longest_streak)) ? Number(platform.longest_streak) : null,
+      current_streak: platform.current_streak !== null && platform.current_streak !== undefined && Number.isFinite(Number(platform.current_streak)) ? Number(platform.current_streak) : null,
+      longest_streak: platform.longest_streak !== null && platform.longest_streak !== undefined && Number.isFinite(Number(platform.longest_streak)) ? Number(platform.longest_streak) : null,
       last_active_date: platform.last_active_date || null,
       latest_7d: {
         active_days: activeDays7,
@@ -319,7 +319,7 @@ function normalizeAnalysis(value, evidence) {
     return {
       platform: platform.platform,
       headline: safeText(found?.headline, platform.activity_available ? "Recent activity snapshot" : "Data unavailable", 180),
-      evidence: Array.isArray(found?.evidence) && found.evidence.length ? found.evidence.slice(0, 4).map(x => safeText(x, "", 200)) : actualFacts.slice(0, 4),
+      evidence: actualFacts.slice(0, 4),
       interpretation: safeText(found?.interpretation, "Review the available metrics and keep a consistent practice rhythm.", 360),
       next_step: safeText(found?.next_step, "Complete a focused session and record what improved.", 260),
       confidence: ["high", "medium", "low"].includes(String(found?.confidence).toLowerCase()) ? String(found.confidence).toLowerCase() : evidence.confidence,
@@ -367,7 +367,7 @@ function normalizeAnalysis(value, evidence) {
     today_plan: todayPlan,
     weekly_plan: weeklyPlan,
     recommendations,
-    data_gaps: Array.isArray(value.data_gaps) ? [...new Set([...evidence.data_gaps, ...value.data_gaps.map(x => safeText(x, "", 240))])].slice(0, 8) : evidence.data_gaps,
+    data_gaps: evidence.data_gaps,
     updated_at: new Date().toISOString(),
   };
 }
