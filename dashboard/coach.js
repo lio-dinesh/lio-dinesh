@@ -1,5 +1,5 @@
 const COACH_STORAGE_PREFIX="dcc-ai-coach-chat-v1:";
-const coachState={last:null,history:[],loading:false,analysisLoading:false,userId:null,bound:false,autoStarted:false};
+const coachState={last:null,history:[],loading:false,analysisLoading:false,testing:false,userId:null,bound:false,autoStarted:false};
 
 function coachBridge(){return window.commandCenterBridge||null;}
 function coachEscape(value){
@@ -68,7 +68,7 @@ function ensureCoachMarkup(){
       <div class="coach-column coach-plan"><span class="coach-label">TODAY'S PLAN</span><div id="coach-plan"></div></div>
     </div>
     <div class="coach-recommendations" id="coach-recommendations"></div>
-    <div class="coach-footer"><span id="coach-engine-status">LOCAL SNAPSHOT ANALYSIS</span><button id="coach-refresh" type="button">↻ ANALYZE LATEST DATA</button></div>
+    <div class="coach-footer"><span id="coach-engine-status">LOCAL SNAPSHOT ANALYSIS</span><div class="coach-footer-actions"><button id="coach-test" type="button">✓ TEST GEMINI</button><button id="coach-refresh" type="button">↻ ANALYZE LATEST DATA</button></div></div>
     <section class="coach-chat" aria-label="Chat with your AI performance coach">
       <div class="coach-chat-heading"><div><span class="coach-label">PRIVATE COACH CONVERSATION</span><h3>Ask about your progress.</h3><p>Chat about practice, weaknesses, study plans, coding goals and your next steps.</p></div><span id="coach-auth-status" class="coach-auth-status">CHECKING SIGN-IN…</span></div>
       <div id="coach-chat-log" class="coach-chat-log" aria-live="polite"></div>
@@ -89,6 +89,7 @@ function ensureCoachMarkup(){
     const prompt=event.target.closest("[data-coach-prompt]");
     if(prompt)sendCoachMessage(prompt.dataset.coachPrompt);
     if(event.target.closest("#coach-refresh"))runAICoach(true);
+    if(event.target.closest("#coach-test"))void testGeminiConnection();
   });
   host.addEventListener("submit",event=>{
     if(event.target.id!=="coach-chat-form")return;
@@ -199,6 +200,34 @@ async function runAICoach(force=false){
     try{const {session}=await getCoachSession();setChatAvailability(session);}catch{}
   }
 }
+async function testGeminiConnection(){
+  const button=document.getElementById("coach-test");
+  const status=document.getElementById("coach-engine-status");
+  if(coachState.testing)return;
+  coachState.testing=true;
+  if(button){button.disabled=true;button.textContent="TESTING…";}
+  if(status)status.textContent="CHECKING SUPABASE AUTH + GEMINI API…";
+  try{
+    const {session,supabase}=await getCoachSession();
+    if(!session?.access_token)throw new Error("Sign in through Cloud Settings Sync first.");
+    const {data,error}=await supabase.functions.invoke("ai-performance-coach",{body:{action:"health"}});
+    if(error)throw error;
+    if(data?.error)throw new Error(data.details||data.error);
+    if(!data?.ok)throw new Error("Gemini did not confirm a successful response.");
+    if(status)status.textContent="CONNECTED · "+(data.model||"GEMINI")+" · SUPABASE AUTH VERIFIED";
+    const note=document.getElementById("coach-chat-note");
+    if(note)note.textContent="Connection test passed. You can now chat with Gemini.";
+  }catch(error){
+    console.error("Gemini connection test failed",error);
+    if(status)status.textContent="CONNECTION TEST FAILED · "+String(error.message||error).slice(0,130);
+    const note=document.getElementById("coach-chat-note");
+    if(note)note.textContent="Test failed. Check sign-in, GEMINI_API_KEY secret, Gemini access/billing and Edge Function logs.";
+  }finally{
+    coachState.testing=false;
+    if(button){button.disabled=false;button.textContent="✓ TEST GEMINI";}
+  }
+}
+
 async function sendCoachMessage(text){
   const message=String(text||"").trim();
   if(!message||coachState.loading)return;
