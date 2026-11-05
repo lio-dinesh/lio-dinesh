@@ -42,6 +42,13 @@ let applyingCloudSettings=false;
 let animationFrame=0;
 const $=id=>document.getElementById(id);
 
+// A small, read-only bridge lets the separate coach module consume the live dashboard state.
+window.commandCenterBridge={
+  getSnapshot:()=>currentSnapshot,
+  getRangeDays:()=>settings.range,
+  getSupabase:()=>supabase
+};
+
 function esc(value){
   return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
@@ -980,6 +987,7 @@ function updateDashboard(data){
   $("connection-status").textContent="CONNECTED";
   $("connection-status").style.color="var(--cobalt)";
   if(!settings.reducedMotion)gsap.fromTo(".overview-card",{y:8,opacity:.65},{y:0,opacity:1,duration:.45,stagger:.06,ease:"power2.out"});
+  if(typeof window.onDashboardSnapshotUpdated==="function")window.onDashboardSnapshotUpdated();
 }
 async function refresh(manual=false){
   const button=$("refresh-now");
