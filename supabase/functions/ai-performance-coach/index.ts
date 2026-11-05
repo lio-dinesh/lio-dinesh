@@ -612,4 +612,5 @@ Deno.serve(async (req) => {
     saved = true;
   }
 
-  return respond(req, { ...analysis, saved, model: answer.model || MODEL, usedFallback: Boolean(answer.usedFallback) });});
+  return respond(req, { ...analysis, saved, model: answer.model || MODEL, usedFallback: Boolean(answer.usedFallback) });
+});
