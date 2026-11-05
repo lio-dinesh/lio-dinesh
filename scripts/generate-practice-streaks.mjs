@@ -557,7 +557,58 @@ async function main() {
   const snapshot = dashboardSnapshot(platforms, today);
   await fs.writeFile(dashboardPath, JSON.stringify(snapshot, null, 2) + "\n", "utf8");
 
-  console.log("Generated SVG and dashboard/data.json for IST date " + today);
+  // Keep one compact, source-backed record per IST day. The file is rewritten
+  // only when that day's actual platform values change, avoiding 5-minute churn.
+  const historyDir = path.resolve(process.cwd(), "dashboard/history");
+  await fs.mkdir(historyDir, { recursive: true });
+  const dailyRecord = {
+    schemaVersion: 1,
+    date: today,
+    timezone: "Asia/Kolkata",
+    platforms: platforms.map((platform) => {
+      const todayItem = activityWindow(platform.activity, today).at(-1);
+      return {
+        id: platform.id,
+        label: platform.label,
+        handle: platform.handle,
+        status: platform.status,
+        activityAvailable: Boolean(platform.activityAvailable),
+        activityCount: Number(todayItem?.count ?? 0),
+        currentStreak: platform.current,
+        longestStreak: platform.longest,
+        lastActiveDate: platform.lastActiveDate,
+        metrics: platform.metrics ?? [],
+      };
+    }),
+  };
+  const dailyPath = path.join(historyDir, today + ".json");
+  const dailyContent = JSON.stringify(dailyRecord, null, 2) + "\n";
+  let existingDaily = "";
+  try { existingDaily = await fs.readFile(dailyPath, "utf8"); } catch {}
+  if (existingDaily !== dailyContent) {
+    await fs.writeFile(dailyPath, dailyContent, "utf8");
+  }
+
+  const historyFiles = (await fs.readdir(historyDir))
+    .filter((name) => /^\\d{4}-\\d{2}-\\d{2}\\.json$/.test(name))
+    .sort()
+    .slice(-730)
+    .reverse();
+  const historyIndex = {
+    schemaVersion: 1,
+    timezone: "Asia/Kolkata",
+    retainedDays: historyFiles.length,
+    dates: historyFiles.map((name) => name.slice(0, 10)),
+  };
+  const indexPath = path.join(historyDir, "index.json");
+  const indexContent = JSON.stringify(historyIndex, null, 2) + "\n";
+  let existingIndex = "";
+  try { existingIndex = await fs.readFile(indexPath, "utf8"); } catch {}
+  if (existingIndex !== indexContent) {
+    await fs.writeFile(indexPath, indexContent, "utf8");
+  }
+
+  console.log("Generated SVG, dashboard/data.json and daily history for IST date " + today);
   for (const p of platforms) {
     console.log(p.label + ": current=" + (p.current ?? "n/a") +
       " longest=" + (p.longest ?? "n/a") +
