@@ -426,7 +426,7 @@ async function callGemini({ apiKey, model, input, maxOutputTokens = 1400 }) {
         console.error("Gemini network request failed for", candidate, ":", message);
         lastFailure = { error: "Could not connect to Gemini (" + candidate + "): " + message.slice(0, 240), status: 502 };
         // Network failures are transient: try the same model once, then fallback.
-        if (attempt === 0) { await sleep(450); continue; }
+        if (attempt + 1 < maxAttempts) { await sleep(450); continue; }
         break;
       }
 
@@ -444,7 +444,7 @@ async function callGemini({ apiKey, model, input, maxOutputTokens = 1400 }) {
             error: "Gemini model " + candidate + " returned HTTP " + result.status + ": " + detail,
             status: 503,
           };
-          if (attempt === 0) { await sleep(650); continue; }
+          if (attempt + 1 < maxAttempts) { await sleep(650); continue; }
           break;
         }
 
