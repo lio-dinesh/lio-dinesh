@@ -139,25 +139,59 @@ async function authenticateUser(req) {
 }
 
 async function callGemini({ apiKey, model, input, maxOutputTokens = 1400 }) {
-  const result = await fetch("https://generativelanguage.googleapis.com/v1beta/interactions", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
-    body: JSON.stringify({
-      model,
-      input,
-      system_instruction: SYSTEM_INSTRUCTION,
-      generation_config: { max_output_tokens: maxOutputTokens, thinking_level: "low" },
-      store: false,
-    }),
-  });
-  const raw = await result.json().catch(() => ({}));
-  if (!result.ok) {
-    const detail = String(raw?.error?.message || "Gemini rejected the request.").slice(0, 320);
-    const status = result.status === 429 ? 429 : result.status === 400 ? 400 : 502;
-    return { error: detail, status };
+  let result;
+  try {
+    result = await fetch("https://generativelanguage.googleapis.com/v1beta/interactions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
+      body: JSON.stringify({
+        model,
+        input,
+        system_instruction: SYSTEM_INSTRUCTION,
+        generation_config: { max_output_tokens: maxOutputTokens, thinking_level: "low" },
+        store: false,
+      }),
+      signal: AbortSignal.timeout(45000),
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("Gemini network request failed:", message);
+    return { error: "Could not connect to the Gemini API. " + message.slice(0, 240), status: 502 };
   }
+
+  const rawText = await result.text().catch(() => "");
+  let raw = {};
+  try { raw = rawText ? JSON.parse(rawText) : {}; } catch { raw = { raw_response: rawText.slice(0, 600) }; }
+
+  if (!result.ok) {
+    const detail = String(raw?.error?.message || raw?.message || rawText || "Gemini rejected the request.").slice(0, 420);
+    let hint = "Check the Gemini request and API configuration.";
+    if (result.status === 400) hint = "The Gemini request or model configuration was rejected. Confirm the model ID and API request format.";
+    else if (result.status === 401 || result.status === 403) hint = "The Gemini API key was rejected, is restricted, or the Gemini API is not enabled for its Google Cloud project.";
+    else if (result.status === 404) hint = "Gemini could not find the requested API resource or model. Check the model ID.";
+    else if (result.status === 429) hint = "The Gemini project has reached a rate or usage quota. Check AI Studio usage and billing.";
+    else if (result.status >= 500) hint = "Google's Gemini service returned a server error. Try again shortly.";
+    console.error("Gemini API returned HTTP", result.status, detail);
+    return {
+      error: "Gemini API returned HTTP " + result.status + ": " + detail + " " + hint,
+      status: result.status === 429 ? 429 : result.status >= 500 ? 503 : 502,
+    };
+  }
+
+  if (raw?.status && raw.status !== "completed") {
+    const platformError = Array.isArray(raw.errors)
+      ? raw.errors.map((item) => item?.message || item?.code || "").filter(Boolean).join("; ")
+      : "";
+    const detail = platformError || "Interaction status: " + String(raw.status);
+    console.error("Gemini interaction did not complete:", detail);
+    return { error: "Gemini did not complete the response: " + detail, status: 502 };
+  }
+
   const text = getText(raw);
-  if (!text) return { error: "Gemini returned an empty response. Try again.", status: 502 };
+  if (!text) {
+    console.error("Gemini returned no text. Response status:", raw?.status || "unknown");
+    return { error: "Gemini returned an empty response. Check whether the model response was incomplete and try again.", status: 502 };
+  }
   return { text };
 }
 
@@ -187,7 +221,7 @@ Deno.serve(async (req) => {
   }
 
   if (action === "health") {
-    const check = await callGemini({ apiKey, model: MODEL, input: "Reply with exactly: READY", maxOutputTokens: 32 });
+    const check = await callGemini({ apiKey, model: MODEL, input: "Reply with exactly: READY", maxOutputTokens: 96 });
     if (check.error) return respond(req, { error: "Gemini connection test failed.", details: check.error }, check.status);
     return respond(req, { ok: true, model: MODEL, message: "Gemini is responding." });
   }
