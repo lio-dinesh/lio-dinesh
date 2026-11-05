@@ -1165,6 +1165,7 @@ async function init(){
   setupScrollReveal();
   setupMagneticInteractions();
   setupReportActions();
+  if(window.initAIPerformanceCoach) window.initAIPerformanceCoach();
   setupCloudAuth();
   const prefersReduced=window.matchMedia("(prefers-reduced-motion: reduce)");
   if(prefersReduced.matches)settings.reducedMotion=true;
