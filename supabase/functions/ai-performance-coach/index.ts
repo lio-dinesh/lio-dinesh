@@ -631,8 +631,9 @@ Deno.serve(async (req) => {
       confidence: analysis.confidence,
       generated_at: analysis.updated_at,
     };
-    const { error: saveError } = await auth.userClient.from("coach_insights").insert({
+    const { error: saveError } = await auth.userClient.from("coach_insights").upsert({
       user_id: auth.user.id,
+      insight_date: evidence.activity_date || new Date().toISOString().slice(0, 10),
       performance_score: analysis.performance_score,
       summary: analysis.summary,
       strengths: analysis.strengths,
@@ -640,7 +641,8 @@ Deno.serve(async (req) => {
       today_plan: analysis.today_plan,
       recommendations: detailReport,
       source_snapshot: { ...snapshot, coach_evidence: evidence, coach_report: detailReport },
-    });
+      updated_at: new Date().toISOString(),
+    }, { onConflict: "user_id,insight_date" });
     if (saveError) {
       console.error("Could not save coach insight under the signed-in user:", saveError.message);
     } else {
