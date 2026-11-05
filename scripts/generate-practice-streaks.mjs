@@ -608,7 +608,56 @@ async function main() {
     await fs.writeFile(indexPath, indexContent, "utf8");
   }
 
-  console.log("Generated SVG, dashboard/data.json and daily history for IST date " + today);
+  // Aggregate the archived daily records into month buckets for the dashboard.
+  const monthlyMap = new Map();
+  for (const name of [...historyFiles].reverse()) {
+    const daily = JSON.parse(await fs.readFile(path.join(historyDir, name), "utf8"));
+    const month = daily.date.slice(0, 7);
+    if (!monthlyMap.has(month)) monthlyMap.set(month, new Map());
+    const bucket = monthlyMap.get(month);
+    for (const platform of daily.platforms ?? []) {
+      if (!bucket.has(platform.id)) {
+        bucket.set(platform.id, {
+          id: platform.id, label: platform.label, totalActivity: 0,
+          activeDays: 0, observedDays: 0, availableDays: 0,
+          latestCurrentStreak: null, latestLongestStreak: null,
+          latestMetrics: [], lastActivityDate: null,
+        });
+      }
+      const item = bucket.get(platform.id);
+      item.observedDays += 1;
+      if (platform.activityAvailable) {
+        item.availableDays += 1;
+        item.totalActivity += Number(platform.activityCount ?? 0);
+        if (Number(platform.activityCount ?? 0) > 0) item.activeDays += 1;
+      }
+      item.latestCurrentStreak = platform.currentStreak;
+      item.latestLongestStreak = platform.longestStreak;
+      item.latestMetrics = platform.metrics ?? [];
+      if (Number(platform.activityCount ?? 0) > 0) item.lastActivityDate = daily.date;
+    }
+  }
+  const monthlyHistory = {
+    schemaVersion: 1,
+    timezone: "Asia/Kolkata",
+    generatedFor: today,
+    months: [...monthlyMap.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([month, bucket]) => ({
+      month,
+      platforms: [...bucket.values()].map((item) => ({
+        ...item,
+        activeDays: item.availableDays > 0 ? item.activeDays : null,
+      })),
+    })),
+  };
+  const monthlyPath = path.join(historyDir, "monthly.json");
+  const monthlyContent = JSON.stringify(monthlyHistory, null, 2) + "\\n";
+  let existingMonthly = "";
+  try { existingMonthly = await fs.readFile(monthlyPath, "utf8"); } catch {}
+  if (existingMonthly !== monthlyContent) {
+    await fs.writeFile(monthlyPath, monthlyContent, "utf8");
+  }
+
+  console.log("Generated SVG, dashboard/data.json and daily/monthly history for IST date " + today);
   for (const p of platforms) {
     console.log(p.label + ": current=" + (p.current ?? "n/a") +
       " longest=" + (p.longest ?? "n/a") +
