@@ -141,7 +141,7 @@ function renderCoach(data,meta={}){
   list("coach-weaknesses",data.weaknesses,"No clear weakness detected in this snapshot.");
   $("coach-plan").innerHTML=(data.today_plan||[]).slice(0,4).map(x=>'<div class="coach-plan-row"><strong>'+coachEscape(x.platform)+'</strong><span>'+coachEscape(x.task)+'</span><small>'+coachEscape(x.reason||"Based on your recent data.")+'</small></div>').join("")||'<div class="coach-plan-row">No plan available yet.</div>';
   $("coach-recommendations").innerHTML=(data.recommendations||[]).slice(0,4).map(x=>'<span>'+coachEscape(x)+'</span>').join("");
-  $("coach-engine-status").textContent=meta.ai?(meta.saved?"GEMINI 3.8 FLASH · INSIGHT SAVED TO SUPABASE":"GEMINI 3.8 FLASH · LIVE RESPONSE"):(meta.status||"LOCAL SNAPSHOT ANALYSIS");
+  $("coach-engine-status").textContent=meta.ai?((meta.model||"GEMINI")+" · "+(meta.saved?"INSIGHT SAVED TO SUPABASE":"LIVE RESPONSE")+(meta.usedFallback?" · AUTOMATIC FALLBACK":"")):(meta.status||"LOCAL SNAPSHOT ANALYSIS");
   $("coach-refresh").disabled=coachState.analysisLoading;
   $("coach-refresh").textContent=coachState.analysisLoading?"ANALYZING…":"↻ ANALYZE LATEST DATA";
   renderChat();
@@ -206,7 +206,7 @@ async function runAICoach(force=false){
     if(error)throw error;
     if(data?.error)throw new Error(data.error+(data.details?": "+data.details:""));
     coachState.last=data;
-    renderCoach(data,{ai:true,saved:data.saved!==false});
+    renderCoach(data,{ai:true,saved:data.saved!==false,model:data.model,usedFallback:Boolean(data.usedFallback)});
     setChatAvailability(session);
   }catch(error){
     console.error("AI Performance Coach analysis failed",error);
@@ -292,7 +292,9 @@ async function sendCoachMessage(text){
     saveChatHistory();
     renderChat();
     const note=document.getElementById("coach-chat-note");
-    if(note)note.textContent="Gemini replied using your latest platform snapshot.";
+    if(note)note.textContent="Gemini replied using your latest platform snapshot"+(data.usedFallback?" via fallback model.":".");
+    const engine=document.getElementById("coach-engine-status");
+    if(engine)engine.textContent=(data.model||"GEMINI")+" · CHAT CONNECTED"+(data.usedFallback?" · AUTOMATIC FALLBACK":"");
   }catch(error){
     console.error("AI Performance Coach chat failed",error);
     const detail=await coachErrorDetails(error);
