@@ -193,7 +193,7 @@ function renderCoach(data,meta={}){
   renderChat();
 }
 function formatCoachMessage(value){
-  const chunks=String(value||"").split(/```([\\w+-]*)\\n([\\s\\S]*?)```/g);
+  const chunks=String(value||"").split(/\x60{3}([\w+-]*)\n([\s\S]*?)\x60{3}/g);
   let html="";
   for(let i=0;i<chunks.length;i++){
     if(i%3===1){
@@ -202,24 +202,48 @@ function formatCoachMessage(value){
       i+=2;
       continue;
     }
-    const lines=chunks[i].split("\\n");
+    const lines=chunks[i].split("\n");
     let paragraph=[],list=[],listType="";
-    const flushParagraph=()=>{if(paragraph.length){html+='<p>'+paragraph.map(line=>coachEscape(line).replace(/\\*\\*(.+?)\\*\\*/g,"<strong>$1</strong>").replace(/`([^`]+)`/g,"<code>$1</code>")).join("<br>")+'</p>';paragraph=[];}};
-    const flushList=()=>{if(list.length){html+=(listType==="ol"?"<ol>":"<ul>")+list.map(line=>'<li>'+coachEscape(line).replace(/\\*\\*(.+?)\\*\\*/g,"<strong>$1</strong>").replace(/`([^`]+)`/g,"<code>$1</code>")+'</li>').join("")+(listType==="ol"?"</ol>":"</ul>");list=[];listType="";}};
+    const inline=line=>coachEscape(line)
+      .replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>")
+      .replace(/\x60([^\x60]+)\x60/g,"<code>$1</code>");
+    const flushParagraph=()=>{
+      if(paragraph.length){
+        html+='<p>'+paragraph.map(inline).join("<br>")+'</p>';
+        paragraph=[];
+      }
+    };
+    const flushList=()=>{
+      if(list.length){
+        html+=(listType==="ol"?"<ol>":"<ul>")+list.map(line=>'<li>'+inline(line)+'</li>').join("")+(listType==="ol"?"</ol>":"</ul>");
+        list=[];
+        listType="";
+      }
+    };
     for(const line of lines){
       const trimmed=line.trim();
-      const heading=trimmed.match(/^(#{1,3})\\s+(.+)$/);
-      const bullet=trimmed.match(/^[-*]\\s+(.+)$/);
-      const numbered=trimmed.match(/^\\d+[.)]\\s+(.+)$/);
-      if(heading){flushParagraph();flushList();html+='<h4>'+coachEscape(heading[2])+'</h4>';continue;}
+      const heading=trimmed.match(/^(#{1,3})\s+(.+)$/);
+      const bullet=trimmed.match(/^[-*]\s+(.+)$/);
+      const numbered=trimmed.match(/^\d+[.)]\s+(.+)$/);
+      if(heading){
+        flushParagraph();flushList();
+        html+='<h4>'+coachEscape(heading[2])+'</h4>';
+        continue;
+      }
       if(bullet||numbered){
         flushParagraph();
         const type=numbered?"ol":"ul";
         if(listType&&listType!==type)flushList();
-        listType=type;list.push((bullet||numbered)[1]);continue;
+        listType=type;
+        list.push((bullet||numbered)[1]);
+        continue;
       }
-      if(!trimmed){flushParagraph();flushList();continue;}
-      flushList();paragraph.push(line);
+      if(!trimmed){
+        flushParagraph();flushList();
+        continue;
+      }
+      flushList();
+      paragraph.push(line);
     }
     flushParagraph();flushList();
   }
