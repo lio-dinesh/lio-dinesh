@@ -639,7 +639,7 @@ function buildAchievements(platforms){
   }
   platforms.forEach(platform=>{
     const streak=Number(platform.currentStreak);
-    if(Number.isFinite(streak)){
+    if(platform.currentStreak!==null&&platform.currentStreak!==undefined&&Number.isFinite(streak)){
       add(platform.id+"-streak-7",platform.label+" 7-day streak","Maintain a 7-day active streak",streak,7,platform.id==="monkeytype"?"orange":platform.id==="leetcode"?"blue":platform.id==="codechef"?"gold":"lavender");
     }
   });
@@ -656,6 +656,46 @@ function renderAchievements(platforms){
       '<div class="achievement-progress"><i style="width:'+item.progress+'%"></i></div></div>'+
       '<b>'+(item.current===null?"—":n(item.current)+" / "+n(item.target))+'</b>'+
       '</article>').join("");
+}
+function renderPerformanceInsights(platforms){
+  const available=platforms.filter(platform=>platform.activityAvailable);
+  const consistency=available.map(platform=>{
+    const days=(platform.dailyActivity||[]).slice(-settings.range);
+    const active=days.filter(day=>Number(day.count||0)>0).length;
+    return {platform,active,ratio:days.length?active/days.length:0};
+  }).sort((a,b)=>b.ratio-a.ratio)[0];
+  const weekly=available.map(platform=>{
+    const days=platform.dailyActivity||[];
+    const current=days.slice(-7),previous=days.slice(-14,-7);
+    const currentTotal=current.reduce((sum,day)=>sum+Number(day.count||0),0);
+    const previousTotal=previous.reduce((sum,day)=>sum+Number(day.count||0),0);
+    const change=previousTotal===0?(currentTotal>0?null:0):Math.round((currentTotal-previousTotal)/previousTotal*100);
+    return {platform,currentTotal,previousTotal,change};
+  }).sort((a,b)=>(b.change??(b.currentTotal>0?999:0))-(a.change??(a.currentTotal>0?999:0)))[0];
+  const streaks=platforms.filter(platform=>platform.currentStreak!==null&&platform.currentStreak!==undefined&&Number.isFinite(Number(platform.currentStreak)))
+    .sort((a,b)=>Number(b.currentStreak)-Number(a.currentStreak));
+  const cards=[];
+  if(consistency)cards.push({
+    label:"MOST CONSISTENT",
+    value:PLATFORM_TITLES[consistency.platform.id]||consistency.platform.label,
+    note:Math.round(consistency.ratio*100)+"% active days in the selected window",
+    accent:moodColorForPlatform(consistency.platform.id)
+  });
+  if(weekly)cards.push({
+    label:"7-DAY MOMENTUM",
+    value:PLATFORM_TITLES[weekly.platform.id]||weekly.platform.label,
+    note:weekly.change===null?"New activity this week · "+n(weekly.currentTotal)+" events":(weekly.change>=0?"+":"")+weekly.change+"% vs previous 7 days",
+    accent:moodColorForPlatform(weekly.platform.id)
+  });
+  if(streaks[0])cards.push({
+    label:"LONGEST CURRENT RUN",
+    value:PLATFORM_TITLES[streaks[0].id]||streaks[0].label,
+    note:n(streaks[0].currentStreak)+" consecutive days · source-reported",
+    accent:moodColorForPlatform(streaks[0].id)
+  });
+  $("performance-insights").innerHTML=cards.length?cards.map(card=>
+    '<article class="performance-insight" style="--insight-accent:'+card.accent+'"><span>'+esc(card.label)+'</span><strong>'+esc(card.value)+'</strong><small>'+esc(card.note)+'</small></article>'
+  ).join(""):'<div class="monthly-empty"><strong>Insights will appear when source activity is available.</strong></div>';
 }
 function renderComparison(platforms){
   $("comparison-window").textContent="LAST "+settings.range+" DAYS";
@@ -752,6 +792,7 @@ function updateDashboard(data){
   renderCalendars(platforms);
   renderDailyGoals(platforms);
   renderAchievements(platforms);
+  renderPerformanceInsights(platforms);
   renderComparison(platforms);
   $("connection-status").textContent="CONNECTED";
   $("connection-status").style.color="var(--cobalt)";
