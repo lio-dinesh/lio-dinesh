@@ -2,5 +2,127 @@
   "schemaVersion": 1,
   "timezone": "Asia/Kolkata",
   "generatedFor": "2026-11-05",
-  "months": []
+  "months": [
+    {
+      "month": "2026-11",
+      "platforms": [
+        {
+          "id": "monkeytype",
+          "label": "MONKEYTYPE",
+          "totalActivity": 2,
+          "activeDays": 1,
+          "observedDays": 1,
+          "availableDays": 1,
+          "latestCurrentStreak": 21,
+          "latestLongestStreak": 21,
+          "latestMetrics": [
+            {
+              "label": "BEST WPM",
+              "value": "64"
+            },
+            {
+              "label": "ACCURACY",
+              "value": "97%"
+            },
+            {
+              "label": "TESTS DONE",
+              "value": "1873"
+            },
+            {
+              "label": "TYPING TIME",
+              "value": "18h"
+            }
+          ],
+          "lastActivityDate": "2026-11-05"
+        },
+        {
+          "id": "leetcode",
+          "label": "LEETCODE",
+          "totalActivity": 2,
+          "activeDays": 1,
+          "observedDays": 1,
+          "availableDays": 1,
+          "latestCurrentStreak": 15,
+          "latestLongestStreak": 15,
+          "latestMetrics": [
+            {
+              "label": "SOLVED",
+              "value": "56"
+            },
+            {
+              "label": "EASY",
+              "value": "20"
+            },
+            {
+              "label": "MEDIUM",
+              "value": "25"
+            },
+            {
+              "label": "HARD",
+              "value": "11"
+            }
+          ],
+          "lastActivityDate": "2026-11-05"
+        },
+        {
+          "id": "codechef",
+          "label": "CODECHEF",
+          "totalActivity": 0,
+          "activeDays": 0,
+          "observedDays": 1,
+          "availableDays": 1,
+          "latestCurrentStreak": 1,
+          "latestLongestStreak": 14,
+          "latestMetrics": [
+            {
+              "label": "SOLVED",
+              "value": "1732"
+            },
+            {
+              "label": "STARS",
+              "value": "unrated"
+            },
+            {
+              "label": "ACTIVE DAYS",
+              "value": "126"
+            },
+            {
+              "label": "CONTESTS",
+              "value": "0"
+            }
+          ],
+          "lastActivityDate": null
+        },
+        {
+          "id": "github",
+          "label": "GITHUB",
+          "totalActivity": 27,
+          "activeDays": 1,
+          "observedDays": 1,
+          "availableDays": 1,
+          "latestCurrentStreak": 5,
+          "latestLongestStreak": 15,
+          "latestMetrics": [
+            {
+              "label": "CONTRIBUTIONS · 12M",
+              "value": "508"
+            },
+            {
+              "label": "ACTIVE DAYS · 13W",
+              "value": "46"
+            },
+            {
+              "label": "PEAK DAY · 13W",
+              "value": "65"
+            },
+            {
+              "label": "AVG / ACTIVE DAY",
+              "value": "10.7"
+            }
+          ],
+          "lastActivityDate": "2026-11-05"
+        }
+      ]
+    }
+  ]
 }
