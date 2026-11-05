@@ -508,109 +508,156 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: headersFor(req) });
   if (req.method !== "POST") return respond(req, { error: "POST required." }, 405);
 
-  const auth = await authenticateUser(req);
-  if (auth.error) return respond(req, { error: auth.error }, auth.status);
-
-  const apiKey = Deno.env.get("GEMINI_API_KEY");
-  if (!apiKey) return respond(req, { error: "GEMINI_API_KEY is not configured in Supabase Edge Function secrets." }, 503);
-
-  let body;
   try {
-    const rawBody = await req.text();
-    if (rawBody.length > 42000) return respond(req, { error: "Request is too large. Shorten the chat and try again." }, 413);
-    body = JSON.parse(rawBody);
-  } catch {
-    return respond(req, { error: "Request body must be valid JSON." }, 400);
-  }
+    const auth = await authenticateUser(req);
+    if (auth.error) return respond(req, { error: auth.error }, auth.status);
 
-  const action = body?.action === "chat" ? "chat" : body?.action === "health" ? "health" : "analyze";
-  const snapshot = body?.snapshot;
-  if (action !== "health" && (!snapshot || !Array.isArray(snapshot.platforms) || snapshot.platforms.length < 1)) {
-    return respond(req, { error: "The dashboard performance snapshot is missing." }, 400);
-  }
+    const apiKey = Deno.env.get("GEMINI_API_KEY");
+    if (!apiKey) return respond(req, { error: "GEMINI_API_KEY is not configured in Supabase Edge Function secrets." }, 503);
 
-  if (action === "health") {
-    const check = await callGemini({ apiKey, model: MODEL, input: "Reply with exactly: READY", maxOutputTokens: 96 });
-    if (check.error) return respond(req, { error: "Gemini connection test failed.", details: check.error }, check.status);
-    return respond(req, { ok: true, model: check.model || MODEL, usedFallback: Boolean(check.usedFallback), message: check.usedFallback ? "Gemini is responding through the fallback model." : "Gemini is responding." });
-  }
+    let body;
+    try {
+      const rawBody = await req.text();
+      if (rawBody.length > 42000) return respond(req, { error: "Request is too large. Shorten the chat and try again." }, 413);
+      body = JSON.parse(rawBody);
+    } catch {
+      return respond(req, { error: "Request body must be valid JSON." }, 400);
+    }
 
-  if (action === "chat") {
-    const message = String(body.message || "").trim();
-    if (!message || message.length > 2500) return respond(req, { error: "Enter a message between 1 and 2500 characters." }, 400);
-    const history = Array.isArray(body.history) ? body.history.slice(-10) : [];
+    const action = body?.action === "chat" ? "chat" : body?.action === "health" ? "health" : "analyze";
+    const snapshot = body?.snapshot;
+    if (action !== "health" && (!snapshot || !Array.isArray(snapshot.platforms) || snapshot.platforms.length < 1)) {
+      return respond(req, { error: "The dashboard performance snapshot is missing." }, 400);
+    }
+
+    if (action === "health") {
+      const check = await callGemini({ apiKey, model: MODEL, input: "Reply with exactly: READY", maxOutputTokens: 96 });
+      if (check.error) return respond(req, { error: "Gemini connection test failed.", details: check.error }, check.status);
+      return respond(req, {
+        ok: true,
+        model: check.model || MODEL,
+        usedFallback: Boolean(check.usedFallback),
+        message: check.usedFallback ? "Gemini is responding through the fallback model." : "Gemini is responding.",
+      });
+    }
+
     const evidence = buildPerformanceEvidence(snapshot);
-    const transcript = history.map((item) => {
-      const role = item?.role === "assistant" ? "Coach" : "Dinesh";
-      return role + ": " + String(item?.content || "").slice(0, 2200);
-    }).join("\n");
-    const evidence = buildPerformanceEvidence(snapshot);
-  const input = [
-    "Analyze this developer performance snapshot and return one valid JSON object only.",
-    "Use the exact key shapes requested below. Never invent facts and never calculate a different performance score.",
-    "Required JSON keys:",
-    "{",
-    '  "summary": "A concise but personalised 3-5 sentence overview using the real metrics.",',
-    '  "trend": "A short trend interpretation. The server will replace this with the computed trend.",',
-    '  "confidence": "high, medium or low",',
-    '  "strengths": [{"title":"...","evidence":"exact snapshot metric","why_it_matters":"...","action":"..."}],',
-    '  "weaknesses": [{"title":"...","evidence":"exact snapshot metric or explicit data gap","impact":"...","improvement":"..."}],',
-    '  "platform_insights": [{"platform":"Monkeytype|LeetCode|CodeChef|GitHub","headline":"...","evidence":["..."],"interpretation":"...","next_step":"...","confidence":"high|medium|low"}],',
-    '  "today_plan": [{"platform":"Monkeytype|LeetCode|CodeChef|GitHub","objective":"...","task":"...","steps":["..."],"estimated_minutes":20,"priority":"high|medium|low","success_check":"..."}],',
-    '  "weekly_plan": [{"date":"YYYY-MM-DD","focus":"...","tasks":[{"platform":"...","task":"...","minutes":20}],"total_minutes":60,"done_when":"..."}],',
-    '  "recommendations": [{"title":"...","reason":"...","action":"...","priority":"high|medium|low"}],',
-    '  "data_gaps": ["..."]',
-    "}",
-    "Create exactly four today_plan entries, one per platform.",
-    "Create exactly seven weekly_plan entries using the exact dates and weekdays in computed evidence.calendar_days.",
-    "Use actual metric evidence. For Monkeytype, explain both speed and accuracy rather than praising WPM alone. For LeetCode, interpret the easy/medium/hard mix only if those values are present. For CodeChef, acknowledge that contest/rating details are not supplied when absent. For GitHub, explain contributions and consistency without equating contribution count with software quality.",
-    "Do not claim a topic-specific weakness when topic data is absent. Recommend a short topic diagnostic instead.",
-    "Do not compare event totals between platforms. Use active days for cross-platform consistency.",
-    "Today's tasks must include concrete steps and a measurable done condition. Make the total realistic and balanced.",
-    "The weekly plan should rotate focus across platforms, build on the weakest evidence-backed area, include a light review/rest day, and have 60-100 minutes most days.",
-    "If data is missing, stale or too limited, state it in data_gaps and reduce confidence. Do not treat missing values as zero.",
-    "SNAPSHOT:",
-    JSON.stringify(snapshot),
-    "COMPUTED EVIDENCE:",
-    JSON.stringify(evidence),
-  ].join("\n\n");
-  const answer = await callGemini({ apiKey, model: MODEL, input, maxOutputTokens: 2600 });
-  if (answer.error) return respond(req, { error: "Gemini analysis failed.", details: answer.error }, answer.status);
 
-  let analysis;
-  try {
-    analysis = normalizeAnalysis(parseJson(answer.text), evidence);
+    if (action === "chat") {
+      const message = String(body.message || "").trim();
+      if (!message || message.length > 2500) return respond(req, { error: "Enter a message between 1 and 2500 characters." }, 400);
+      const history = Array.isArray(body.history) ? body.history.slice(-10) : [];
+      const transcript = history.map((item) => {
+        const role = item?.role === "assistant" ? "Coach" : "Dinesh";
+        return role + ": " + String(item?.content || "").slice(0, 2200);
+      }).join("\\n");
+      const input = [
+        "CURRENT VERIFIED DASHBOARD SNAPSHOT:",
+        JSON.stringify(snapshot),
+        "COMPUTED PERFORMANCE EVIDENCE AND SCORE METHODOLOGY:",
+        JSON.stringify(evidence),
+        "RECENT CONVERSATION:",
+        transcript || "(No earlier messages.)",
+        "DINESH'S NEW MESSAGE:",
+        message,
+        "Response requirements:",
+        "- Answer the actual question first. Do not begin with generic praise.",
+        "- For progress/performance questions, use this order: Direct answer; What the data shows (quote exact metric labels and numbers); What it means; What to do next; How to measure improvement.",
+        "- For a study/practice plan, give a day-by-day plan with realistic time budgets, exact tasks, steps, and completion checks.",
+        "- For programming concepts, explain in simple English, include a small relevant example or pseudocode, then one practice task.",
+        "- Give useful detail. Usually use 180-350 words; use up to 550 words for a requested weekly plan or deeper explanation. Do not pad the response.",
+        "- Mention missing data explicitly. Never invent topic-level LeetCode tags or CodeChef ratings.",
+        "- Refer to the latest snapshot, not generic assumptions. If the question is unrelated to dashboard performance, answer normally without forcing metrics into it.",
+        "Return a readable answer using short headings, bullets and code fences where helpful. Do not return JSON.",
+      ].join("\\n\\n");
+      const answer = await callGemini({ apiKey, model: MODEL, input, maxOutputTokens: 2200 });
+      if (answer.error) return respond(req, { error: "Gemini chat request failed.", details: answer.error }, answer.status);
+      return respond(req, {
+        reply: answer.text,
+        model: answer.model || MODEL,
+        usedFallback: Boolean(answer.usedFallback),
+        evidence_updated_at: evidence.generated_at,
+      });
+    }
+
+    const input = [
+      "Analyze this developer performance snapshot and return one valid JSON object only.",
+      "Use the exact key shapes requested below. Never invent facts and never calculate a different performance score.",
+      "Required JSON keys:",
+      "{",
+      '  "summary": "A concise but personalised 3-5 sentence overview using the real metrics.",',
+      '  "trend": "A short trend interpretation. The server will replace this with the computed trend.",',
+      '  "confidence": "high, medium or low",',
+      '  "strengths": [{"title":"...","evidence":"exact snapshot metric","why_it_matters":"...","action":"..."}],',
+      '  "weaknesses": [{"title":"...","evidence":"exact snapshot metric or explicit data gap","impact":"...","improvement":"..."}],',
+      '  "platform_insights": [{"platform":"Monkeytype|LeetCode|CodeChef|GitHub","headline":"...","evidence":["..."],"interpretation":"...","next_step":"...","confidence":"high|medium|low"}],',
+      '  "today_plan": [{"platform":"Monkeytype|LeetCode|CodeChef|GitHub","objective":"...","task":"...","steps":["..."],"estimated_minutes":20,"priority":"high|medium|low","success_check":"..."}],',
+      '  "weekly_plan": [{"date":"YYYY-MM-DD","focus":"...","tasks":[{"platform":"...","task":"...","minutes":20}],"total_minutes":60,"done_when":"..."}],',
+      '  "recommendations": [{"title":"...","reason":"...","action":"...","priority":"high|medium|low"}],',
+      '  "data_gaps": ["..."]',
+      "}",
+      "Create exactly four today_plan entries, one per platform.",
+      "Create exactly seven weekly_plan entries using the exact dates and weekdays in computed evidence.calendar_days.",
+      "Use actual metric evidence. For Monkeytype, explain both speed and accuracy rather than praising WPM alone. For LeetCode, interpret the easy/medium/hard mix only if those values are present. For CodeChef, acknowledge that contest/rating details are not supplied when absent. For GitHub, explain contributions and consistency without equating contribution count with software quality.",
+      "Do not claim a topic-specific weakness when topic data is absent. Recommend a short topic diagnostic instead.",
+      "Do not compare event totals between platforms. Use active days for cross-platform consistency.",
+      "Today's tasks must include concrete steps and a measurable done condition. Make the total realistic and balanced.",
+      "The weekly plan should rotate focus across platforms, build on the weakest evidence-backed area, include a light review/rest day, and have 60-100 minutes most days.",
+      "If data is missing, stale or too limited, state it in data_gaps and reduce confidence. Do not treat missing values as zero.",
+      "SNAPSHOT:",
+      JSON.stringify(snapshot),
+      "COMPUTED EVIDENCE:",
+      JSON.stringify(evidence),
+    ].join("\\n\\n");
+    const answer = await callGemini({ apiKey, model: MODEL, input, maxOutputTokens: 2600 });
+    if (answer.error) return respond(req, { error: "Gemini analysis failed.", details: answer.error }, answer.status);
+
+    let analysis;
+    try {
+      analysis = normalizeAnalysis(parseJson(answer.text), evidence);
+    } catch (error) {
+      console.error("Coach analysis JSON parsing failed:", error);
+      return respond(req, { error: "Gemini returned an unexpected analysis format. Please analyze again." }, 502);
+    }
+
+    let saved = false;
+    const detailReport = {
+      score_breakdown: analysis.score_breakdown,
+      score_methodology: analysis.score_methodology,
+      platform_insights: analysis.platform_insights,
+      weekly_plan: analysis.weekly_plan,
+      recommendations: analysis.recommendations,
+      data_gaps: analysis.data_gaps,
+      confidence: analysis.confidence,
+      generated_at: analysis.updated_at,
+    };
+    const { error: saveError } = await auth.userClient.from("coach_insights").insert({
+      user_id: auth.user.id,
+      performance_score: analysis.performance_score,
+      summary: analysis.summary,
+      strengths: analysis.strengths,
+      weaknesses: analysis.weaknesses,
+      today_plan: analysis.today_plan,
+      recommendations: detailReport,
+      source_snapshot: { ...snapshot, coach_evidence: evidence, coach_report: detailReport },
+    });
+    if (saveError) {
+      console.error("Could not save coach insight under the signed-in user:", saveError.message);
+    } else {
+      saved = true;
+    }
+
+    return respond(req, {
+      ...analysis,
+      saved,
+      model: answer.model || MODEL,
+      usedFallback: Boolean(answer.usedFallback),
+    });
   } catch (error) {
-    console.error("Coach analysis JSON parsing failed:", error);
-    return respond(req, { error: "Gemini returned an unexpected analysis format. Please analyze again." }, 502);
+    console.error("Unhandled AI Performance Coach error:", error);
+    return respond(req, {
+      error: "The AI Performance Coach encountered an internal error.",
+      details: String(error instanceof Error ? error.message : error).slice(0, 320),
+    }, 500);
   }
-
-  let saved = false;
-  const detailReport = {
-    score_breakdown: analysis.score_breakdown,
-    score_methodology: analysis.score_methodology,
-    platform_insights: analysis.platform_insights,
-    weekly_plan: analysis.weekly_plan,
-    recommendations: analysis.recommendations,
-    data_gaps: analysis.data_gaps,
-    confidence: analysis.confidence,
-    generated_at: analysis.updated_at,
-  };
-  const { error: saveError } = await auth.userClient.from("coach_insights").insert({
-    user_id: auth.user.id,
-    performance_score: analysis.performance_score,
-    summary: analysis.summary,
-    strengths: analysis.strengths,
-    weaknesses: analysis.weaknesses,
-    today_plan: analysis.today_plan,
-    recommendations: detailReport,
-    source_snapshot: { ...snapshot, coach_evidence: evidence, coach_report: detailReport },
-  });
-  if (saveError) {
-    console.error("Could not save coach insight under the signed-in user:", saveError.message);
-  } else {
-    saved = true;
-  }
-
-  return respond(req, { ...analysis, saved, model: answer.model || MODEL, usedFallback: Boolean(answer.usedFallback) });
 });
