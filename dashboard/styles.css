@@ -543,3 +543,29 @@ body{font-family:var(--display-font)}
 .coach-footer button{border:1px solid var(--line);background:transparent;color:var(--text);padding:9px 12px;border-radius:5px;font:8px var(--mono);cursor:pointer}
 .coach-footer button:hover{border-color:var(--orange);color:var(--orange)}
 @media(max-width:900px){.coach-grid{grid-template-columns:1fr}.coach-column{border-right:0;border-bottom:1px solid var(--line)}.coach-head{flex-direction:column}.coach-score{text-align:left;border-left:0;border-top:1px solid var(--line);padding:16px 0 0}.coach-footer{flex-direction:column;align-items:flex-start}}
+
+
+.coach-recommendations{display:flex;flex-wrap:wrap;gap:8px;padding:0 24px 18px}
+.coach-recommendations span{border:1px solid var(--line-soft);border-radius:999px;padding:7px 10px;color:var(--muted);font-size:9px;line-height:1.4}
+.coach-chat{border-top:1px solid var(--line);padding:24px}
+.coach-chat-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:16px}
+.coach-chat-heading h3{font-size:22px;letter-spacing:-.035em;margin:5px 0}
+.coach-chat-heading p{color:var(--muted);font-size:11px;margin:0;line-height:1.6}
+.coach-auth-status{font:8px var(--mono);letter-spacing:.09em;color:var(--brass);text-align:right;max-width:260px;overflow-wrap:anywhere}
+.coach-chat-log{min-height:150px;max-height:420px;overflow:auto;padding:16px;border:1px solid var(--line-soft);border-radius:10px;background:#111419;display:flex;flex-direction:column;gap:12px}
+.coach-message{max-width:min(850px,92%);padding:11px 14px;border-radius:10px;border:1px solid var(--line-soft);background:#1c2026}
+.coach-message.user{align-self:flex-end;background:#28232a;border-color:#704b5c}
+.coach-message>span{font:8px var(--mono);letter-spacing:.12em;color:var(--orange)}
+.coach-message.user>span{color:#ff9ab0}
+.coach-message p{white-space:pre-wrap;overflow-wrap:anywhere;margin:6px 0 0;color:var(--text);font-size:11px;line-height:1.75}
+.coach-message.typing p{color:var(--muted);font-style:italic}
+.coach-prompts{display:flex;gap:8px;flex-wrap:wrap;padding:14px 0}
+.coach-prompts button{border:1px solid var(--line);background:#1b1f25;color:var(--muted);border-radius:999px;padding:8px 11px;font:9px var(--sans);cursor:pointer;transition:border-color .2s,color .2s}
+.coach-prompts button:hover{border-color:var(--orange);color:var(--text)}
+.coach-chat-form{display:flex;align-items:stretch;gap:10px}
+.coach-chat-form textarea{flex:1;min-width:0;resize:vertical;min-height:58px;max-height:180px;border:1px solid var(--line);border-radius:9px;background:#111419;color:var(--text);padding:13px;font:11px/1.6 var(--sans);outline:none}
+.coach-chat-form textarea:focus{border-color:var(--orange);box-shadow:0 0 0 3px #e58b6718}
+.coach-chat-form button{min-width:94px;border:1px solid #8d6171;border-radius:9px;background:#38262f;color:#ffdce5;padding:0 16px;font:9px var(--mono);letter-spacing:.08em;cursor:pointer}
+.coach-chat-form button:disabled,.coach-chat-form textarea:disabled{opacity:.48;cursor:not-allowed}
+.coach-chat-foot{display:flex;justify-content:space-between;gap:12px;padding-top:9px;color:var(--faint);font:8px var(--mono);letter-spacing:.04em}
+@media(max-width:680px){.coach-chat{padding:16px}.coach-chat-heading{flex-direction:column}.coach-auth-status{text-align:left}.coach-chat-form{flex-direction:column}.coach-chat-form button{min-height:42px}.coach-chat-foot{flex-direction:column}.coach-message{max-width:100%}.coach-score{padding-left:0}.coach-recommendations{padding:0 16px 16px}}
