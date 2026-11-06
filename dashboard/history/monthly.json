@@ -71,7 +71,7 @@
           "activeDays": 0,
           "observedDays": 2,
           "availableDays": 2,
-          "latestCurrentStreak": 1,
+          "latestCurrentStreak": 0,
           "latestLongestStreak": 14,
           "latestMetrics": [
             {
