@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "timezone": "Asia/Kolkata",
-  "generatedFor": "2026-11-06",
+  "generatedFor": "2026-11-07",
   "months": [
     {
       "month": "2026-11",
@@ -11,10 +11,10 @@
           "label": "MONKEYTYPE",
           "totalActivity": 2,
           "activeDays": 1,
-          "observedDays": 2,
-          "availableDays": 2,
-          "latestCurrentStreak": 21,
-          "latestLongestStreak": 21,
+          "observedDays": 3,
+          "availableDays": 3,
+          "latestCurrentStreak": 22,
+          "latestLongestStreak": 22,
           "latestMetrics": [
             {
               "label": "BEST WPM",
@@ -26,7 +26,7 @@
             },
             {
               "label": "TESTS DONE",
-              "value": "1873"
+              "value": "1874"
             },
             {
               "label": "TYPING TIME",
@@ -40,8 +40,8 @@
           "label": "LEETCODE",
           "totalActivity": 2,
           "activeDays": 1,
-          "observedDays": 2,
-          "availableDays": 2,
+          "observedDays": 3,
+          "availableDays": 3,
           "latestCurrentStreak": 15,
           "latestLongestStreak": 15,
           "latestMetrics": [
@@ -69,8 +69,8 @@
           "label": "CODECHEF",
           "totalActivity": 0,
           "activeDays": 0,
-          "observedDays": 2,
-          "availableDays": 2,
+          "observedDays": 3,
+          "availableDays": 3,
           "latestCurrentStreak": 0,
           "latestLongestStreak": 14,
           "latestMetrics": [
@@ -84,7 +84,7 @@
             },
             {
               "label": "ACTIVE DAYS",
-              "value": "127"
+              "value": "128"
             },
             {
               "label": "CONTESTS",
@@ -98,9 +98,9 @@
           "label": "GITHUB",
           "totalActivity": 76,
           "activeDays": 1,
-          "observedDays": 2,
-          "availableDays": 2,
-          "latestCurrentStreak": 5,
+          "observedDays": 3,
+          "availableDays": 3,
+          "latestCurrentStreak": 0,
           "latestLongestStreak": 15,
           "latestMetrics": [
             {

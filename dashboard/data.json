@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "owner": "Dinesh G",
-  "generatedAt": "2026-11-06T15:27:19.137Z",
-  "generatedAtIST": "6 Nov 2026, 8:57:19 pm",
+  "generatedAt": "2026-11-06T20:59:42.261Z",
+  "generatedAtIST": "7 Nov 2026, 2:29:42 am",
   "timezone": "Asia/Kolkata",
-  "activityDate": "2026-11-06",
+  "activityDate": "2026-11-07",
   "refreshIntervalSeconds": 300,
   "platforms": [
     {
@@ -13,10 +13,10 @@
       "handle": "lio_dinesh",
       "url": "https://monkeytype.com/profile/lio_dinesh",
       "status": "PUBLIC PROFILE",
-      "currentStreak": 21,
-      "longestStreak": 21,
+      "currentStreak": 22,
+      "longestStreak": 22,
       "activeDays": 56,
-      "lastActiveDate": "2026-11-05",
+      "lastActiveDate": "2026-11-06",
       "activityAvailable": true,
       "note": "Official current and maximum streak from public profile",
       "metrics": [
@@ -30,7 +30,7 @@
         },
         {
           "label": "TESTS DONE",
-          "value": "1873"
+          "value": "1874"
         },
         {
           "label": "TYPING TIME",
@@ -38,10 +38,6 @@
         }
       ],
       "dailyActivity": [
-        {
-          "date": "2026-08-08",
-          "count": 12
-        },
         {
           "date": "2026-08-09",
           "count": 10
@@ -400,6 +396,10 @@
         },
         {
           "date": "2026-11-06",
+          "count": 1
+        },
+        {
+          "date": "2026-11-07",
           "count": 0
         }
       ]
@@ -412,8 +412,8 @@
       "status": "PUBLIC CALENDAR",
       "currentStreak": 15,
       "longestStreak": 15,
-      "activeDays": 32,
-      "lastActiveDate": "2026-11-05",
+      "activeDays": 33,
+      "lastActiveDate": "2026-11-06",
       "activityAvailable": true,
       "note": "Current streak from LeetCode; longest calculated across available calendar years",
       "metrics": [
@@ -435,10 +435,6 @@
         }
       ],
       "dailyActivity": [
-        {
-          "date": "2026-08-08",
-          "count": 0
-        },
         {
           "date": "2026-08-09",
           "count": 0
@@ -797,6 +793,10 @@
         },
         {
           "date": "2026-11-06",
+          "count": 1
+        },
+        {
+          "date": "2026-11-07",
           "count": 0
         }
       ]
@@ -809,7 +809,7 @@
       "status": "PUBLIC HEATMAP",
       "currentStreak": 0,
       "longestStreak": 14,
-      "activeDays": 45,
+      "activeDays": 44,
       "lastActiveDate": "2026-11-04",
       "activityAvailable": true,
       "note": "Heatmap-derived submission streak; CodeChef streak freezes may not be reflected",
@@ -824,7 +824,7 @@
         },
         {
           "label": "ACTIVE DAYS",
-          "value": "127"
+          "value": "128"
         },
         {
           "label": "CONTESTS",
@@ -832,10 +832,6 @@
         }
       ],
       "dailyActivity": [
-        {
-          "date": "2026-08-08",
-          "count": 12
-        },
         {
           "date": "2026-08-09",
           "count": 2
@@ -1195,6 +1191,10 @@
         {
           "date": "2026-11-06",
           "count": 0
+        },
+        {
+          "date": "2026-11-07",
+          "count": 0
         }
       ]
     },
@@ -1204,7 +1204,7 @@
       "handle": "lio-dinesh",
       "url": "https://github.com/lio-dinesh",
       "status": "GITHUB GRAPHQL",
-      "currentStreak": 5,
+      "currentStreak": 0,
       "longestStreak": 15,
       "activeDays": 46,
       "lastActiveDate": "2026-11-05",
@@ -1229,10 +1229,6 @@
         }
       ],
       "dailyActivity": [
-        {
-          "date": "2026-08-08",
-          "count": 0
-        },
         {
           "date": "2026-08-09",
           "count": 0
@@ -1591,6 +1587,10 @@
         },
         {
           "date": "2026-11-06",
+          "count": 0
+        },
+        {
+          "date": "2026-11-07",
           "count": 0
         }
       ]
