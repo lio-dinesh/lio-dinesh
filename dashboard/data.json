@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "owner": "Dinesh G",
-  "generatedAt": "2026-11-08T07:28:26.920Z",
-  "generatedAtIST": "8 Nov 2026, 12:58:26 pm",
+  "generatedAt": "2026-11-08T14:27:45.091Z",
+  "generatedAtIST": "8 Nov 2026, 7:57:45 pm",
   "timezone": "Asia/Kolkata",
   "activityDate": "2026-11-08",
   "refreshIntervalSeconds": 300,
@@ -13,10 +13,10 @@
       "handle": "lio_dinesh",
       "url": "https://monkeytype.com/profile/lio_dinesh",
       "status": "PUBLIC PROFILE",
-      "currentStreak": 23,
-      "longestStreak": 23,
-      "activeDays": 56,
-      "lastActiveDate": "2026-11-07",
+      "currentStreak": 24,
+      "longestStreak": 24,
+      "activeDays": 57,
+      "lastActiveDate": "2026-11-08",
       "activityAvailable": true,
       "note": "Official current and maximum streak from public profile",
       "metrics": [
@@ -30,7 +30,7 @@
         },
         {
           "label": "TESTS DONE",
-          "value": "1914"
+          "value": "1924"
         },
         {
           "label": "TYPING TIME",
@@ -400,7 +400,7 @@
         },
         {
           "date": "2026-11-08",
-          "count": 0
+          "count": 10
         }
       ]
     },
