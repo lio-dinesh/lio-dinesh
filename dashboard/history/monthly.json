@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "timezone": "Asia/Kolkata",
-  "generatedFor": "2026-11-08",
+  "generatedFor": "2026-11-09",
   "months": [
     {
       "month": "2026-11",
@@ -11,8 +11,8 @@
           "label": "MONKEYTYPE",
           "totalActivity": 52,
           "activeDays": 3,
-          "observedDays": 4,
-          "availableDays": 4,
+          "observedDays": 5,
+          "availableDays": 5,
           "latestCurrentStreak": 24,
           "latestLongestStreak": 24,
           "latestMetrics": [
@@ -26,7 +26,7 @@
             },
             {
               "label": "TESTS DONE",
-              "value": "1924"
+              "value": "1928"
             },
             {
               "label": "TYPING TIME",
@@ -40,14 +40,14 @@
           "label": "LEETCODE",
           "totalActivity": 2,
           "activeDays": 1,
-          "observedDays": 4,
-          "availableDays": 4,
+          "observedDays": 5,
+          "availableDays": 5,
           "latestCurrentStreak": 15,
           "latestLongestStreak": 15,
           "latestMetrics": [
             {
               "label": "SOLVED",
-              "value": "56"
+              "value": "57"
             },
             {
               "label": "EASY",
@@ -55,7 +55,7 @@
             },
             {
               "label": "MEDIUM",
-              "value": "25"
+              "value": "26"
             },
             {
               "label": "HARD",
@@ -69,8 +69,8 @@
           "label": "CODECHEF",
           "totalActivity": 0,
           "activeDays": 0,
-          "observedDays": 4,
-          "availableDays": 4,
+          "observedDays": 5,
+          "availableDays": 5,
           "latestCurrentStreak": 0,
           "latestLongestStreak": 14,
           "latestMetrics": [
@@ -98,18 +98,18 @@
           "label": "GITHUB",
           "totalActivity": 76,
           "activeDays": 1,
-          "observedDays": 4,
-          "availableDays": 4,
-          "latestCurrentStreak": 0,
+          "observedDays": 5,
+          "availableDays": 5,
+          "latestCurrentStreak": 1,
           "latestLongestStreak": 15,
           "latestMetrics": [
             {
               "label": "CONTRIBUTIONS · 12M",
-              "value": "557"
+              "value": "574"
             },
             {
               "label": "ACTIVE DAYS · 13W",
-              "value": "46"
+              "value": "47"
             },
             {
               "label": "PEAK DAY · 13W",
@@ -117,7 +117,7 @@
             },
             {
               "label": "AVG / ACTIVE DAY",
-              "value": "11.7"
+              "value": "11.8"
             }
           ],
           "lastActivityDate": "2026-11-05"
