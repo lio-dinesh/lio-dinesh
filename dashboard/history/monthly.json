@@ -9,12 +9,12 @@
         {
           "id": "monkeytype",
           "label": "MONKEYTYPE",
-          "totalActivity": 52,
-          "activeDays": 3,
+          "totalActivity": 65,
+          "activeDays": 4,
           "observedDays": 5,
           "availableDays": 5,
-          "latestCurrentStreak": 24,
-          "latestLongestStreak": 24,
+          "latestCurrentStreak": 25,
+          "latestLongestStreak": 25,
           "latestMetrics": [
             {
               "label": "BEST WPM",
@@ -26,14 +26,14 @@
             },
             {
               "label": "TESTS DONE",
-              "value": "1928"
+              "value": "1941"
             },
             {
               "label": "TYPING TIME",
               "value": "18h"
             }
           ],
-          "lastActivityDate": "2026-11-08"
+          "lastActivityDate": "2026-11-09"
         },
         {
           "id": "leetcode",
