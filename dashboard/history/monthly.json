@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "timezone": "Asia/Kolkata",
-  "generatedFor": "2026-11-10",
+  "generatedFor": "2026-11-11",
   "months": [
     {
       "month": "2026-11",
@@ -11,8 +11,8 @@
           "label": "MONKEYTYPE",
           "totalActivity": 65,
           "activeDays": 4,
-          "observedDays": 6,
-          "availableDays": 6,
+          "observedDays": 7,
+          "availableDays": 7,
           "latestCurrentStreak": 25,
           "latestLongestStreak": 25,
           "latestMetrics": [
@@ -40,8 +40,8 @@
           "label": "LEETCODE",
           "totalActivity": 2,
           "activeDays": 1,
-          "observedDays": 6,
-          "availableDays": 6,
+          "observedDays": 7,
+          "availableDays": 7,
           "latestCurrentStreak": 15,
           "latestLongestStreak": 15,
           "latestMetrics": [
@@ -69,8 +69,8 @@
           "label": "CODECHEF",
           "totalActivity": 0,
           "activeDays": 0,
-          "observedDays": 6,
-          "availableDays": 6,
+          "observedDays": 7,
+          "availableDays": 7,
           "latestCurrentStreak": 0,
           "latestLongestStreak": 14,
           "latestMetrics": [
@@ -98,8 +98,8 @@
           "label": "GITHUB",
           "totalActivity": 76,
           "activeDays": 1,
-          "observedDays": 6,
-          "availableDays": 6,
+          "observedDays": 7,
+          "availableDays": 7,
           "latestCurrentStreak": 0,
           "latestLongestStreak": 15,
           "latestMetrics": [

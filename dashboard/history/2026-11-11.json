@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-11",
+  "timezone": "Asia/Kolkata",
+  "platforms": [
+    {
+      "id": "monkeytype",
+      "label": "MONKEYTYPE",
+      "handle": "lio_dinesh",
+      "status": "PUBLIC PROFILE",
+      "activityAvailable": true,
+      "activityCount": 0,
+      "currentStreak": 25,
+      "longestStreak": 25,
+      "lastActiveDate": "2026-11-09",
+      "metrics": [
+        {
+          "label": "BEST WPM",
+          "value": "64"
+        },
+        {
+          "label": "ACCURACY",
+          "value": "97%"
+        },
+        {
+          "label": "TESTS DONE",
+          "value": "1941"
+        },
+        {
+          "label": "TYPING TIME",
+          "value": "18h"
+        }
+      ]
+    },
+    {
+      "id": "leetcode",
+      "label": "LEETCODE",
+      "handle": "410725148010",
+      "status": "PUBLIC CALENDAR",
+      "activityAvailable": true,
+      "activityCount": 0,
+      "currentStreak": 15,
+      "longestStreak": 15,
+      "lastActiveDate": "2026-11-08",
+      "metrics": [
+        {
+          "label": "SOLVED",
+          "value": "57"
+        },
+        {
+          "label": "EASY",
+          "value": "20"
+        },
+        {
+          "label": "MEDIUM",
+          "value": "26"
+        },
+        {
+          "label": "HARD",
+          "value": "11"
+        }
+      ]
+    },
+    {
+      "id": "codechef",
+      "label": "CODECHEF",
+      "handle": "dce_25148010",
+      "status": "PUBLIC HEATMAP",
+      "activityAvailable": true,
+      "activityCount": 0,
+      "currentStreak": 0,
+      "longestStreak": 14,
+      "lastActiveDate": "2026-11-04",
+      "metrics": [
+        {
+          "label": "SOLVED",
+          "value": "1732"
+        },
+        {
+          "label": "STARS",
+          "value": "unrated"
+        },
+        {
+          "label": "ACTIVE DAYS",
+          "value": "129"
+        },
+        {
+          "label": "CONTESTS",
+          "value": "0"
+        }
+      ]
+    },
+    {
+      "id": "github",
+      "label": "GITHUB",
+      "handle": "lio-dinesh",
+      "status": "GITHUB GRAPHQL",
+      "activityAvailable": true,
+      "activityCount": 0,
+      "currentStreak": 0,
+      "longestStreak": 15,
+      "lastActiveDate": "2026-11-08",
+      "metrics": [
+        {
+          "label": "CONTRIBUTIONS · 12M",
+          "value": "574"
+        },
+        {
+          "label": "ACTIVE DAYS · 13W",
+          "value": "47"
+        },
+        {
+          "label": "PEAK DAY · 13W",
+          "value": "76"
+        },
+        {
+          "label": "AVG / ACTIVE DAY",
+          "value": "11.8"
+        }
+      ]
+    }
+  ]
+}
