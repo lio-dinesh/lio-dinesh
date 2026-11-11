@@ -9,10 +9,10 @@
       "handle": "lio_dinesh",
       "status": "PUBLIC PROFILE",
       "activityAvailable": true,
-      "activityCount": 0,
-      "currentStreak": 25,
+      "activityCount": 13,
+      "currentStreak": 1,
       "longestStreak": 25,
-      "lastActiveDate": "2026-11-09",
+      "lastActiveDate": "2026-11-11",
       "metrics": [
         {
           "label": "BEST WPM",
@@ -24,7 +24,7 @@
         },
         {
           "label": "TESTS DONE",
-          "value": "1941"
+          "value": "1954"
         },
         {
           "label": "TYPING TIME",
@@ -38,14 +38,14 @@
       "handle": "410725148010",
       "status": "PUBLIC CALENDAR",
       "activityAvailable": true,
-      "activityCount": 0,
+      "activityCount": 2,
       "currentStreak": 15,
       "longestStreak": 15,
-      "lastActiveDate": "2026-11-08",
+      "lastActiveDate": "2026-11-11",
       "metrics": [
         {
           "label": "SOLVED",
-          "value": "57"
+          "value": "58"
         },
         {
           "label": "EASY",
@@ -53,7 +53,7 @@
         },
         {
           "label": "MEDIUM",
-          "value": "26"
+          "value": "27"
         },
         {
           "label": "HARD",
@@ -96,18 +96,18 @@
       "handle": "lio-dinesh",
       "status": "GITHUB GRAPHQL",
       "activityAvailable": true,
-      "activityCount": 0,
-      "currentStreak": 0,
+      "activityCount": 5,
+      "currentStreak": 1,
       "longestStreak": 15,
-      "lastActiveDate": "2026-11-08",
+      "lastActiveDate": "2026-11-11",
       "metrics": [
         {
           "label": "CONTRIBUTIONS · 12M",
-          "value": "574"
+          "value": "579"
         },
         {
           "label": "ACTIVE DAYS · 13W",
-          "value": "47"
+          "value": "48"
         },
         {
           "label": "PEAK DAY · 13W",
@@ -115,7 +115,7 @@
         },
         {
           "label": "AVG / ACTIVE DAY",
-          "value": "11.8"
+          "value": "11.7"
         }
       ]
     }
