@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "timezone": "Asia/Kolkata",
-  "generatedFor": "2026-11-12",
+  "generatedFor": "2026-11-13",
   "months": [
     {
       "month": "2026-11",
@@ -11,8 +11,8 @@
           "label": "MONKEYTYPE",
           "totalActivity": 81,
           "activeDays": 6,
-          "observedDays": 8,
-          "availableDays": 8,
+          "observedDays": 9,
+          "availableDays": 9,
           "latestCurrentStreak": 2,
           "latestLongestStreak": 25,
           "latestMetrics": [
@@ -40,18 +40,18 @@
           "label": "LEETCODE",
           "totalActivity": 4,
           "activeDays": 2,
-          "observedDays": 8,
-          "availableDays": 8,
+          "observedDays": 9,
+          "availableDays": 9,
           "latestCurrentStreak": 15,
           "latestLongestStreak": 15,
           "latestMetrics": [
             {
               "label": "SOLVED",
-              "value": "58"
+              "value": "59"
             },
             {
               "label": "EASY",
-              "value": "20"
+              "value": "21"
             },
             {
               "label": "MEDIUM",
@@ -69,11 +69,28 @@
           "label": "CODECHEF",
           "totalActivity": 0,
           "activeDays": 0,
-          "observedDays": 8,
-          "availableDays": 7,
-          "latestCurrentStreak": null,
-          "latestLongestStreak": null,
-          "latestMetrics": [],
+          "observedDays": 9,
+          "availableDays": 8,
+          "latestCurrentStreak": 0,
+          "latestLongestStreak": 14,
+          "latestMetrics": [
+            {
+              "label": "SOLVED",
+              "value": "1732"
+            },
+            {
+              "label": "STARS",
+              "value": "unrated"
+            },
+            {
+              "label": "ACTIVE DAYS",
+              "value": "129"
+            },
+            {
+              "label": "CONTESTS",
+              "value": "0"
+            }
+          ],
           "lastActivityDate": null
         },
         {
@@ -81,18 +98,18 @@
           "label": "GITHUB",
           "totalActivity": 81,
           "activeDays": 2,
-          "observedDays": 8,
-          "availableDays": 8,
-          "latestCurrentStreak": 1,
+          "observedDays": 9,
+          "availableDays": 9,
+          "latestCurrentStreak": 2,
           "latestLongestStreak": 15,
           "latestMetrics": [
             {
               "label": "CONTRIBUTIONS · 12M",
-              "value": "579"
+              "value": "589"
             },
             {
               "label": "ACTIVE DAYS · 13W",
-              "value": "48"
+              "value": "49"
             },
             {
               "label": "PEAK DAY · 13W",
