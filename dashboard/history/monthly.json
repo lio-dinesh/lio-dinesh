@@ -9,11 +9,11 @@
         {
           "id": "monkeytype",
           "label": "MONKEYTYPE",
-          "totalActivity": 78,
-          "activeDays": 5,
+          "totalActivity": 81,
+          "activeDays": 6,
           "observedDays": 8,
           "availableDays": 8,
-          "latestCurrentStreak": 1,
+          "latestCurrentStreak": 2,
           "latestLongestStreak": 25,
           "latestMetrics": [
             {
@@ -26,14 +26,14 @@
             },
             {
               "label": "TESTS DONE",
-              "value": "1954"
+              "value": "1957"
             },
             {
               "label": "TYPING TIME",
               "value": "18h"
             }
           ],
-          "lastActivityDate": "2026-11-11"
+          "lastActivityDate": "2026-11-12"
         },
         {
           "id": "leetcode",
@@ -70,27 +70,10 @@
           "totalActivity": 0,
           "activeDays": 0,
           "observedDays": 8,
-          "availableDays": 8,
-          "latestCurrentStreak": 0,
-          "latestLongestStreak": 14,
-          "latestMetrics": [
-            {
-              "label": "SOLVED",
-              "value": "1732"
-            },
-            {
-              "label": "STARS",
-              "value": "unrated"
-            },
-            {
-              "label": "ACTIVE DAYS",
-              "value": "129"
-            },
-            {
-              "label": "CONTESTS",
-              "value": "0"
-            }
-          ],
+          "availableDays": 7,
+          "latestCurrentStreak": null,
+          "latestLongestStreak": null,
+          "latestMetrics": [],
           "lastActivityDate": null
         },
         {

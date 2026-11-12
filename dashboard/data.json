@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "owner": "Dinesh G",
-  "generatedAt": "2026-11-12T04:20:08.378Z",
-  "generatedAtIST": "12 Nov 2026, 9:50:08 am",
+  "generatedAt": "2026-11-12T12:58:15.081Z",
+  "generatedAtIST": "12 Nov 2026, 6:28:15 pm",
   "timezone": "Asia/Kolkata",
   "activityDate": "2026-11-12",
   "refreshIntervalSeconds": 300,
@@ -13,10 +13,10 @@
       "handle": "lio_dinesh",
       "url": "https://monkeytype.com/profile/lio_dinesh",
       "status": "PUBLIC PROFILE",
-      "currentStreak": 1,
+      "currentStreak": 2,
       "longestStreak": 25,
-      "activeDays": 56,
-      "lastActiveDate": "2026-11-11",
+      "activeDays": 57,
+      "lastActiveDate": "2026-11-12",
       "activityAvailable": true,
       "note": "Official current and maximum streak from public profile",
       "metrics": [
@@ -30,7 +30,7 @@
         },
         {
           "label": "TESTS DONE",
-          "value": "1954"
+          "value": "1957"
         },
         {
           "label": "TYPING TIME",
@@ -400,7 +400,7 @@
         },
         {
           "date": "2026-11-12",
-          "count": 0
+          "count": 3
         }
       ]
     },
@@ -806,39 +806,22 @@
       "label": "CODECHEF",
       "handle": "dce_25148010",
       "url": "https://www.codechef.com/users/dce_25148010",
-      "status": "PUBLIC HEATMAP",
-      "currentStreak": 0,
-      "longestStreak": 14,
-      "activeDays": 39,
-      "lastActiveDate": "2026-11-04",
-      "activityAvailable": true,
-      "note": "Heatmap-derived submission streak; CodeChef streak freezes may not be reflected",
-      "metrics": [
-        {
-          "label": "SOLVED",
-          "value": "1732"
-        },
-        {
-          "label": "STARS",
-          "value": "unrated"
-        },
-        {
-          "label": "ACTIVE DAYS",
-          "value": "129"
-        },
-        {
-          "label": "CONTESTS",
-          "value": "0"
-        }
-      ],
+      "status": "DATA UNAVAILABLE",
+      "currentStreak": null,
+      "longestStreak": null,
+      "activeDays": null,
+      "lastActiveDate": null,
+      "activityAvailable": false,
+      "note": "CodeChef heatmap unavailable: HTTP 429: {\"detail\":\"CodeChef returned status 429\"}",
+      "metrics": [],
       "dailyActivity": [
         {
           "date": "2026-08-14",
-          "count": 5
+          "count": 0
         },
         {
           "date": "2026-08-15",
-          "count": 2
+          "count": 0
         },
         {
           "date": "2026-08-16",
@@ -846,15 +829,15 @@
         },
         {
           "date": "2026-08-17",
-          "count": 3
+          "count": 0
         },
         {
           "date": "2026-08-18",
-          "count": 8
+          "count": 0
         },
         {
           "date": "2026-08-19",
-          "count": 1
+          "count": 0
         },
         {
           "date": "2026-08-20",
@@ -862,7 +845,7 @@
         },
         {
           "date": "2026-08-21",
-          "count": 1
+          "count": 0
         },
         {
           "date": "2026-08-22",
@@ -870,7 +853,7 @@
         },
         {
           "date": "2026-08-23",
-          "count": 15
+          "count": 0
         },
         {
           "date": "2026-08-24",
@@ -878,11 +861,11 @@
         },
         {
           "date": "2026-08-25",
-          "count": 12
+          "count": 0
         },
         {
           "date": "2026-08-26",
-          "count": 6
+          "count": 0
         },
         {
           "date": "2026-08-27",
@@ -890,11 +873,11 @@
         },
         {
           "date": "2026-08-28",
-          "count": 10
+          "count": 0
         },
         {
           "date": "2026-08-29",
-          "count": 9
+          "count": 0
         },
         {
           "date": "2026-08-30",
@@ -902,7 +885,7 @@
         },
         {
           "date": "2026-08-31",
-          "count": 1
+          "count": 0
         },
         {
           "date": "2026-09-01",
@@ -942,7 +925,7 @@
         },
         {
           "date": "2026-09-10",
-          "count": 7
+          "count": 0
         },
         {
           "date": "2026-09-11",
@@ -962,7 +945,7 @@
         },
         {
           "date": "2026-09-15",
-          "count": 89
+          "count": 0
         },
         {
           "date": "2026-09-16",
@@ -986,11 +969,11 @@
         },
         {
           "date": "2026-09-21",
-          "count": 3
+          "count": 0
         },
         {
           "date": "2026-09-22",
-          "count": 69
+          "count": 0
         },
         {
           "date": "2026-09-23",
@@ -1054,31 +1037,31 @@
         },
         {
           "date": "2026-10-08",
-          "count": 259
+          "count": 0
         },
         {
           "date": "2026-10-09",
-          "count": 23
+          "count": 0
         },
         {
           "date": "2026-10-10",
-          "count": 5
+          "count": 0
         },
         {
           "date": "2026-10-11",
-          "count": 19
+          "count": 0
         },
         {
           "date": "2026-10-12",
-          "count": 231
+          "count": 0
         },
         {
           "date": "2026-10-13",
-          "count": 42
+          "count": 0
         },
         {
           "date": "2026-10-14",
-          "count": 8
+          "count": 0
         },
         {
           "date": "2026-10-15",
@@ -1086,59 +1069,59 @@
         },
         {
           "date": "2026-10-16",
-          "count": 27
+          "count": 0
         },
         {
           "date": "2026-10-17",
-          "count": 36
+          "count": 0
         },
         {
           "date": "2026-10-18",
-          "count": 32
+          "count": 0
         },
         {
           "date": "2026-10-19",
-          "count": 30
+          "count": 0
         },
         {
           "date": "2026-10-20",
-          "count": 51
+          "count": 0
         },
         {
           "date": "2026-10-21",
-          "count": 7
+          "count": 0
         },
         {
           "date": "2026-10-22",
-          "count": 13
+          "count": 0
         },
         {
           "date": "2026-10-23",
-          "count": 1
+          "count": 0
         },
         {
           "date": "2026-10-24",
-          "count": 44
+          "count": 0
         },
         {
           "date": "2026-10-25",
-          "count": 4
+          "count": 0
         },
         {
           "date": "2026-10-26",
-          "count": 26
+          "count": 0
         },
         {
           "date": "2026-10-27",
-          "count": 18
+          "count": 0
         },
         {
           "date": "2026-10-28",
-          "count": 7
+          "count": 0
         },
         {
           "date": "2026-10-29",
-          "count": 57
+          "count": 0
         },
         {
           "date": "2026-10-30",
@@ -1150,7 +1133,7 @@
         },
         {
           "date": "2026-11-01",
-          "count": 52
+          "count": 0
         },
         {
           "date": "2026-11-02",
@@ -1162,7 +1145,7 @@
         },
         {
           "date": "2026-11-04",
-          "count": 3
+          "count": 0
         },
         {
           "date": "2026-11-05",

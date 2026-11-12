@@ -9,10 +9,10 @@
       "handle": "lio_dinesh",
       "status": "PUBLIC PROFILE",
       "activityAvailable": true,
-      "activityCount": 0,
-      "currentStreak": 1,
+      "activityCount": 3,
+      "currentStreak": 2,
       "longestStreak": 25,
-      "lastActiveDate": "2026-11-11",
+      "lastActiveDate": "2026-11-12",
       "metrics": [
         {
           "label": "BEST WPM",
@@ -24,7 +24,7 @@
         },
         {
           "label": "TESTS DONE",
-          "value": "1954"
+          "value": "1957"
         },
         {
           "label": "TYPING TIME",
@@ -65,30 +65,13 @@
       "id": "codechef",
       "label": "CODECHEF",
       "handle": "dce_25148010",
-      "status": "PUBLIC HEATMAP",
-      "activityAvailable": true,
+      "status": "DATA UNAVAILABLE",
+      "activityAvailable": false,
       "activityCount": 0,
-      "currentStreak": 0,
-      "longestStreak": 14,
-      "lastActiveDate": "2026-11-04",
-      "metrics": [
-        {
-          "label": "SOLVED",
-          "value": "1732"
-        },
-        {
-          "label": "STARS",
-          "value": "unrated"
-        },
-        {
-          "label": "ACTIVE DAYS",
-          "value": "129"
-        },
-        {
-          "label": "CONTESTS",
-          "value": "0"
-        }
-      ]
+      "currentStreak": null,
+      "longestStreak": null,
+      "lastActiveDate": null,
+      "metrics": []
     },
     {
       "id": "github",
