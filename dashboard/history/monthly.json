@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "timezone": "Asia/Kolkata",
-  "generatedFor": "2026-11-13",
+  "generatedFor": "2026-11-14",
   "months": [
     {
       "month": "2026-11",
@@ -11,8 +11,8 @@
           "label": "MONKEYTYPE",
           "totalActivity": 124,
           "activeDays": 7,
-          "observedDays": 9,
-          "availableDays": 9,
+          "observedDays": 10,
+          "availableDays": 10,
           "latestCurrentStreak": 3,
           "latestLongestStreak": 25,
           "latestMetrics": [
@@ -26,7 +26,7 @@
             },
             {
               "label": "TESTS DONE",
-              "value": "2014"
+              "value": "2015"
             },
             {
               "label": "TYPING TIME",
@@ -40,8 +40,8 @@
           "label": "LEETCODE",
           "totalActivity": 8,
           "activeDays": 3,
-          "observedDays": 9,
-          "availableDays": 9,
+          "observedDays": 10,
+          "availableDays": 10,
           "latestCurrentStreak": 15,
           "latestLongestStreak": 15,
           "latestMetrics": [
@@ -69,8 +69,8 @@
           "label": "CODECHEF",
           "totalActivity": 0,
           "activeDays": 0,
-          "observedDays": 9,
-          "availableDays": 8,
+          "observedDays": 10,
+          "availableDays": 9,
           "latestCurrentStreak": 0,
           "latestLongestStreak": 14,
           "latestMetrics": [
@@ -98,8 +98,8 @@
           "label": "GITHUB",
           "totalActivity": 94,
           "activeDays": 3,
-          "observedDays": 9,
-          "availableDays": 9,
+          "observedDays": 10,
+          "availableDays": 10,
           "latestCurrentStreak": 3,
           "latestLongestStreak": 15,
           "latestMetrics": [
@@ -109,7 +109,7 @@
             },
             {
               "label": "ACTIVE DAYS · 13W",
-              "value": "50"
+              "value": "49"
             },
             {
               "label": "PEAK DAY · 13W",
