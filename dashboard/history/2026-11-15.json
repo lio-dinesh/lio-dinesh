@@ -45,7 +45,7 @@
       "metrics": [
         {
           "label": "SOLVED",
-          "value": "62"
+          "value": "63"
         },
         {
           "label": "EASY",
@@ -57,7 +57,7 @@
         },
         {
           "label": "HARD",
-          "value": "12"
+          "value": "13"
         }
       ]
     },
