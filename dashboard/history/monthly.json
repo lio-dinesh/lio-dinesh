@@ -9,7 +9,7 @@
         {
           "id": "monkeytype",
           "label": "MONKEYTYPE",
-          "totalActivity": 125,
+          "totalActivity": 128,
           "activeDays": 8,
           "observedDays": 10,
           "availableDays": 10,
@@ -26,7 +26,7 @@
             },
             {
               "label": "TESTS DONE",
-              "value": "2016"
+              "value": "2019"
             },
             {
               "label": "TYPING TIME",
