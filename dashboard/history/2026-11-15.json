@@ -9,10 +9,10 @@
       "handle": "lio_dinesh",
       "status": "PUBLIC PROFILE",
       "activityAvailable": true,
-      "activityCount": 0,
-      "currentStreak": 4,
+      "activityCount": 5,
+      "currentStreak": 5,
       "longestStreak": 25,
-      "lastActiveDate": "2026-11-14",
+      "lastActiveDate": "2026-11-15",
       "metrics": [
         {
           "label": "BEST WPM",
@@ -24,7 +24,7 @@
         },
         {
           "label": "TESTS DONE",
-          "value": "2021"
+          "value": "2026"
         },
         {
           "label": "TYPING TIME",
@@ -96,18 +96,18 @@
       "handle": "lio-dinesh",
       "status": "GITHUB GRAPHQL",
       "activityAvailable": true,
-      "activityCount": 0,
-      "currentStreak": 4,
+      "activityCount": 20,
+      "currentStreak": 5,
       "longestStreak": 15,
-      "lastActiveDate": "2026-11-14",
+      "lastActiveDate": "2026-11-15",
       "metrics": [
         {
           "label": "CONTRIBUTIONS · 12M",
-          "value": "631"
+          "value": "651"
         },
         {
           "label": "ACTIVE DAYS · 13W",
-          "value": "49"
+          "value": "50"
         },
         {
           "label": "PEAK DAY · 13W",
@@ -115,7 +115,7 @@
         },
         {
           "label": "AVG / ACTIVE DAY",
-          "value": "12.2"
+          "value": "12.4"
         }
       ]
     }
