@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "owner": "Dinesh G",
-  "generatedAt": "2026-11-17T03:13:58.903Z",
-  "generatedAtIST": "17 Nov 2026, 8:43:58 am",
+  "generatedAt": "2026-11-17T11:56:50.096Z",
+  "generatedAtIST": "17 Nov 2026, 5:26:50 pm",
   "timezone": "Asia/Kolkata",
   "activityDate": "2026-11-17",
   "refreshIntervalSeconds": 300,
@@ -806,18 +806,35 @@
       "label": "CODECHEF",
       "handle": "dce_25148010",
       "url": "https://www.codechef.com/users/dce_25148010",
-      "status": "DATA UNAVAILABLE",
-      "currentStreak": null,
-      "longestStreak": null,
-      "activeDays": null,
-      "lastActiveDate": null,
-      "activityAvailable": false,
-      "note": "CodeChef heatmap unavailable: The operation was aborted due to timeout",
-      "metrics": [],
+      "status": "PUBLIC HEATMAP",
+      "currentStreak": 0,
+      "longestStreak": 14,
+      "activeDays": 35,
+      "lastActiveDate": "2026-11-04",
+      "activityAvailable": true,
+      "note": "Heatmap-derived submission streak; CodeChef streak freezes may not be reflected",
+      "metrics": [
+        {
+          "label": "SOLVED",
+          "value": "1732"
+        },
+        {
+          "label": "STARS",
+          "value": "unrated"
+        },
+        {
+          "label": "ACTIVE DAYS",
+          "value": "129"
+        },
+        {
+          "label": "CONTESTS",
+          "value": "0"
+        }
+      ],
       "dailyActivity": [
         {
           "date": "2026-08-19",
-          "count": 0
+          "count": 1
         },
         {
           "date": "2026-08-20",
@@ -825,7 +842,7 @@
         },
         {
           "date": "2026-08-21",
-          "count": 0
+          "count": 1
         },
         {
           "date": "2026-08-22",
@@ -833,7 +850,7 @@
         },
         {
           "date": "2026-08-23",
-          "count": 0
+          "count": 15
         },
         {
           "date": "2026-08-24",
@@ -841,11 +858,11 @@
         },
         {
           "date": "2026-08-25",
-          "count": 0
+          "count": 12
         },
         {
           "date": "2026-08-26",
-          "count": 0
+          "count": 6
         },
         {
           "date": "2026-08-27",
@@ -853,11 +870,11 @@
         },
         {
           "date": "2026-08-28",
-          "count": 0
+          "count": 10
         },
         {
           "date": "2026-08-29",
-          "count": 0
+          "count": 9
         },
         {
           "date": "2026-08-30",
@@ -865,7 +882,7 @@
         },
         {
           "date": "2026-08-31",
-          "count": 0
+          "count": 1
         },
         {
           "date": "2026-09-01",
@@ -905,7 +922,7 @@
         },
         {
           "date": "2026-09-10",
-          "count": 0
+          "count": 7
         },
         {
           "date": "2026-09-11",
@@ -925,7 +942,7 @@
         },
         {
           "date": "2026-09-15",
-          "count": 0
+          "count": 89
         },
         {
           "date": "2026-09-16",
@@ -949,11 +966,11 @@
         },
         {
           "date": "2026-09-21",
-          "count": 0
+          "count": 3
         },
         {
           "date": "2026-09-22",
-          "count": 0
+          "count": 69
         },
         {
           "date": "2026-09-23",
@@ -1017,31 +1034,31 @@
         },
         {
           "date": "2026-10-08",
-          "count": 0
+          "count": 259
         },
         {
           "date": "2026-10-09",
-          "count": 0
+          "count": 23
         },
         {
           "date": "2026-10-10",
-          "count": 0
+          "count": 5
         },
         {
           "date": "2026-10-11",
-          "count": 0
+          "count": 19
         },
         {
           "date": "2026-10-12",
-          "count": 0
+          "count": 231
         },
         {
           "date": "2026-10-13",
-          "count": 0
+          "count": 42
         },
         {
           "date": "2026-10-14",
-          "count": 0
+          "count": 8
         },
         {
           "date": "2026-10-15",
@@ -1049,59 +1066,59 @@
         },
         {
           "date": "2026-10-16",
-          "count": 0
+          "count": 27
         },
         {
           "date": "2026-10-17",
-          "count": 0
+          "count": 36
         },
         {
           "date": "2026-10-18",
-          "count": 0
+          "count": 32
         },
         {
           "date": "2026-10-19",
-          "count": 0
+          "count": 30
         },
         {
           "date": "2026-10-20",
-          "count": 0
+          "count": 51
         },
         {
           "date": "2026-10-21",
-          "count": 0
+          "count": 7
         },
         {
           "date": "2026-10-22",
-          "count": 0
+          "count": 13
         },
         {
           "date": "2026-10-23",
-          "count": 0
+          "count": 1
         },
         {
           "date": "2026-10-24",
-          "count": 0
+          "count": 44
         },
         {
           "date": "2026-10-25",
-          "count": 0
+          "count": 4
         },
         {
           "date": "2026-10-26",
-          "count": 0
+          "count": 26
         },
         {
           "date": "2026-10-27",
-          "count": 0
+          "count": 18
         },
         {
           "date": "2026-10-28",
-          "count": 0
+          "count": 7
         },
         {
           "date": "2026-10-29",
-          "count": 0
+          "count": 57
         },
         {
           "date": "2026-10-30",
@@ -1113,7 +1130,7 @@
         },
         {
           "date": "2026-11-01",
-          "count": 0
+          "count": 52
         },
         {
           "date": "2026-11-02",
@@ -1125,7 +1142,7 @@
         },
         {
           "date": "2026-11-04",
-          "count": 0
+          "count": 3
         },
         {
           "date": "2026-11-05",
