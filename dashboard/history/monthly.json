@@ -70,27 +70,10 @@
           "totalActivity": 0,
           "activeDays": 0,
           "observedDays": 13,
-          "availableDays": 12,
-          "latestCurrentStreak": 0,
-          "latestLongestStreak": 14,
-          "latestMetrics": [
-            {
-              "label": "SOLVED",
-              "value": "1732"
-            },
-            {
-              "label": "STARS",
-              "value": "unrated"
-            },
-            {
-              "label": "ACTIVE DAYS",
-              "value": "129"
-            },
-            {
-              "label": "CONTESTS",
-              "value": "0"
-            }
-          ],
+          "availableDays": 11,
+          "latestCurrentStreak": null,
+          "latestLongestStreak": null,
+          "latestMetrics": [],
           "lastActivityDate": null
         },
         {

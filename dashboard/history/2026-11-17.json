@@ -65,30 +65,13 @@
       "id": "codechef",
       "label": "CODECHEF",
       "handle": "dce_25148010",
-      "status": "PUBLIC HEATMAP",
-      "activityAvailable": true,
+      "status": "DATA UNAVAILABLE",
+      "activityAvailable": false,
       "activityCount": 0,
-      "currentStreak": 0,
-      "longestStreak": 14,
-      "lastActiveDate": "2026-11-04",
-      "metrics": [
-        {
-          "label": "SOLVED",
-          "value": "1732"
-        },
-        {
-          "label": "STARS",
-          "value": "unrated"
-        },
-        {
-          "label": "ACTIVE DAYS",
-          "value": "129"
-        },
-        {
-          "label": "CONTESTS",
-          "value": "0"
-        }
-      ]
+      "currentStreak": null,
+      "longestStreak": null,
+      "lastActiveDate": null,
+      "metrics": []
     },
     {
       "id": "github",
