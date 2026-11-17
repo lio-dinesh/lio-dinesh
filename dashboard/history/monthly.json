@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "timezone": "Asia/Kolkata",
-  "generatedFor": "2026-11-17",
+  "generatedFor": "2026-11-18",
   "months": [
     {
       "month": "2026-11",
@@ -11,9 +11,9 @@
           "label": "MONKEYTYPE",
           "totalActivity": 145,
           "activeDays": 10,
-          "observedDays": 13,
-          "availableDays": 13,
-          "latestCurrentStreak": 6,
+          "observedDays": 14,
+          "availableDays": 14,
+          "latestCurrentStreak": 7,
           "latestLongestStreak": 25,
           "latestMetrics": [
             {
@@ -26,11 +26,11 @@
             },
             {
               "label": "TESTS DONE",
-              "value": "2065"
+              "value": "2071"
             },
             {
               "label": "TYPING TIME",
-              "value": "19h"
+              "value": "20h"
             }
           ],
           "lastActivityDate": "2026-11-16"
@@ -40,14 +40,14 @@
           "label": "LEETCODE",
           "totalActivity": 14,
           "activeDays": 4,
-          "observedDays": 13,
-          "availableDays": 13,
+          "observedDays": 14,
+          "availableDays": 14,
           "latestCurrentStreak": 15,
           "latestLongestStreak": 15,
           "latestMetrics": [
             {
               "label": "SOLVED",
-              "value": "65"
+              "value": "66"
             },
             {
               "label": "EASY",
@@ -59,7 +59,7 @@
             },
             {
               "label": "HARD",
-              "value": "13"
+              "value": "14"
             }
           ],
           "lastActivityDate": "2026-11-14"
@@ -69,8 +69,8 @@
           "label": "CODECHEF",
           "totalActivity": 0,
           "activeDays": 0,
-          "observedDays": 13,
-          "availableDays": 12,
+          "observedDays": 14,
+          "availableDays": 13,
           "latestCurrentStreak": 0,
           "latestLongestStreak": 14,
           "latestMetrics": [
@@ -98,14 +98,14 @@
           "label": "GITHUB",
           "totalActivity": 143,
           "activeDays": 5,
-          "observedDays": 13,
-          "availableDays": 13,
-          "latestCurrentStreak": 6,
+          "observedDays": 14,
+          "availableDays": 14,
+          "latestCurrentStreak": 7,
           "latestLongestStreak": 15,
           "latestMetrics": [
             {
               "label": "CONTRIBUTIONS · 12M",
-              "value": "666"
+              "value": "668"
             },
             {
               "label": "ACTIVE DAYS · 13W",

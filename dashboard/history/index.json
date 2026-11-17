@@ -1,8 +1,9 @@
 {
   "schemaVersion": 1,
   "timezone": "Asia/Kolkata",
-  "retainedDays": 13,
+  "retainedDays": 14,
   "dates": [
+    "2026-11-18",
     "2026-11-17",
     "2026-11-16",
     "2026-11-15",
