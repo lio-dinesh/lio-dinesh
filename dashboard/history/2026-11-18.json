@@ -9,10 +9,10 @@
       "handle": "lio_dinesh",
       "status": "PUBLIC PROFILE",
       "activityAvailable": true,
-      "activityCount": 0,
-      "currentStreak": 7,
+      "activityCount": 3,
+      "currentStreak": 8,
       "longestStreak": 25,
-      "lastActiveDate": "2026-11-17",
+      "lastActiveDate": "2026-11-18",
       "metrics": [
         {
           "label": "BEST WPM",
@@ -24,7 +24,7 @@
         },
         {
           "label": "TESTS DONE",
-          "value": "2071"
+          "value": "2074"
         },
         {
           "label": "TYPING TIME",
