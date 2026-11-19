@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "owner": "Dinesh G",
-  "generatedAt": "2026-11-19T17:41:55.096Z",
-  "generatedAtIST": "19 Nov 2026, 11:11:55 pm",
+  "generatedAt": "2026-11-19T23:52:07.914Z",
+  "generatedAtIST": "20 Nov 2026, 5:22:07 am",
   "timezone": "Asia/Kolkata",
-  "activityDate": "2026-11-19",
+  "activityDate": "2026-11-20",
   "refreshIntervalSeconds": 300,
   "platforms": [
     {
@@ -38,10 +38,6 @@
         }
       ],
       "dailyActivity": [
-        {
-          "date": "2026-08-21",
-          "count": 0
-        },
         {
           "date": "2026-08-22",
           "count": 0
@@ -401,6 +397,10 @@
         {
           "date": "2026-11-19",
           "count": 27
+        },
+        {
+          "date": "2026-11-20",
+          "count": 0
         }
       ]
     },
@@ -412,7 +412,7 @@
       "status": "PUBLIC CALENDAR",
       "currentStreak": 15,
       "longestStreak": 15,
-      "activeDays": 38,
+      "activeDays": 37,
       "lastActiveDate": "2026-11-19",
       "activityAvailable": true,
       "note": "Current streak from LeetCode; longest calculated across available calendar years",
@@ -435,10 +435,6 @@
         }
       ],
       "dailyActivity": [
-        {
-          "date": "2026-08-21",
-          "count": 2
-        },
         {
           "date": "2026-08-22",
           "count": 0
@@ -798,6 +794,10 @@
         {
           "date": "2026-11-19",
           "count": 4
+        },
+        {
+          "date": "2026-11-20",
+          "count": 0
         }
       ]
     },
@@ -809,7 +809,7 @@
       "status": "PUBLIC HEATMAP",
       "currentStreak": 0,
       "longestStreak": 14,
-      "activeDays": 34,
+      "activeDays": 33,
       "lastActiveDate": "2026-11-04",
       "activityAvailable": true,
       "note": "Heatmap-derived submission streak; CodeChef streak freezes may not be reflected",
@@ -832,10 +832,6 @@
         }
       ],
       "dailyActivity": [
-        {
-          "date": "2026-08-21",
-          "count": 1
-        },
         {
           "date": "2026-08-22",
           "count": 0
@@ -1195,6 +1191,10 @@
         {
           "date": "2026-11-19",
           "count": 0
+        },
+        {
+          "date": "2026-11-20",
+          "count": 0
         }
       ]
     },
@@ -1206,7 +1206,7 @@
       "status": "GITHUB GRAPHQL",
       "currentStreak": 9,
       "longestStreak": 15,
-      "activeDays": 50,
+      "activeDays": 49,
       "lastActiveDate": "2026-11-19",
       "activityAvailable": true,
       "note": "GitHub contribution calendar; updates when GitHub records a contribution",
@@ -1217,7 +1217,7 @@
         },
         {
           "label": "ACTIVE DAYS · 13W",
-          "value": "50"
+          "value": "49"
         },
         {
           "label": "PEAK DAY · 13W",
@@ -1225,14 +1225,10 @@
         },
         {
           "label": "AVG / ACTIVE DAY",
-          "value": "12.9"
+          "value": "13.1"
         }
       ],
       "dailyActivity": [
-        {
-          "date": "2026-08-21",
-          "count": 1
-        },
         {
           "date": "2026-08-22",
           "count": 0
@@ -1592,6 +1588,10 @@
         {
           "date": "2026-11-19",
           "count": 14
+        },
+        {
+          "date": "2026-11-20",
+          "count": 0
         }
       ]
     }
