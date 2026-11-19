@@ -9,11 +9,11 @@
         {
           "id": "monkeytype",
           "label": "MONKEYTYPE",
-          "totalActivity": 148,
-          "activeDays": 11,
+          "totalActivity": 175,
+          "activeDays": 12,
           "observedDays": 15,
           "availableDays": 15,
-          "latestCurrentStreak": 8,
+          "latestCurrentStreak": 9,
           "latestLongestStreak": 25,
           "latestMetrics": [
             {
@@ -26,20 +26,20 @@
             },
             {
               "label": "TESTS DONE",
-              "value": "2085"
+              "value": "2112"
             },
             {
               "label": "TYPING TIME",
               "value": "20h"
             }
           ],
-          "lastActivityDate": "2026-11-18"
+          "lastActivityDate": "2026-11-19"
         },
         {
           "id": "leetcode",
           "label": "LEETCODE",
-          "totalActivity": 14,
-          "activeDays": 4,
+          "totalActivity": 18,
+          "activeDays": 5,
           "observedDays": 15,
           "availableDays": 15,
           "latestCurrentStreak": 15,
@@ -47,7 +47,7 @@
           "latestMetrics": [
             {
               "label": "SOLVED",
-              "value": "67"
+              "value": "68"
             },
             {
               "label": "EASY",
@@ -55,14 +55,14 @@
             },
             {
               "label": "MEDIUM",
-              "value": "30"
+              "value": "31"
             },
             {
               "label": "HARD",
               "value": "14"
             }
           ],
-          "lastActivityDate": "2026-11-14"
+          "lastActivityDate": "2026-11-19"
         },
         {
           "id": "codechef",
@@ -96,20 +96,20 @@
         {
           "id": "github",
           "label": "GITHUB",
-          "totalActivity": 143,
-          "activeDays": 5,
+          "totalActivity": 157,
+          "activeDays": 6,
           "observedDays": 15,
           "availableDays": 15,
-          "latestCurrentStreak": 8,
+          "latestCurrentStreak": 9,
           "latestLongestStreak": 15,
           "latestMetrics": [
             {
               "label": "CONTRIBUTIONS · 12M",
-              "value": "672"
+              "value": "686"
             },
             {
               "label": "ACTIVE DAYS · 13W",
-              "value": "49"
+              "value": "50"
             },
             {
               "label": "PEAK DAY · 13W",
@@ -120,7 +120,7 @@
               "value": "12.9"
             }
           ],
-          "lastActivityDate": "2026-11-15"
+          "lastActivityDate": "2026-11-19"
         }
       ]
     }
