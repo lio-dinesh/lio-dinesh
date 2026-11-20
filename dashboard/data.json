@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "owner": "Dinesh G",
-  "generatedAt": "2026-11-20T13:38:17.447Z",
-  "generatedAtIST": "20 Nov 2026, 7:08:17 pm",
+  "generatedAt": "2026-11-20T21:32:09.907Z",
+  "generatedAtIST": "21 Nov 2026, 3:02:09 am",
   "timezone": "Asia/Kolkata",
-  "activityDate": "2026-11-20",
+  "activityDate": "2026-11-21",
   "refreshIntervalSeconds": 300,
   "platforms": [
     {
@@ -38,10 +38,6 @@
         }
       ],
       "dailyActivity": [
-        {
-          "date": "2026-08-22",
-          "count": 0
-        },
         {
           "date": "2026-08-23",
           "count": 12
@@ -401,6 +397,10 @@
         {
           "date": "2026-11-20",
           "count": 9
+        },
+        {
+          "date": "2026-11-21",
+          "count": 0
         }
       ]
     },
@@ -435,10 +435,6 @@
         }
       ],
       "dailyActivity": [
-        {
-          "date": "2026-08-22",
-          "count": 0
-        },
         {
           "date": "2026-08-23",
           "count": 6
@@ -798,6 +794,10 @@
         {
           "date": "2026-11-20",
           "count": 8
+        },
+        {
+          "date": "2026-11-21",
+          "count": 0
         }
       ]
     },
@@ -832,10 +832,6 @@
         }
       ],
       "dailyActivity": [
-        {
-          "date": "2026-08-22",
-          "count": 0
-        },
         {
           "date": "2026-08-23",
           "count": 15
@@ -1195,6 +1191,10 @@
         {
           "date": "2026-11-20",
           "count": 0
+        },
+        {
+          "date": "2026-11-21",
+          "count": 0
         }
       ]
     },
@@ -1229,10 +1229,6 @@
         }
       ],
       "dailyActivity": [
-        {
-          "date": "2026-08-22",
-          "count": 0
-        },
         {
           "date": "2026-08-23",
           "count": 5
@@ -1592,6 +1588,10 @@
         {
           "date": "2026-11-20",
           "count": 27
+        },
+        {
+          "date": "2026-11-21",
+          "count": 0
         }
       ]
     }
