@@ -9,7 +9,7 @@
         {
           "id": "monkeytype",
           "label": "MONKEYTYPE",
-          "totalActivity": 191,
+          "totalActivity": 212,
           "activeDays": 14,
           "observedDays": 17,
           "availableDays": 17,
@@ -26,7 +26,7 @@
             },
             {
               "label": "TESTS DONE",
-              "value": "2137"
+              "value": "2158"
             },
             {
               "label": "TYPING TIME",
@@ -38,8 +38,8 @@
         {
           "id": "leetcode",
           "label": "LEETCODE",
-          "totalActivity": 26,
-          "activeDays": 6,
+          "totalActivity": 30,
+          "activeDays": 7,
           "observedDays": 17,
           "availableDays": 17,
           "latestCurrentStreak": 15,
@@ -47,7 +47,7 @@
           "latestMetrics": [
             {
               "label": "SOLVED",
-              "value": "69"
+              "value": "70"
             },
             {
               "label": "EASY",
@@ -55,14 +55,14 @@
             },
             {
               "label": "MEDIUM",
-              "value": "31"
+              "value": "32"
             },
             {
               "label": "HARD",
               "value": "15"
             }
           ],
-          "lastActivityDate": "2026-11-20"
+          "lastActivityDate": "2026-11-21"
         },
         {
           "id": "codechef",
@@ -96,7 +96,7 @@
         {
           "id": "github",
           "label": "GITHUB",
-          "totalActivity": 204,
+          "totalActivity": 222,
           "activeDays": 8,
           "observedDays": 17,
           "availableDays": 17,
@@ -105,7 +105,7 @@
           "latestMetrics": [
             {
               "label": "CONTRIBUTIONS · 12M",
-              "value": "733"
+              "value": "751"
             },
             {
               "label": "ACTIVE DAYS · 13W",
@@ -117,7 +117,7 @@
             },
             {
               "label": "AVG / ACTIVE DAY",
-              "value": "13.5"
+              "value": "13.9"
             }
           ],
           "lastActivityDate": "2026-11-21"
