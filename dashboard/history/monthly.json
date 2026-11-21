@@ -9,11 +9,11 @@
         {
           "id": "monkeytype",
           "label": "MONKEYTYPE",
-          "totalActivity": 184,
-          "activeDays": 13,
+          "totalActivity": 191,
+          "activeDays": 14,
           "observedDays": 17,
           "availableDays": 17,
-          "latestCurrentStreak": 10,
+          "latestCurrentStreak": 11,
           "latestLongestStreak": 25,
           "latestMetrics": [
             {
@@ -26,14 +26,14 @@
             },
             {
               "label": "TESTS DONE",
-              "value": "2121"
+              "value": "2137"
             },
             {
               "label": "TYPING TIME",
               "value": "20h"
             }
           ],
-          "lastActivityDate": "2026-11-20"
+          "lastActivityDate": "2026-11-21"
         },
         {
           "id": "leetcode",
@@ -96,20 +96,20 @@
         {
           "id": "github",
           "label": "GITHUB",
-          "totalActivity": 184,
-          "activeDays": 7,
+          "totalActivity": 204,
+          "activeDays": 8,
           "observedDays": 17,
           "availableDays": 17,
-          "latestCurrentStreak": 10,
+          "latestCurrentStreak": 11,
           "latestLongestStreak": 15,
           "latestMetrics": [
             {
               "label": "CONTRIBUTIONS · 12M",
-              "value": "713"
+              "value": "733"
             },
             {
               "label": "ACTIVE DAYS · 13W",
-              "value": "50"
+              "value": "51"
             },
             {
               "label": "PEAK DAY · 13W",
@@ -117,10 +117,10 @@
             },
             {
               "label": "AVG / ACTIVE DAY",
-              "value": "13.4"
+              "value": "13.5"
             }
           ],
-          "lastActivityDate": "2026-11-20"
+          "lastActivityDate": "2026-11-21"
         }
       ]
     }
