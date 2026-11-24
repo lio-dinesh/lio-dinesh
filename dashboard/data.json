@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "owner": "Dinesh G",
-  "generatedAt": "2026-11-23T13:12:41.111Z",
-  "generatedAtIST": "23 Nov 2026, 6:42:41 pm",
+  "generatedAt": "2026-11-24T00:54:03.688Z",
+  "generatedAtIST": "24 Nov 2026, 6:24:03 am",
   "timezone": "Asia/Kolkata",
-  "activityDate": "2026-11-23",
+  "activityDate": "2026-11-24",
   "refreshIntervalSeconds": 300,
   "platforms": [
     {
@@ -13,10 +13,10 @@
       "handle": "lio_dinesh",
       "url": "https://monkeytype.com/profile/lio_dinesh",
       "status": "PUBLIC PROFILE",
-      "currentStreak": 12,
+      "currentStreak": 14,
       "longestStreak": 25,
-      "activeDays": 62,
-      "lastActiveDate": "2026-11-22",
+      "activeDays": 63,
+      "lastActiveDate": "2026-11-24",
       "activityAvailable": true,
       "note": "Official current and maximum streak from public profile",
       "metrics": [
@@ -30,18 +30,14 @@
         },
         {
           "label": "TESTS DONE",
-          "value": "2185"
+          "value": "2257"
         },
         {
           "label": "TYPING TIME",
-          "value": "20h"
+          "value": "21h"
         }
       ],
       "dailyActivity": [
-        {
-          "date": "2026-08-25",
-          "count": 2
-        },
         {
           "date": "2026-08-26",
           "count": 5
@@ -400,7 +396,11 @@
         },
         {
           "date": "2026-11-23",
-          "count": 0
+          "count": 57
+        },
+        {
+          "date": "2026-11-24",
+          "count": 15
         }
       ]
     },
@@ -413,13 +413,13 @@
       "currentStreak": 15,
       "longestStreak": 15,
       "activeDays": 39,
-      "lastActiveDate": "2026-11-22",
+      "lastActiveDate": "2026-11-23",
       "activityAvailable": true,
       "note": "Current streak from LeetCode; longest calculated across available calendar years",
       "metrics": [
         {
           "label": "SOLVED",
-          "value": "71"
+          "value": "72"
         },
         {
           "label": "EASY",
@@ -427,7 +427,7 @@
         },
         {
           "label": "MEDIUM",
-          "value": "32"
+          "value": "33"
         },
         {
           "label": "HARD",
@@ -435,10 +435,6 @@
         }
       ],
       "dailyActivity": [
-        {
-          "date": "2026-08-25",
-          "count": 1
-        },
         {
           "date": "2026-08-26",
           "count": 0
@@ -797,6 +793,10 @@
         },
         {
           "date": "2026-11-23",
+          "count": 9
+        },
+        {
+          "date": "2026-11-24",
           "count": 0
         }
       ]
@@ -809,7 +809,7 @@
       "status": "PUBLIC HEATMAP",
       "currentStreak": 0,
       "longestStreak": 14,
-      "activeDays": 32,
+      "activeDays": 31,
       "lastActiveDate": "2026-11-04",
       "activityAvailable": true,
       "note": "Heatmap-derived submission streak; CodeChef streak freezes may not be reflected",
@@ -832,10 +832,6 @@
         }
       ],
       "dailyActivity": [
-        {
-          "date": "2026-08-25",
-          "count": 12
-        },
         {
           "date": "2026-08-26",
           "count": 6
@@ -1195,6 +1191,10 @@
         {
           "date": "2026-11-23",
           "count": 0
+        },
+        {
+          "date": "2026-11-24",
+          "count": 0
         }
       ]
     },
@@ -1204,16 +1204,16 @@
       "handle": "lio-dinesh",
       "url": "https://github.com/lio-dinesh",
       "status": "GITHUB GRAPHQL",
-      "currentStreak": 12,
+      "currentStreak": 13,
       "longestStreak": 15,
       "activeDays": 50,
-      "lastActiveDate": "2026-11-22",
+      "lastActiveDate": "2026-11-23",
       "activityAvailable": true,
       "note": "GitHub contribution calendar; updates when GitHub records a contribution",
       "metrics": [
         {
           "label": "CONTRIBUTIONS · 12M",
-          "value": "781"
+          "value": "802"
         },
         {
           "label": "ACTIVE DAYS · 13W",
@@ -1225,14 +1225,10 @@
         },
         {
           "label": "AVG / ACTIVE DAY",
-          "value": "14.5"
+          "value": "14.9"
         }
       ],
       "dailyActivity": [
-        {
-          "date": "2026-08-25",
-          "count": 3
-        },
         {
           "date": "2026-08-26",
           "count": 0
@@ -1591,6 +1587,10 @@
         },
         {
           "date": "2026-11-23",
+          "count": 21
+        },
+        {
+          "date": "2026-11-24",
           "count": 0
         }
       ]

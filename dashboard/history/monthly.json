@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "timezone": "Asia/Kolkata",
-  "generatedFor": "2026-11-23",
+  "generatedFor": "2026-11-24",
   "months": [
     {
       "month": "2026-11",
@@ -9,11 +9,11 @@
         {
           "id": "monkeytype",
           "label": "MONKEYTYPE",
-          "totalActivity": 239,
-          "activeDays": 15,
-          "observedDays": 19,
-          "availableDays": 19,
-          "latestCurrentStreak": 12,
+          "totalActivity": 254,
+          "activeDays": 16,
+          "observedDays": 20,
+          "availableDays": 20,
+          "latestCurrentStreak": 14,
           "latestLongestStreak": 25,
           "latestMetrics": [
             {
@@ -26,28 +26,28 @@
             },
             {
               "label": "TESTS DONE",
-              "value": "2185"
+              "value": "2257"
             },
             {
               "label": "TYPING TIME",
-              "value": "20h"
+              "value": "21h"
             }
           ],
-          "lastActivityDate": "2026-11-22"
+          "lastActivityDate": "2026-11-24"
         },
         {
           "id": "leetcode",
           "label": "LEETCODE",
           "totalActivity": 37,
           "activeDays": 8,
-          "observedDays": 19,
-          "availableDays": 19,
+          "observedDays": 20,
+          "availableDays": 20,
           "latestCurrentStreak": 15,
           "latestLongestStreak": 15,
           "latestMetrics": [
             {
               "label": "SOLVED",
-              "value": "71"
+              "value": "72"
             },
             {
               "label": "EASY",
@@ -55,7 +55,7 @@
             },
             {
               "label": "MEDIUM",
-              "value": "32"
+              "value": "33"
             },
             {
               "label": "HARD",
@@ -69,8 +69,8 @@
           "label": "CODECHEF",
           "totalActivity": 0,
           "activeDays": 0,
-          "observedDays": 19,
-          "availableDays": 18,
+          "observedDays": 20,
+          "availableDays": 19,
           "latestCurrentStreak": 0,
           "latestLongestStreak": 14,
           "latestMetrics": [
@@ -98,14 +98,14 @@
           "label": "GITHUB",
           "totalActivity": 252,
           "activeDays": 9,
-          "observedDays": 19,
-          "availableDays": 19,
-          "latestCurrentStreak": 12,
+          "observedDays": 20,
+          "availableDays": 20,
+          "latestCurrentStreak": 13,
           "latestLongestStreak": 15,
           "latestMetrics": [
             {
               "label": "CONTRIBUTIONS · 12M",
-              "value": "781"
+              "value": "802"
             },
             {
               "label": "ACTIVE DAYS · 13W",
@@ -117,7 +117,7 @@
             },
             {
               "label": "AVG / ACTIVE DAY",
-              "value": "14.5"
+              "value": "14.9"
             }
           ],
           "lastActivityDate": "2026-11-22"
