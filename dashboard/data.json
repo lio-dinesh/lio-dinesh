@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "owner": "Dinesh G",
-  "generatedAt": "2026-11-24T10:36:59.872Z",
-  "generatedAtIST": "24 Nov 2026, 4:06:59 pm",
+  "generatedAt": "2026-11-24T20:52:02.263Z",
+  "generatedAtIST": "25 Nov 2026, 2:22:02 am",
   "timezone": "Asia/Kolkata",
-  "activityDate": "2026-11-24",
+  "activityDate": "2026-11-25",
   "refreshIntervalSeconds": 300,
   "platforms": [
     {
@@ -15,7 +15,7 @@
       "status": "PUBLIC PROFILE",
       "currentStreak": 14,
       "longestStreak": 25,
-      "activeDays": 63,
+      "activeDays": 62,
       "lastActiveDate": "2026-11-24",
       "activityAvailable": true,
       "note": "Official current and maximum streak from public profile",
@@ -30,7 +30,7 @@
         },
         {
           "label": "TESTS DONE",
-          "value": "2269"
+          "value": "2276"
         },
         {
           "label": "TYPING TIME",
@@ -38,10 +38,6 @@
         }
       ],
       "dailyActivity": [
-        {
-          "date": "2026-08-26",
-          "count": 5
-        },
         {
           "date": "2026-08-27",
           "count": 0
@@ -400,7 +396,11 @@
         },
         {
           "date": "2026-11-24",
-          "count": 27
+          "count": 34
+        },
+        {
+          "date": "2026-11-25",
+          "count": 0
         }
       ]
     },
@@ -435,10 +435,6 @@
         }
       ],
       "dailyActivity": [
-        {
-          "date": "2026-08-26",
-          "count": 0
-        },
         {
           "date": "2026-08-27",
           "count": 0
@@ -798,6 +794,10 @@
         {
           "date": "2026-11-24",
           "count": 5
+        },
+        {
+          "date": "2026-11-25",
+          "count": 0
         }
       ]
     },
@@ -809,7 +809,7 @@
       "status": "PUBLIC HEATMAP",
       "currentStreak": 0,
       "longestStreak": 14,
-      "activeDays": 31,
+      "activeDays": 30,
       "lastActiveDate": "2026-11-04",
       "activityAvailable": true,
       "note": "Heatmap-derived submission streak; CodeChef streak freezes may not be reflected",
@@ -832,10 +832,6 @@
         }
       ],
       "dailyActivity": [
-        {
-          "date": "2026-08-26",
-          "count": 6
-        },
         {
           "date": "2026-08-27",
           "count": 0
@@ -1195,6 +1191,10 @@
         {
           "date": "2026-11-24",
           "count": 0
+        },
+        {
+          "date": "2026-11-25",
+          "count": 0
         }
       ]
     },
@@ -1229,10 +1229,6 @@
         }
       ],
       "dailyActivity": [
-        {
-          "date": "2026-08-26",
-          "count": 0
-        },
         {
           "date": "2026-08-27",
           "count": 0
@@ -1592,6 +1588,10 @@
         {
           "date": "2026-11-24",
           "count": 20
+        },
+        {
+          "date": "2026-11-25",
+          "count": 0
         }
       ]
     }
