@@ -38,8 +38,8 @@
         {
           "id": "leetcode",
           "label": "LEETCODE",
-          "totalActivity": 42,
-          "activeDays": 9,
+          "totalActivity": 46,
+          "activeDays": 10,
           "observedDays": 21,
           "availableDays": 21,
           "latestCurrentStreak": 15,
@@ -47,7 +47,7 @@
           "latestMetrics": [
             {
               "label": "SOLVED",
-              "value": "73"
+              "value": "74"
             },
             {
               "label": "EASY",
@@ -59,10 +59,10 @@
             },
             {
               "label": "HARD",
-              "value": "15"
+              "value": "16"
             }
           ],
-          "lastActivityDate": "2026-11-24"
+          "lastActivityDate": "2026-11-25"
         },
         {
           "id": "codechef",
@@ -96,20 +96,20 @@
         {
           "id": "github",
           "label": "GITHUB",
-          "totalActivity": 272,
-          "activeDays": 10,
+          "totalActivity": 288,
+          "activeDays": 11,
           "observedDays": 21,
           "availableDays": 21,
-          "latestCurrentStreak": 14,
+          "latestCurrentStreak": 15,
           "latestLongestStreak": 15,
           "latestMetrics": [
             {
               "label": "CONTRIBUTIONS · 12M",
-              "value": "822"
+              "value": "838"
             },
             {
               "label": "ACTIVE DAYS · 13W",
-              "value": "51"
+              "value": "52"
             },
             {
               "label": "PEAK DAY · 13W",
@@ -120,7 +120,7 @@
               "value": "15.0"
             }
           ],
-          "lastActivityDate": "2026-11-24"
+          "lastActivityDate": "2026-11-25"
         }
       ]
     }

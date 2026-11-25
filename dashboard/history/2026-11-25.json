@@ -38,14 +38,14 @@
       "handle": "410725148010",
       "status": "PUBLIC CALENDAR",
       "activityAvailable": true,
-      "activityCount": 0,
+      "activityCount": 4,
       "currentStreak": 15,
       "longestStreak": 15,
-      "lastActiveDate": "2026-11-24",
+      "lastActiveDate": "2026-11-25",
       "metrics": [
         {
           "label": "SOLVED",
-          "value": "73"
+          "value": "74"
         },
         {
           "label": "EASY",
@@ -57,7 +57,7 @@
         },
         {
           "label": "HARD",
-          "value": "15"
+          "value": "16"
         }
       ]
     },
@@ -96,18 +96,18 @@
       "handle": "lio-dinesh",
       "status": "GITHUB GRAPHQL",
       "activityAvailable": true,
-      "activityCount": 0,
-      "currentStreak": 14,
+      "activityCount": 16,
+      "currentStreak": 15,
       "longestStreak": 15,
-      "lastActiveDate": "2026-11-24",
+      "lastActiveDate": "2026-11-25",
       "metrics": [
         {
           "label": "CONTRIBUTIONS · 12M",
-          "value": "822"
+          "value": "838"
         },
         {
           "label": "ACTIVE DAYS · 13W",
-          "value": "51"
+          "value": "52"
         },
         {
           "label": "PEAK DAY · 13W",
