@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "owner": "Dinesh G",
-  "generatedAt": "2026-11-26T04:31:15.069Z",
-  "generatedAtIST": "26 Nov 2026, 10:01:15 am",
+  "generatedAt": "2026-11-26T14:18:59.356Z",
+  "generatedAtIST": "26 Nov 2026, 7:48:59 pm",
   "timezone": "Asia/Kolkata",
   "activityDate": "2026-11-26",
   "refreshIntervalSeconds": 300,
@@ -13,28 +13,28 @@
       "handle": "lio_dinesh",
       "url": "https://monkeytype.com/profile/lio_dinesh",
       "status": "PUBLIC PROFILE",
-      "currentStreak": 14,
+      "currentStreak": 1,
       "longestStreak": 25,
-      "activeDays": 62,
-      "lastActiveDate": "2026-11-24",
+      "activeDays": 63,
+      "lastActiveDate": "2026-11-26",
       "activityAvailable": true,
       "note": "Official current and maximum streak from public profile",
       "metrics": [
         {
           "label": "BEST WPM",
-          "value": "64"
+          "value": "66"
         },
         {
           "label": "ACCURACY",
-          "value": "97%"
+          "value": "93%"
         },
         {
           "label": "TESTS DONE",
-          "value": "2276"
+          "value": "2294"
         },
         {
           "label": "TYPING TIME",
-          "value": "21h"
+          "value": "22h"
         }
       ],
       "dailyActivity": [
@@ -400,7 +400,7 @@
         },
         {
           "date": "2026-11-26",
-          "count": 0
+          "count": 18
         }
       ]
     },
@@ -412,18 +412,18 @@
       "status": "PUBLIC CALENDAR",
       "currentStreak": 15,
       "longestStreak": 15,
-      "activeDays": 41,
-      "lastActiveDate": "2026-11-25",
+      "activeDays": 42,
+      "lastActiveDate": "2026-11-26",
       "activityAvailable": true,
       "note": "Current streak from LeetCode; longest calculated across available calendar years",
       "metrics": [
         {
           "label": "SOLVED",
-          "value": "74"
+          "value": "76"
         },
         {
           "label": "EASY",
-          "value": "25"
+          "value": "26"
         },
         {
           "label": "MEDIUM",
@@ -431,7 +431,7 @@
         },
         {
           "label": "HARD",
-          "value": "16"
+          "value": "17"
         }
       ],
       "dailyActivity": [
@@ -797,7 +797,7 @@
         },
         {
           "date": "2026-11-26",
-          "count": 0
+          "count": 10
         }
       ]
     },
@@ -1204,20 +1204,20 @@
       "handle": "lio-dinesh",
       "url": "https://github.com/lio-dinesh",
       "status": "GITHUB GRAPHQL",
-      "currentStreak": 15,
-      "longestStreak": 15,
-      "activeDays": 52,
-      "lastActiveDate": "2026-11-25",
+      "currentStreak": 16,
+      "longestStreak": 16,
+      "activeDays": 53,
+      "lastActiveDate": "2026-11-26",
       "activityAvailable": true,
       "note": "GitHub contribution calendar; updates when GitHub records a contribution",
       "metrics": [
         {
           "label": "CONTRIBUTIONS · 12M",
-          "value": "838"
+          "value": "882"
         },
         {
           "label": "ACTIVE DAYS · 13W",
-          "value": "52"
+          "value": "53"
         },
         {
           "label": "PEAK DAY · 13W",
@@ -1225,7 +1225,7 @@
         },
         {
           "label": "AVG / ACTIVE DAY",
-          "value": "15.0"
+          "value": "15.5"
         }
       ],
       "dailyActivity": [
@@ -1591,7 +1591,7 @@
         },
         {
           "date": "2026-11-26",
-          "count": 0
+          "count": 44
         }
       ]
     }
