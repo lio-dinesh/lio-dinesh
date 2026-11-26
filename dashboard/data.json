@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "owner": "Dinesh G",
-  "generatedAt": "2026-11-26T14:18:59.356Z",
-  "generatedAtIST": "26 Nov 2026, 7:48:59 pm",
+  "generatedAt": "2026-11-26T23:06:09.557Z",
+  "generatedAtIST": "27 Nov 2026, 4:36:09 am",
   "timezone": "Asia/Kolkata",
-  "activityDate": "2026-11-26",
+  "activityDate": "2026-11-27",
   "refreshIntervalSeconds": 300,
   "platforms": [
     {
@@ -38,10 +38,6 @@
         }
       ],
       "dailyActivity": [
-        {
-          "date": "2026-08-28",
-          "count": 0
-        },
         {
           "date": "2026-08-29",
           "count": 0
@@ -401,6 +397,10 @@
         {
           "date": "2026-11-26",
           "count": 18
+        },
+        {
+          "date": "2026-11-27",
+          "count": 0
         }
       ]
     },
@@ -435,10 +435,6 @@
         }
       ],
       "dailyActivity": [
-        {
-          "date": "2026-08-28",
-          "count": 0
-        },
         {
           "date": "2026-08-29",
           "count": 0
@@ -798,6 +794,10 @@
         {
           "date": "2026-11-26",
           "count": 10
+        },
+        {
+          "date": "2026-11-27",
+          "count": 0
         }
       ]
     },
@@ -809,7 +809,7 @@
       "status": "PUBLIC HEATMAP",
       "currentStreak": 0,
       "longestStreak": 14,
-      "activeDays": 30,
+      "activeDays": 29,
       "lastActiveDate": "2026-11-04",
       "activityAvailable": true,
       "note": "Heatmap-derived submission streak; CodeChef streak freezes may not be reflected",
@@ -832,10 +832,6 @@
         }
       ],
       "dailyActivity": [
-        {
-          "date": "2026-08-28",
-          "count": 10
-        },
         {
           "date": "2026-08-29",
           "count": 9
@@ -1195,6 +1191,10 @@
         {
           "date": "2026-11-26",
           "count": 0
+        },
+        {
+          "date": "2026-11-27",
+          "count": 0
         }
       ]
     },
@@ -1206,7 +1206,7 @@
       "status": "GITHUB GRAPHQL",
       "currentStreak": 16,
       "longestStreak": 16,
-      "activeDays": 53,
+      "activeDays": 52,
       "lastActiveDate": "2026-11-26",
       "activityAvailable": true,
       "note": "GitHub contribution calendar; updates when GitHub records a contribution",
@@ -1217,7 +1217,7 @@
         },
         {
           "label": "ACTIVE DAYS · 13W",
-          "value": "53"
+          "value": "52"
         },
         {
           "label": "PEAK DAY · 13W",
@@ -1229,10 +1229,6 @@
         }
       ],
       "dailyActivity": [
-        {
-          "date": "2026-08-28",
-          "count": 19
-        },
         {
           "date": "2026-08-29",
           "count": 3
@@ -1592,6 +1588,10 @@
         {
           "date": "2026-11-26",
           "count": 44
+        },
+        {
+          "date": "2026-11-27",
+          "count": 0
         }
       ]
     }
